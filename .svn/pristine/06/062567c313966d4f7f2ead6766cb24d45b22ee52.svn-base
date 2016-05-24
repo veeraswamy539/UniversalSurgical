@@ -1,0 +1,259 @@
+﻿@model Universal.BusinessEntities.Jobs
+@{
+    ViewBag.Title = "JobView";
+}
+<style>
+    body
+    {
+        background-color: #e5e9ec;
+    }
+    .page-content
+    {
+        position: relative !important;
+        width: auto !important;
+    }
+    .datepicker-dropdown.datepicker-orient-left::before
+    {
+        left: 179px;
+    }
+    .datepicker-dropdown.datepicker-orient-left::after
+    {
+        left: 180px;
+    }
+</style>
+<form id="frmjobView">
+<div id="some_grid_container1">
+    <div class="col-lg-12 search-strip">
+        <div class="col-lg-3 pull-right">
+            <a href="@Url.Action("JobsList", "Admin")" class="md-trigger update frm-src-fld update" data-modal="modal-16">
+                 <i class="fa fa-arrow-left"></i> Jobs List</a>
+        </div>
+    </div>
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding"> 
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <i class="fa fa-black-tie"></i> Job Details</div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12  col-md-12  m-b-10 m-t-10 ">
+            <div class="controls">
+                <span><b>JobTitle : </b></span>@Model.JobTitle
+            </div>
+        </div>
+
+          <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Min Experience : </b></span>@Model.MinExperience
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Max Experience : </b></span>
+                @if (@Model.MaxExperience != null)
+                {
+                    @Model.MaxExperience
+                }
+                else
+                {
+                    @: Not Specified
+                }
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Job Location:</b> </span>@Model.JobLocation
+            </div>
+        </div>
+
+    
+      
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Industry :</b> </span>@Model.Industry
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Role :</b> </span>@Model.Role
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Education :</b> </span>@Model.Education
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Specialization :</b> </span>@Model.Specialization
+            </div>
+        </div>
+        <div class="ccol-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Contact Name :</b> </span>@Model.ContactName
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Contact Email : </b></span>@Model.ContactEmail
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Contact Phone Number : </b></span>@Model.ContactPhoneNumber
+            </div>
+        </div>
+
+            <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>IsActive: </b></span>
+                @if (@Model.IsActive)
+                {
+                @: Active
+                }
+                else
+                {
+                    @: Inactive
+                }
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Created Date:</b></span>@Model.CreatedDate.AddHours(5.30).ToShortDateString()
+            </div>
+        </div>
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                <span><b>Modified Date:</b> </span>@Model.ModifiedDate.AddHours(5.30).ToShortDateString()
+            </div>
+        </div>
+
+            <div class="col-lg-12  col-md-6  m-b-10">
+            <div class="controls">
+                <span><b>Job Description :</b> </span>
+                <br />
+                @Model.JobDescription
+            </div>
+        </div>
+        <div class="col-lg-6  col-md-6  m-b-10">
+            <div class="controls">
+                <span><b>Job Details:</b> </span>
+                <br />
+                @Model.JobDetails
+            </div>
+        </div>
+        </div>
+         <div class="clearfix">
+            </div>
+         <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 ">
+                    <i class="fa fa-black-tie"></i> Applied Candidates Information </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right">
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="clearfix">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            @if(Model.jobs_AppliedCandidatesCollection.Count!=0)
+            {
+            <table class="table no-more-tables col-lg-12 table-color">
+
+                    <thead>
+                        <tr class="grid-headding-strips" style="text-align:center;">
+                            <th class="col-lg-2 col-md-2">
+                                Name
+                            </th>
+                            <th class="col-lg-2 col-md-1">
+                                Email Id
+                            </th>
+                            <th class="col-lg-2 col-md-1">
+                                Applied Date
+                            </th>
+                            <th class="col-lg-1 col-md-1">
+                               Resume
+                            </th>
+                             <th class="col-lg-1 col-md-1">
+                               Action
+                            </th>
+                           
+                            
+                        </tr>
+                    </thead>
+                  <tbody>
+                  
+                   @if (Model.jobs_AppliedCandidatesCollection.Count != 0)
+                   {
+                        foreach (var item in @Model.jobs_AppliedCandidatesCollection)
+                        {
+                            <tr>
+                                <td class="v-align-middle">@item.Name
+                                </td>
+                                <td class="v-align-middle">@item.EmailId
+                                </td>
+                                <td class="v-align-middle">@item.CreatedDate.Value.ToString("dd'/'MM'/'yyyy")
+                                </td>
+                              
+                                <td class="v-align-middle">@item.ResumeFileName
+
+                                </td>
+                                <td class="v-align-middle">
+                                  <a href="http://www.universalsurgicals.com/Resumes/@item.ResumeFileName" download target="_blank"><i class="fa fa-download"></i></a>
+                                  </td>
+
+                                </tr>
+                        }
+                   
+                        }
+                   
+   
+                            </tbody>
+                    </table>
+                   }
+                else
+    {
+        <div class="emp-exp-cnt-lst col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound" style="background:white; padding-top:100px;">
+                <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+    }                   
+             
+                  
+                     
+    </div>
+    </div>
+    <div class="md-overlay">
+</div>
+
+</form>
+<script type="text/javascript">
+    $(".update").click(function (e) {
+        e.preventDefault();
+
+        var redirecturl = $(this).attr('href');
+        //        alert(redirecturl);
+        $("#AdminLoadingBg").fadeIn();
+        $("#AdminLoadimg").show();
+        $.ajax({
+            url: redirecturl,
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+
+        })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+       });
+    });
+
+
+</script>

@@ -1,0 +1,132 @@
+﻿@model Universal.BusinessEntities.News
+@{
+    ViewBag.Title = "News Details";
+}
+<style>
+    body
+    {
+        background-color: #e5e9ec;
+    }
+    .page-content
+    {
+        position: relative !important;
+        width: auto !important;
+    }
+    .datepicker-dropdown.datepicker-orient-left::before
+    {
+        left: 179px;
+    }
+    .datepicker-dropdown.datepicker-orient-left::after
+    {
+        left: 180px;
+    }
+</style>
+<form id="frmjobView">
+<div id="some_grid_container1">
+    <div class="col-lg-12 search-strip">
+        <div class="col-lg-3 pull-right">
+            <a href="@Url.Action("NewsList", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16">
+                <i class="fa fa-arrow-left"></i>   News List</a>
+        </div>
+    </div>
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <i class="fa fa-newspaper-o"></i>   News Details</div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12  col-md-12  m-b-10 m-t-10 ">
+            <div class="col-lg-4  col-md-4  m-b-10">
+                <div class="controls">
+                    <span><b>News Title : </b></span>@Model.Title
+                </div>
+            </div>
+            <div class="col-lg-4  col-md-4  m-b-10">
+                <div class="controls">
+                    @if (Session["AccountMgr"] != null)
+               {
+                   
+                        <span><b>Created Date: </b></span>@Model.CreatedDate.AddHours(5.30).ToShortDateString()
+
+               }
+               else
+               {
+                     <span><b>Posted Date: </b></span>@Model.ModifiedDate.AddHours(5.30).ToShortDateString()
+ 
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+       
+          @if (Session["AccountMgr"] != null)
+         {
+             <div class="col-lg-12  col-md-12  m-b-10 m-t-10 ">
+                <div class="col-lg-4  col-md-4  m-b-10">
+                    <div class="controls">
+                        <span><b>Status: </b></span>
+                      @if (Model.Status == true)
+                      {
+                          @: Active
+                      }
+                      else
+                      {
+                           @: Inactive
+                      }
+                    </div>
+                </div>
+                <div class="col-lg-4  col-md-4  m-b-10">
+                    <div class="controls">
+                        <span><b>Modified Date: </b></span>@Model.ModifiedDate.AddHours(5.30).ToShortDateString()
+                    </div>
+                </div>
+</div>
+             
+         }
+    
+      
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12  col-md-6  m-b-10">
+            <div class="col-lg-12  col-md-12  m-b-10">
+                <div class="controls">
+                    <span><b>News Description :</b> </span>
+                    <br />
+                    @Model.Description
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<script type="text/javascript">
+    $(".update").click(function (e) {
+        e.preventDefault();
+
+        var redirecturl = $(this).attr('href');
+        //        alert(redirecturl);
+        $("#AdminLoadingBg").fadeIn();
+        $("#AdminLoadimg").show();
+        $.ajax({
+            url: redirecturl,
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+
+        })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+       });
+    });
+
+
+</script>

@@ -1,0 +1,414 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.UserGroups>
+@Scripts.Render("~/bundles/jqueryval")
+@*<script src="../../Scripts/loadajax.js" type="text/javascript"></script>*@
+<script src="../../Scripts/js/tabs_accordian.js" type="text/javascript"></script>
+
+  <div class="col-lg-12 search-strip">
+            @*  @if (Model.Count != 0)
+            {*@
+            <div class="col-lg-8">
+                <div id="Zonelistsearch" class="col-lg-9 col-md-9 search-fld no-padding">
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter User Group Name", @required = "required", @class = "form-control",@maxlength="50",@Title="User Group Name" })</div>
+                <div class="col-lg-3 col-md-3">
+                    <a href="#" id="SearchBtn" class="col-lg-12 col-md-12 frm-src-fld"><i class="fa fa-search">
+                    </i> Search</a>
+                </div>
+            </div>
+            @*  }*@
+            <div class="col-lg-4">
+                <a class="md-trigger  frm-src-fld" style="cursor:pointer;" data-modal="modal-16" id="creusrgrp"><i class="fa fa-users"></i><i class="fa fa-plus plus-border"></i> Create User Group</a>
+            </div>
+        </div>
+
+<div id="test">
+
+
+    <div class="content-cont col-lg-12 col-md-12 no-padding">
+  
+        <div class="clearfix">
+        </div>
+        <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+            <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 grid-headding ">
+                    <i class="fa fa-users"></i> User Groups</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="clearfix">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            @if (Model.Count != 0)
+            {
+                      
+                <table class="table no-more-tables col-lg-12 table-color">
+                    <thead>
+                        <tr class="grid-headding-strips">
+                            <th class="col-lg-3 col-md-3">
+                                <div id="sortdiv">
+                                    @* @Ajax.ActionLink("Zone Name", "ZonesList", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions { UpdateTargetId = "some_grid_container" })*@
+                                    @Html.ActionLink("Name", "UserGroupsList", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                                </div>
+                            </th>
+                            <th class="col-lg-3 col-md-3">
+                                Description
+                            </th>
+                            <th class="col-lg-3 col-md-3">
+                                No.Of Users
+                            </th>
+                            <th class="col-lg-3 col-md-3">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="v-align-middle">@item.UserGroup_ID
+                                </td>
+                                <td class="v-align-middle">@item.Description
+                                </td>
+                                <td class="v-align-middle">@item.NoofUsers
+                                </td>
+                                <td class="v-align-middle">
+                                    @* @Html.ActionLink("Update", "UpdateUserGroup", "Admin", new { id = (int?)item.Id }, new { @class = "update1" })
+*@ 
+
+<a href="@Url.Action("UpdateUserGroup", "Admin", new { id = (int?)item.Id })" class="update1 update-icon" data-toggle="tooltip" data-placement="top" title="Update">
+    <i class="fa fa-pencil-square-o"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="col-lg-12 col-md-12">
+                    <div id="myPager" class="pull-right">
+                        @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                      "UserGroupsList",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        )
+    )
+                    </div>
+                    @*  @Html.PagedListPager(Model, page => Url.Action("UserGroupsList", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "divPartial" }))*@
+                </div>
+            }
+            else
+            {
+                <div>
+                    No Users Found</div>
+            }
+        </div>
+    </div>
+
+
+    <div class="clearfix">
+                        </div>
+
+    <div class="col-lg-12">
+        <div class=" col-lg-12 col-md-12 no-padding">
+            @if (Model.Count != 0)
+            {
+                <ul class="nav nav-tabs" id="tab-01">
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                        <li class="active"><a href="#@Model[i].Id">@Model[i].UserGroup_ID.ToString().ToUpper()</a>
+                        </li>
+                        }
+                        else
+                        {
+                        <li><a href="#@Model[i].Id">@Model[i].UserGroup_ID.ToString().ToUpper()</a> </li>
+                        }
+
+                    }
+                </ul>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"></a><a href="#grid-config" data-toggle="modal"
+                        class="config"></a><a href="javascript:;" class="reload"></a><a href="javascript:;"
+                            class="remove"></a>
+                </div>
+            
+                <div class="tab-content tab-tablehed no-mrg-cnt">
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+
+                        if (i == 0)
+                        {
+                        <div class="tab-pane active" id="@Model[i].Id">
+                            <div class="row column-seperation">
+                                <div class=" col-lg-12 col-md-12">
+                                    @Html.Action("EmployeeList", "Shared", new { id = @Model[i].Id })
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        else
+                        {
+                        <div class="tab-pane" id="@Model[i].Id">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.Action("EmployeeList", "Shared", new { id = @Model[i].Id })
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+
+                    }
+                </div>
+                
+                
+            }
+        </div>
+    </div>
+</div>
+<div class="md-modal md-effect-16" id="modal-16">
+    <div class="md-content">
+        <h3>
+            <div style="float: left">
+                Create User Group</div>
+            <div style="float: right">
+                <a href="#" id="usergrouppopclse">X</a></div>
+        </h3>
+        <div style="background-color: #fff;">
+            @Html.Action("CreateUserGroup", "Admin")
+        </div>
+    </div>
+</div>
+<div class="md-modal md-effect-16" id="modal-161">
+    <div class="md-content">
+        <h3>
+            <div style="float: left">
+                Update User Group
+            </div>
+            <div style="float: right">
+                <a href="#" id="updateusergrouppopclse">X</a></div>
+        </h3>
+        <div style="background-color: #fff;" id="uploaddiv">
+        </div>
+    </div>
+</div>
+<div class="md-overlay">
+</div>
+<!-- the overlay element -->
+
+<script type="text/javascript">
+    $('.update1,#myPager,#sortdiv').bind('contextmenu', function (e) {
+        alert("Mouse right click disabled");
+        return false;
+    }); 
+        </script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(this).scrollTop(0);
+
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#usergrouppopclse").click(function () {
+
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+
+
+            $("#txtGroupName-error").empty();
+
+
+
+            $('#txtDesc-error').empty();
+
+            $('#txtGroupName,#txtDesc').val("");
+
+        });
+
+
+        $("#updateusergrouppopclse").click(function () {
+
+            $("#modal-161").fadeOut();
+            $(".md-overlay").fadeOut();
+
+
+        });
+
+
+        $("#creusrgrp").click(function () {
+
+            $("#modal-16").fadeIn();
+            $(".md-overlay").fadeIn();
+        });
+
+
+
+        $('#SearchBtn').click(function (e) {
+            e.preventDefault();
+            // alert();
+            if ($('#SearchString').val() != "") {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+
+                $.ajax({
+                    url: "/Admin/UserGroupsList",
+                    type: 'GET',
+                    cache: false,
+                    data: { searchString: $('#SearchString').val() },
+
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html('');
+                        $('#divPartial').html(result);
+                    }
+                });
+            }
+            else {
+                return;
+            }
+            return false;
+        });
+
+
+        $(function () {
+            $('#sortdiv').on('click', 'a', function (e) {
+                e.preventDefault();
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html('');
+                        $('#divPartial').empty();
+                        $('#divPartial').html(result);
+                    }
+                });
+                return false;
+            });
+        })
+
+        $('.pagination').on('click', 'a', function (e) {
+            e.preventDefault();
+            // alert();
+            if (this.href != "") {
+                //  alert(this.href);
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+                        $('#divPartial').html('');
+                        $('#divPartial').empty();
+                        $('#divPartial').html(result);
+                    }
+                });
+            }
+
+        });
+
+        $(function () {
+            $('#myPager').on('click', 'a', function (e) {
+                e.preventDefault();
+                if (this.href != "") {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+                    $.ajax({
+                        url: this.href,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            $('#divPartial').html('');
+                            $('#divPartial').empty();
+                            $('#divPartial').html(result);
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+
+
+        $(".md-overlay").click(function (e) {
+            $('#modal-161').removeClass('md-show');
+        });
+        $(".update1").click(function (e) {
+            e.preventDefault();
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+           
+            var redirecturl = $(this).attr('href');
+            
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                cache: false,
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+          
+           $('#modal-161').show();
+           $('#modal-161').addClass('md-modal md-effect-16 md-show');
+           //  alert(result);
+           if (result.indexOf("Session") != -1) {
+               $("#modal-16").fadeOut();
+               $(".md-overlay").fadeOut();
+
+
+               $("#txtGroupName-error").empty();
+
+
+
+               $('#txtDesc-error').empty();
+
+               $('#txtGroupName,#txtDesc').val("");
+               $('#divPartial').html('');
+               $('#divPartial').html(result);
+           }
+           else {
+               $('#uploaddiv').html(result);
+           }
+           //           $('#uploaddiv').html('');
+       })
+       .error(function (xhr, status) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           // alert("2");
+       });
+        });
+
+    });
+</script>
+<script src="../../Scripts/classie.js"></script>
+<script src="../../Scripts/modalEffects.js"></script>
+<!-- for the blur effect -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+</script>
+<script src="../../Scripts/cssParser.js"></script>
+<script src="../../Scripts/css-filters-polyfill.js"></script>

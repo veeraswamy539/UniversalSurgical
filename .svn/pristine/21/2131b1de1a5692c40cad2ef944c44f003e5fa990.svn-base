@@ -1,0 +1,553 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.UserExpenses_Header>
+@Scripts.Render("~/bundles/jqueryval")
+@{
+    ViewBag.Title = "Expenditure Report for Admin";
+}
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 search-strip">
+    <div class="col-lg-12 col-md-12">
+        <div class="col-lg-2">
+            <div class="controls">
+                @if (ViewBag.ZonesList != null)
+                {   
+                    @Html.DropDownList("ddlZone", ViewBag.ZonesList as List<SelectListItem>, "All Zones", new { @class = "form-control", @id = "ddlZone", @placeholder = "Zone", @Title = "Zone" })
+                }
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="controls">
+                @if (ViewBag.EmployeesList != null)
+                {   
+                    @Html.DropDownList("ddlEmployee", ViewBag.EmployeesList as List<SelectListItem>, "All Employees", new { @class = "form-control", @id = "ddlEmployee", @placeholder = "Employee", @Title = "Employee" })
+                }
+            </div>
+        </div>
+        <div class="col-lg-2 dt-pik">
+            <div class="input-append success date">
+            @if (ViewBag.FromDate != null)
+            {
+                @Html.TextBox("FromDate", (string)(@ViewBag.FromDate), "{0:dd/MM/yyyy}", new { @placeholder = "From Date", @required = "required", @Title = "From Date" })
+            }
+            else
+            {
+                 @Html.TextBox("FromDate", "", "{0:dd/MM/yyyy}", new { @placeholder = "From Date", @required = "required", @Title = "From Date" })
+            }
+                
+                <span class="add-on"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <div class="col-lg-2 dt-pik ">
+            <div class="input-append success date">
+
+            @if (@ViewBag.ToDate != null)
+            {
+                @Html.TextBox("ToDate", (string)(@ViewBag.ToDate), "{0:dd/MM/yyyy}", new { @placeholder = "To Date", @required = "required", @Title = "To Date" })
+            }
+            else
+            {
+                @Html.TextBox("ToDate", "", "{0:dd/MM/yyyy}", new { @placeholder = "To Date", @required = "required", @Title = "To Date" })
+            }
+                <span class="add-on"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="controls">
+        @if (ViewBag.SelectedSOStatus == "true")
+        {
+            @Html.DropDownList("ddlIsSONumber", new List<SelectListItem>
+            { 
+                new SelectListItem { Text = "With SO Numbers", Value = "true", Selected=true},
+                new SelectListItem { Text = "Without SO Numbers", Value = "false" },  
+            }, "Over all expenditures status?", new { @class = "form-control", @id = "ddlIsSONumber", @Title = "Over All Expenditures Status?" })
+        }
+        else if (ViewBag.SelectedSOStatus == "false")
+        {
+            @Html.DropDownList("ddlIsSONumber", new List<SelectListItem>
+            { 
+                new SelectListItem { Text = "With SO Numbers", Value = "true"},
+                new SelectListItem { Text = "Without SO Numbers", Value = "false", Selected = true },  
+            }, "Over all expenditures status?", new { @class = "form-control", @id = "ddlIsSONumber", @Title = "Over All Expenditures Status?" })
+        }
+        else
+        {
+                @Html.DropDownList("ddlIsSONumber", new List<SelectListItem>
+                { 
+                    new SelectListItem { Text = "With SO Numbers", Value = "true"},
+                    new SelectListItem { Text = "Without SO Numbers", Value = "false" },  
+                }, "Over All Expenditures Status?", new { @class = "form-control", @id = "ddlIsSONumber", @Title = "Over All Expenditures Status?" })
+        }
+            </div>
+        </div>
+        <div class="col-lg-2  ">
+            <a href="#" id="btnSubmit" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa"></i>
+                Get Records</a> <span style="color: Red; font-size: small" id="errMessage"></span>
+        </div>
+    </div>
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="test">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+            <div id="Heading1" style="text-align: center; font-weight: bold; font-size: 25px;
+                color: #333645; display: none;">
+
+                @if (ViewBag.BetweenDates == "betweenDates")
+                {
+                    @:Expense Report Between Dates
+                }
+                else if (ViewBag.ForEmployee == "Employee")
+                {
+		            @:Employee Expense Report
+            	}
+                else if (ViewBag.FromServiceOrderNos == "Available")
+                {
+		            @:Expense Report SO# Wise
+	            }
+                else if (ViewBag.FromServiceOrderNos == "NotAvailable")
+                {
+		            @:Expense Report Missing SO#
+	            }
+                else
+                {
+                    @:Expense Report
+                }
+                </div>
+            <div class="clearfix">
+            </div>
+            <div id="Heading" style="display: none; float: left; font-weight: bold; color: #333645;">
+                <span>Universal Surgicals</span>
+                <div class="clearfix">
+                </div>
+                <span>15-15-57/3, 3/2, Prince Appartments</span>
+                <div class="clearfix">
+                </div>
+                <span>Beach Road, Visakhapantam</span>
+            </div>
+            <div style="float: left; display: none;" id="ExcelLogo">
+                <img src= "@Url.Content("~/Content/Images/login-logo.png")" alt="IMAGES" />
+            </div>
+            <div class="clearfix">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <i class="fa fa-bar-chart"></i> Expenditures Report
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <div class="col-lg-10 col-md-3 emp-exp-dt">
+                    @if (Model.Count != 0)
+                    {
+                        <a href="#" id="btnExport4"><img src="~/Content/Images/pdfdownload.png" alt="Download Excel" title="PDF Download" height="42" width="42"></a>
+                    }
+                    <div class="clearfix">
+                    </div>
+                </div>
+                 <div class="col-lg-1 col-md-3 emp-exp-dt">
+                            @if (Model.Count != 0)
+                            {
+                               
+                                  <a href="#" id="btnExportExcel4" onClick="javascript:fnExcelReport4();"><img src="~/Content/Images/exceldownload.png" alt="Download Excel" title="Excel Download" height="42" width="42"></a>
+                            }
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        </div>
+        <div id="divF" style="display: none; font-weight: bold; color: #333645;">
+         <div id="divlogoEXCEL2"></div>
+            @if (ViewBag.ForEmployee == "Employee")
+            {
+                @:Employee Name:
+                    <label>@ViewBag.Fullname</label>
+                    <div class="clearfix"></div>
+                @:Zone:
+                    <label>@ViewBag.Zone</label>
+                    <div class="clearfix"></div>
+            }
+            
+            From Date:
+                <label>@ViewBag.FromDate</label>
+                <div class="clearfix"></div>
+            To Date:
+                <label>@ViewBag.ToDate</label>
+        </div>
+        <div class="table-responsive" id="normallist4">
+        @if (Model.Count > 0)
+        {
+            <table class="table no-more-tables col-lg-12  table-color">
+                <thead>
+                    <tr class="grid-headding-strips">
+                        <th class="col-lg-1 col-md-1 text-center">Sl.No</th>
+
+                        @if (@ViewBag.ForEmployee == "Employee")
+                        {
+                            <th class="col-lg-1 col-md-1 text-center">Date</th>
+                            <th class="col-lg-2 col-md-2 text-center">SO Number</th>
+                            <th class="col-lg-2 col-md-2 text-center">Expense Type</th>
+                            <th class="col-lg-2 col-md-2 text-center">From Location</th>
+                            <th class="col-lg-2 col-md-2 text-center">To Location</th>
+                            <th class="col-lg-2 col-md-2 text-center">Kms</th>
+                        }
+                        
+                        @if (@ViewBag.FromServiceOrderNos == "AvailableWithEmployee")
+                        {
+                            <th class="col-lg-1 col-md-1 text-center">Date</th>
+                            <th class="col-lg-2 col-md-2 text-center">SO Number</th>
+                            <th class="col-lg-2 col-md-2 text-center">SO Confirmation Number</th>
+                        }
+                        else if (@ViewBag.FromServiceOrderNos == "NotAvailableWithEmployee")
+                        {
+                            <th class="col-lg-1 col-md-1 text-center">Date</th>
+                            <th class="col-lg-2 col-md-2 text-center">Instrument Serial Number</th>
+                            <th class="col-lg-2 col-md-2 text-center">Justification</th>
+                        }
+
+                        @if (@ViewBag.BetweenDates == "betweenDates")
+                        {
+                            <th class="col-lg-1 col-md-1 text-center">Employee Id</th>
+                            <th class="col-lg-1 col-md-1 text-center">Employee Name</th>
+                        }
+
+                        @if (@ViewBag.FromServiceOrderNos == "Available" || @ViewBag.FromServiceOrderNos == "AvailableWithZone" || @ViewBag.FromServiceOrderNos == "AvailableWithAll")
+                        {
+                            <th class="col-lg-1 col-md-1 text-center">Employee Id</th>
+                            <th class="col-lg-1 col-md-1 text-center">Date</th>
+                            <th class="col-lg-2 col-md-2 text-center">SO Number</th>
+                            <th class="col-lg-2 col-md-2 text-center">SO Confirmation Number</th>
+                        }
+                        
+                        @if (@ViewBag.FromServiceOrderNos == "NotAvailable" || @ViewBag.FromServiceOrderNos == "NotAvailableWithZone" || @ViewBag.FromServiceOrderNos == "NotAvailableWithAll")
+                        {
+                            <th class="col-lg-1 col-md-1 text-center">Employee Id</th>
+                            <th class="col-lg-1 col-md-1 text-center">Date</th>
+                            <th class="col-lg-2 col-md-2 text-center">Instrument Serial Number</th>
+                            <th class="col-lg-2 col-md-2 text-center">Justification</th>
+                        }
+                        
+                        @if (@ViewBag.ForEmployee != "Employee" && @ViewBag.BetweenDates != "betweenDates")
+                        {
+                            <th class="col-lg-1 col-md-1 text-center">Client Name</th>
+                        }
+                        
+                        <th class="col-lg-1 col-md-1 text-center">Amount</th>
+                         @if (@ViewBag.ForEmployee != "Employee")
+                         {
+                            <th class="col-lg-1 col-md-1 text-center">Paid Amount</th>
+                         }
+                         @if (@ViewBag.BetweenDates == "betweenDates")
+                         {
+                             <th class="col-lg-1 col-md-1 text-center">Lumpsum Amount</th>
+                         }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int j = 1;}
+                    @{decimal expenseTotalAmount = 0;}
+                    @foreach (var item in Model)
+                    {
+                        if (@ViewBag.FromServiceOrderNos == "Available" || @ViewBag.FromServiceOrderNos == "AvailableWithZone" || @ViewBag.FromServiceOrderNos == "AvailableWithAll")
+                        {
+                            <tr>
+                                <td class="v-align-middle text-center">@j</td>
+                                <td class="v-align-middle text-center">@item.Employee_ID</td>
+                                <td class="v-align-middle text-center">@item.FromDate.Value.ToString("dd-MM-yyyy").Replace("-", "/")</td>
+                                <td class="v-align-middle text-center">@item.ServiceOrderNo</td>
+                                <td class="v-align-middle text-center">@item.ServiceOrderConfirmationNo</td>
+                                <td class="v-align-middle text-center">@item.ClientName</td>
+                                @*@if (item.MultipleSONoID == 0)
+                                {*@
+                                    <td class="v-align-middle text-center">@item.TotalAmount</td>
+                                    <td class="v-align-middle text-center">@item.PaidAmount</td>
+                                    
+                                @*}
+                                else
+                                {
+                                    <td class="v-align-middle text-center">0</td>
+                                    <td class="v-align-middle text-center">0</td>
+                                }*@
+                                
+                            </tr>
+                            expenseTotalAmount = expenseTotalAmount + @item.TotalAmount;
+                            j++;
+                        }
+                        else if (@ViewBag.FromServiceOrderNos == "NotAvailable" || @ViewBag.FromServiceOrderNos == "NotAvailableWithZone" || @ViewBag.FromServiceOrderNos == "NotAvailableWithAll")
+                        {
+		                    <tr>
+                                <td class="v-align-middle text-center">@j</td>
+                                <td class="v-align-middle text-center">@item.Employee_ID</td>
+                                <td class="v-align-middle text-center">@item.FromDate.Value.ToString("dd-MM-yyyy").Replace("-", "/")</td>
+                                <td class="v-align-middle text-center">@item.SerialNoforInstrument</td>
+                                <td class="v-align-middle text-center">@item.ExplanationforSONo</td>
+                                <td class="v-align-middle text-center">@item.ClientName</td>
+                              @*  @if (item.MultipleSONoID == 0)
+                                {*@
+                                    <td class="v-align-middle text-center">@item.TotalAmount</td>
+                                    <td class="v-align-middle text-center">@item.PaidAmount</td>
+                                    
+                               @* }
+                                else
+                                {
+                                    <td class="v-align-middle text-center">0</td>
+                                    <td class="v-align-middle text-center">0</td>
+                                }*@
+                                
+                            </tr>
+                            expenseTotalAmount = expenseTotalAmount + @item.TotalAmount;
+                            j++;
+                        }
+                        else if (@ViewBag.BetweenDates == "betweenDates")
+                        {
+                            <tr>
+                                <td class="v-align-middle text-center">@j</td>
+                                <td class="v-align-middle text-center">@item.Employee_ID</td>
+                                <td class="v-align-middle text-center">@item.EmployeeName</td>
+                                <td class="v-align-middle text-center">@item.TotalAmount</td>
+                                <td class="v-align-middle text-center">@item.PaidAmount</td>
+                                <td class="v-align-middle text-center">@item.LumpsumAmount</td>
+                            </tr>
+                            expenseTotalAmount = expenseTotalAmount + @item.TotalAmount;
+                            j++;
+                        }
+                        else if (@ViewBag.FromServiceOrderNos == "AvailableWithEmployee")
+                        {
+		                    <tr>
+                                <td class="v-align-middle text-center">@j</td>
+                                <td class="v-align-middle text-center">@item.FromDate.Value.ToString("dd-MM-yyyy").Replace("-", "/")</td>
+                                <td class="v-align-middle text-center">@item.ServiceOrderNo</td>
+                                <td class="v-align-middle text-center">@item.ServiceOrderConfirmationNo</td>
+                                <td class="v-align-middle text-center">@item.ClientName</td>
+                                @*@if (item.MultipleSONoID == 0)
+                                {*@
+                                    <td class="v-align-middle text-center">@item.TotalAmount</td>
+                                    <td class="v-align-middle text-center">@item.PaidAmount</td>
+                                    
+                                @*}
+                                else
+                                {
+                                    <td class="v-align-middle text-center">0</td>
+                                    <td class="v-align-middle text-center">0</td>
+                                }*@
+                                
+                            </tr>
+                            expenseTotalAmount = expenseTotalAmount + @item.TotalAmount;
+                            j++;
+                        }
+                        else if (@ViewBag.FromServiceOrderNos == "NotAvailableWithEmployee")
+                        {
+		 
+                            <tr>
+                                <td class="v-align-middle text-center">@j</td>
+                                <td class="v-align-middle text-center">@item.FromDate.Value.ToString("dd-MM-yyyy").Replace("-", "/")</td>
+                                <td class="v-align-middle text-center">@item.SerialNoforInstrument</td>
+                                <td class="v-align-middle text-center">@item.ExplanationforSONo</td>
+                                <td class="v-align-middle text-center">@item.ClientName</td>
+                               @* @if (item.MultipleSONoID == 0)
+                                {*@
+                                    <td class="v-align-middle text-center">@item.TotalAmount</td>
+                                    
+                                    <td class="v-align-middle text-center">@item.PaidAmount</td>
+                                @*}
+                                else
+                                {
+                                    <td class="v-align-middle text-center">0</td>
+                                    <td class="v-align-middle text-center">0</td>
+                                }*@
+                                
+                            </tr>
+                            expenseTotalAmount = expenseTotalAmount + @item.TotalAmount;
+                            j++;
+                        }
+                        else
+                        {
+                            foreach (var item1 in item.UserExpenseDetailsList)
+                            {
+                                <tr>
+                                    <td class="v-align-middle text-center">@j</td>
+                                    <td class="v-align-middle text-center">@item.FromDate.Value.ToString("dd-MM-yyyy").Replace("-", "/")</td>
+                                    <td class="v-align-middle text-center">@item1.SON</td>
+                                    <td class="v-align-middle text-center">@item1.ExpenseTypeDetails</td>
+                                    <td class="v-align-middle text-center">@item1.FromLocation</td>
+                                    <td class="v-align-middle text-center">@item1.ToLocation</td>
+                                    <td class="v-align-middle text-center">@item1.TraveledKms</td>
+                                    <td class="v-align-middle text-center">@item1.Amount</td>
+                                </tr>    
+                                j++;
+                                expenseTotalAmount = expenseTotalAmount + @item1.Amount;
+                            }
+                        }
+                    }
+                    <tr>
+                        <td colspan="8" class=" text-right">
+                            @if (Model.Count != 0)
+                            {
+                                <span style="font-weight: bold; color: #ccc; text-transform: uppercase;">Total Amount
+                                    : @expenseTotalAmount</span>  
+ 
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <br />
+             <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+            <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+        }
+    </div>
+</div>
+<!--[if lt IE 10]>
+    <script type="text/javascript">
+        $(function () {
+            // Invoke the plugin
+            $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+        });
+    </script>
+<![endif]-->
+<script type="text/javascript">
+    function fnExcelReport4() {
+        var Zone = $("#ddlZone").val();
+        var Employee = $("#ddlEmployee").val();
+        var SDate = $("#FromDate").val();
+        var EDate = $("#ToDate").val();
+        var isSoNums = $("#ddlIsSONumber").val();
+
+
+        $("#divF").show();
+        $("#divlogoEXCEL2").append("<img src='http://universal.globaldatasolutions.com/Content/Images/login-logo.png'/><br/><br/><br/><br/><br/><br/><b>Universal Surgicals</b><br/><b>15-15-57/3, 3/2, Prince Appartments<br/></b></br>");
+        var contents = $("#divF").html() + $("#normallist4").html();
+
+        var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+        tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+        tab_text = tab_text + '<x:Name>Expenditure Reports</x:Name>';
+
+        tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+        tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+        //            tab_text = tab_text + "<table border='1px'>";
+        tab_text = tab_text + contents;
+        tab_text = tab_text + '</body></html>';
+
+        var data_type = 'data:application/vnd.ms-excel';
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+            if (window.navigator.msSaveBlob) {
+                var blob = new Blob([tab_text], {
+                    type: "application/csv;charset=utf-8;"
+                });
+                navigator.msSaveBlob(blob, 'expenditurereports.xls');
+            }
+        } else {
+            $('#btnExportExcel4').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+            $('#btnExportExcel4').attr('download', 'expenditurereports.xls');
+        }
+        $('#Heading').hide();
+        $('#divlogoEXCEL2').empty();
+        $('#divF').hide();
+        $('#ExcelLogo').hide();
+        $('#Heading1').css("text-align", "left");
+        $('#Heading1').css("font-weight", "normal");
+        $('#btnExportExcel4').show();
+        $('#btnExport4').show();
+    }
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+        $.validator.addMethod("date", function (value, element) {
+            if (value != "") {
+                return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+            }
+            else {
+
+                return true;
+            }
+        },
+        "Please enter a date in the format dd/mm/yyyy."
+        );
+        $('#FromDate,#ToDate').datepicker().on('changeDate', function (ev) {
+            ev.preventDefault();
+            $(this).datepicker('hide');
+        });
+        $("#btnExport4").click(function (e) {
+            $('#Heading').show();
+            $('#Heading1').show();
+            $('#divF').show();
+            $('#ExcelLogo').show();
+            $('#btnExport4').hide();
+            $('#btnExportExcel4').hide();
+            var contents = $("#test").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+            $('#Heading').hide();
+            $('#divF').hide();
+            $('#ExcelLogo').hide();
+            $('#Heading1').hide();
+            $('#btnExport4').show();
+            $('#btnExportExcel4').show();
+
+        });
+
+        $('#btnSubmit').click(function (e) {
+            e.preventDefault();
+            $("#errMessage").hide();
+            $("#errMessage").text('');
+            var Zone = $("#ddlZone").val();
+            var Employee = $("#ddlEmployee").val();
+            var SDate = $("#FromDate").val();
+            var EDate = $("#ToDate").val();
+            var isSoNums = $("#ddlIsSONumber").val();
+            if (SDate.length > 0 && EDate.length > 0) {
+                if ($.datepicker.parseDate("dd/mm/yy", SDate) <= $.datepicker.parseDate("dd/mm/yy", EDate)) {
+                    $.ajax({
+                        url: '/Admin/ExpenditureReportForAdmin',
+                        type: "GET",
+                        cache: false,
+                        data: { Zone: Zone, Employee: Employee, SDate: SDate, EDate: EDate, SoNumrOrNot: isSoNums },
+                        success: function (data) {
+                            $("#divPartial").html('');
+                            $("#divPartial").html(data);
+                        },
+                        error: function (event, jqxhr, settings, exception) {
+                            alert(exception);
+                        }
+                    });
+                }
+                else {
+                    $("#errMessage").text('');
+                    $("#errMessage").show();
+                    $("#errMessage").text("Please select From Date less than Todate");
+                }
+            }
+            else {
+                $("#errMessage").text('');
+                $("#errMessage").show();
+                $("#errMessage").text("Please select From and To dates");
+            }
+
+        });
+
+    });
+
+</script>

@@ -1,0 +1,202 @@
+﻿@using Universal.BusinessEntities;
+@model UserGroups
+
+<form id="frmCreateUg">
+
+
+        <div class="col-lg-12" style="min-height:250px; padding-top:30px;">
+            <div class="col-lg-12 col-md-4  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(Model => Model.UserGroup_ID, new { @class = "form-control", @placeholder = "User Group Id", @id = "txtGroupName", @Title = "User Group Id" })
+                    @Html.ValidationMessageFor(Model => Model.UserGroup_ID)
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-lg-12  col-md-6  m-b-10">
+                <div class="controls">
+                    @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control", @placeholder = "Group Description", @id = "txtDesc", @Title = "Description" })
+                    @Html.ValidationMessageFor(Model => Model.Description)
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-lg-3 col-md-4  m-b-10 pull-right">
+                <div class="controls">
+                  
+                    <button type="submit" class="md-trigger" id="btnCreateUG" name="btnCreateUG" value="Create User Group" >Create</button>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4  m-b-10 pull-right">
+                <div class="controls">
+                  
+                    <button type="reset" class="md-trigger btnClear" id="btnClear" name="btnClear" value="Clear" >Clear</button>
+
+                </div>
+            </div>
+    
+                 <div class="clearfix"></div>
+
+         <div class="alert alert-success" id="result" style="display: none; width:80%; text-align:center; margin-left:30px;"></div>
+
+         <div class="popupposition">
+ <div class="alert alert-warning" id="usergroupwarning" runat="server">
+<strong>Warning !</strong><br /><label id="usergrouperrormessage"></label>
+
+
+</div>
+
+</div>
+
+
+<div id="CreateusergroupLoadimg" runat="server" style="text-align: center; padding: 50px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:0%; left:0%;"> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+
+        </div>
+
+
+
+</form>
+@Scripts.Render("~/bundles/jqueryval")
+
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".popupposition").hide();
+
+        $("#txtGroupName").change(function (e) {
+            e.preventDefault();
+            var usergroup = $('#txtGroupName').val();
+
+            $.ajax({
+                url: '/Admin/VerifyUserGroupID',
+                type: "GET",
+                data: { UserGroupID: usergroup },
+                success: function (data) {
+                    if (data >= 1) {
+                        $("#txtGroupName").val("");
+                        $(".popupposition").fadeIn();
+                        $('#usergrouperrormessage').text('UserGroupID already exist, please enter new UserGroupID');
+                        $('#usergrouperrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                        $('#txtGroupName').focus();
+                    }
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    //                    alert(jqxhr);
+                }
+            });
+        });
+
+        $('.md-overlay').click(function () {
+            $('#txtGroupName-error').empty();
+            $('#txtDesc-error').empty();
+            $('#txtGroupName').val('');
+            $('#txtDesc').val('');
+        });
+
+        $('.btnClear').click(function () {
+            $("#frmCreateUg").trigger('reset');
+
+            $('#txtDesc-error').empty();
+            $('#txtGroupName-error').empty();
+        });
+
+
+        $("#btnCreateUG").click(function (e) {
+            e.preventDefault();
+
+            
+            var usergroup = $('#txtGroupName').val();
+
+            $.ajax({
+                url: '/Admin/VerifyUserGroupID',
+                type: "GET",
+                data: { UserGroupID: usergroup },
+                success: function (data) {
+                    $("#CreateusergroupLoadimg").hide();
+                    if (data >= 1) {
+                        $("#txtGroupName").val("");
+
+                        $('#txtGroupName').focus();
+                    }
+                    else {
+                        var valid = $("#frmCreateUg").valid();
+
+                        if (valid) {
+                            $("#CreateusergroupLoadimg").show();
+                            $.ajax({
+                                cache: false,
+                                type: 'POST',
+                                url: '/Admin/CreateUserGroup',
+                                data: $("#frmCreateUg").serialize(),
+                                dataType: 'json',
+                                success: function (data) {
+                                    $("#CreateusergroupLoadimg").hide();
+                                    $('#result').text(data.Text);
+                                    if (data.Available === true) {
+                                        $('#result').text(data.Text);
+                                        $('#result').show();
+                                        $(':input', $("#frmCreateUg"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                                        setTimeout(function () {
+                                            $('#modelbg').hide();
+                                            $('#modelbg').hide();
+                                            $('#modal-161').removeClass('md-show');
+                                            $.ajax({
+                                                url: "/Admin/UserGroupsList",
+                                                contentType: 'application/html; charset=utf-8',
+                                                type: 'GET',
+                                                cache: false,
+                                                dataType: 'html'
+
+                                            })
+                     .success(function (result) {
+
+                         $('#divPartial').html(result);
+                     })
+                      .error(function (xhr, status) {
+                          // alert("2");
+                      });
+
+                                        }, 2000);
+
+                                    }
+                                    else {
+                                        $('#result').text(data.Text);
+                                        $('#result').show();
+                                    }
+
+
+                                },
+                                failure: function () {
+                                    alert("fail");
+                                }
+
+                            });
+                        }
+                        else {
+                            return;
+
+                        }
+                    }
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    //                    alert(jqxhr);
+                }
+            });
+
+
+        });
+    });
+</script>

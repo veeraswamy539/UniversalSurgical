@@ -1,0 +1,402 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.ExpenseBlockedDates>
+@Scripts.Render("~/bundles/jqueryval")
+<div class="col-lg-12 search-strip">
+    <div class="col-lg-8 col-md-8">
+        <div class="col-lg-8 col-md-8 search-fld no-padding">
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter employee name", @required = "required", @class = "form-control", @Title = "employee name" })</div>
+        <div class="col-lg-4 col-md-4  ">
+            <a href="@Url.Action("ExpenseBlocking", "Admin", new { status = @ViewBag.status })" id="searchBtn" class="col-lg-12 col-md-12 frm-src-fld  ">
+                <i class="fa fa-search"></i> Search</a>
+        </div>
+    </div>
+    @if (@ViewBag.status == "Blocked")
+    {
+        <div class="col-lg-4 col-md-4  ">
+            <a href="@Url.Action("ExpenseBlocking", "Admin", new { status = "Unblocked" })" id="" class="col-lg-12 col-md-12 frm-src-fld update">
+                Unblocked Dates</a>
+        </div>
+    }
+    else if (@ViewBag.status == "Unblocked")
+    {
+        <div class="col-lg-4 col-md-4  ">
+            <a href="@Url.Action("ExpenseBlocking", "Admin", new { status = "Blocked" })" id="" class="col-lg-12 col-md-12 frm-src-fld update">
+                Blocked Dates</a>
+        </div>
+    }
+</div>
+<div id="divExpeseBlocking">
+    <div class="content-cont col-lg-12 col-md-12 no-padding">
+        <div class="clearfix">
+        </div>
+        <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+            <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 ">
+                    <i class="fa fa-calendar-times-o"></i> Expense Blocked/Unblocked Dates Information</div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right">
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="clearfix">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            @if (Model.Count != 0)
+            {
+            
+                <table class="table no-more-tables col-lg-12 table-color">
+                    <thead>
+                        <tr class="grid-headding-strips">
+                            <th class="col-lg-1 col-md-1">
+                                Emp Id
+                            </th>
+                            <th class="col-lg-2 col-md-2">
+                                Name
+                            </th>
+                            <th class="col-lg-2 col-md-2">
+                                <div id="sortdivblock">
+                                    @Html.ActionLink("From Date", "ExpenseBlocking", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, status = @ViewBag.status })
+                                </div>
+                            </th>
+                            <th class="col-lg-2 col-md-2">
+                                To Date
+                            </th>
+                            <th class="col-lg-1 col-md-1">
+                                Status
+                            </th>
+                            
+                            <th class="col-lg-1 col-md-1">
+                                Type
+                            </th>
+
+                            <th class="col-lg-3 col-md-3">
+                                Comments
+                            </th>
+                            @if (@ViewBag.status == "Blocked")
+                            {
+                                <th class="col-lg-2 col-md-2">
+                                    Actions
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="v-align-middle">@item.UserId
+                                </td>
+                                <td class="v-align-middle">@item.Name
+                                </td>
+                                <td class="v-align-middle">@item.BlockingFromDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td class="v-align-middle">@item.BlockingToDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td class="v-align-middle">@item.Status
+                                </td>
+                                <td class="v-align-middle">
+                                @if (item.BlockingType == "TrainingExpenditure")
+                                {
+                                    @:Training
+                                }
+                                else
+                                {
+                                    @:Expenditure
+                                }
+                                </td>
+
+                                @if (@item.Comments != null && !(string.IsNullOrEmpty(item.Comments)))
+                                {
+                                    <td>
+                                        <div style="overflow: scroll; height: 70px; width: 300px">@item.Comments</div>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="v-align-middle">
+                                        No Comments
+                                    </td>
+                                }
+                                @if (@ViewBag.status == "Blocked")
+                                {
+                                    <td class="v-align-middle">
+                                        <a href="@Url.Action("UnblockDates", "Admin", new { id = (int?)item.Id })" class="unblock update-icon" data-toggle="tooltip" data-placement="top" title="Unblock Dates">
+                                            <i class="fa fa-calendar-times-o"></i></a>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            
+            
+                <div class="col-lg-12 col-md-12">
+                    <div id="myPagerexblock" class="pull-right">
+                        @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                      "ExpenseBlocking", "Admin",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter,
+                status = @ViewBag.status
+            }
+        )
+    )
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-12 col-md-12 m-t-20 m-l-20">
+                    No @ViewBag.status dates
+                </div>
+            
+            }
+        </div>
+    </div>
+</div>
+<div class="md-modal md-effect-16" id="modal-162">
+    <div class="md-content">
+        <h3>
+            <div style="float: left">
+                Unblock Dates
+            </div>
+            <div style="float: right">
+                <a href="#" id="blockclosse">X</a></div>
+        </h3>
+        <div style="background-color: #fff;" id="uploaddiv">
+            <div class="col-lg-12" style="min-height: 120px;">
+                Are you sure you want to unblock these dates?
+                <div class="col-lg-12 col-md-4  m-b-10 m-t-10 no-padding">
+                    <input type="text" id="txtComment" required placeholder="Comment" title="Comment"
+                        maxlength="400" class="form-control" />
+                    <span id="errorComment" style="color: #ff6d93"></span>
+                </div>
+                <div class="col-lg-6 col-md-6 pull-right text-right m-b-20">
+                    <div class="dfl-buttom col-lg-6 col-md-4 col-sm-12 col-xs-12">
+                        <input type="button" id="btnno" name="btnno" value="No" />
+                    </div>
+                    <div class="dfl-buttom col-lg-6 col-md-4 col-sm-12 col-xs-12">
+                        <input type="submit" id="btnbtnYes" name="btnYes" value="Yes" />
+                    </div>
+                </div>
+                <span id="result1" style="display: none;"></span>
+            </div>
+            <input type="hidden" id="route" />
+        </div>
+    </div>
+</div>
+<div class="md-overlay">
+</div>
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<!-- the overlay element -->
+<script type="text/javascript">
+    $('.update,#sortdivblock').bind('contextmenu', function (e) {
+        alert("Mouse right click disabled");
+        return false;
+    }); 
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(".unblock").click(function (e) {
+            e.preventDefault();
+            $("#route").val(this.href);
+            $("#modal-162").addClass('md-show');
+            $("#modal-162").show();
+            $("#modal-162").fadeIn();
+            $(".md-overlay").fadeIn();
+        });
+
+        $('#searchBtn').click(function (e) {
+            e.preventDefault();
+            if ($('#SearchString').val() != "") {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+                    cache: false,
+                    data: { searchString: $('#SearchString').val() },
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadingBg").hide();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html("");
+                        $('#divPartial').html(result);
+                    }
+                });
+            }
+            else {
+                return;
+            }
+            return false;
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnbtnYes").click(function (e) {
+            e.preventDefault();
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            var comment = $("#txtComment").val();
+            if (comment != "") {
+                $('#errorComment').text('');
+                $('#errorComment').hide();
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: $("#route").val(),
+                    data: { comment: comment },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadingBg").hide();
+                        $("#AdminLoadimg").hide();
+                        $('#result1').text(data.Text);
+                        $('#result1').show();
+                        $("#route").val('');
+                        setTimeout(function () {
+                            $("#modal-162").fadeOut();
+                            $(".md-overlay").fadeOut();
+                            $.ajax({
+                                url: "/Admin/ExpenseBlocking",
+                                contentType: 'application/html; charset=utf-8',
+                                type: 'GET',
+                                dataType: 'html'
+                            })
+                            .success(function (result) {
+                                $('#divPartial').html(result);
+                            })
+                            .error(function (xhr, status) {
+                            });
+                        }, 2000);
+
+                        if (data.Available === true) {
+                            $('#result1').text(data.Text);
+                            $('#resul1').show();
+                            $('#modelbg').hide();
+                            $('#modelbg').hide();
+                        }
+                        else {
+                            $('#result1').text(data.Text);
+                            $('#result1').show();
+                        }
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+                });
+                $('#modal-162').removeClass('md-show');
+                $("#modal-162").hide();
+                $(".md-overlay").fadeOut();
+                $("#route").val('');
+            }
+            else {
+                $("#AdminLoadingBg").fadeOut();
+                $("#AdminLoadingBg").hide();
+                $("#AdminLoadimg").hide();
+                $('#errorComment').text('Please enter Comment');
+                $('#errorComment').show();
+                return;
+            }
+        });
+
+        $("#btnno").click(function (e) {
+            $('#modal-162').removeClass('md-show');
+            $("#modal-162").hide();
+            $(".md-overlay").fadeOut();
+            $("#route").val('');
+            $("#txtComment").val('');
+        });
+
+        $("#blockclosse").click(function (e) {
+            e.preventDefault();
+            $("#modal-162").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#route").val('');
+            $("#modal-162").removeClass('md-show');
+            $("#modal-162").hide();
+            $("#txtComment").val('');
+            $('#errorComment').empty();
+        });
+
+        $('#sortdivblock').on('click', 'a', function (e) {
+            e.preventDefault();
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: false,
+                success: function (result) {
+                    $("#AdminLoadingBg").fadeOut();
+                    $("#AdminLoadingBg").hide();
+                    $("#AdminLoadimg").hide();
+                    $('#divPartial').html("");
+                    $('#divPartial').html(result);
+                }
+            });
+            return false;
+        });
+
+        $(".update").click(function (e) {
+            e.preventDefault();
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            var redirecturl = $(this).attr('href');
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $("#AdminLoadingBg").fadeOut();
+                $("#AdminLoadingBg").hide();
+                $("#AdminLoadimg").hide();
+                $('#divPartial').show();
+                $('#divPartial').html(result);
+            })
+            .error(function (xhr, status) {
+            });
+        });
+        $('#myPagerexblock').on('click', 'a', function (e) {
+            e.preventDefault();
+            if (this.href != "") {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadingBg").hide();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html("");
+                        $('#divPartial').html(result);
+
+                    }
+                });
+            }
+        });
+
+
+    });
+</script>

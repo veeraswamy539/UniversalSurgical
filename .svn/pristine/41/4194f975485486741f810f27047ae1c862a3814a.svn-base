@@ -1,0 +1,236 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.UserExpenses_Header>
+
+@{
+    ViewBag.Title = "Drafted Expenditure";
+}
+<div id="some_grid1_container">
+<div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+@*    <div class="grid-hd col-lg-12 col-md-12 col-sm-12" style="background-color:#333645; color:#fff;">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 " >Drafted Expenditure List</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+    </div>*@
+
+
+
+
+                    <div class="grid-hd col-lg-12 col-md-12 col-sm-12  grid-headding">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 "><i class="fa fa-pencil-square-o"></i> Drafted Expenditure List</div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="clearfix"></div>
+  
+        @if (Model.Count != 0)
+        {
+            @*<table class="table no-more-tables col-lg-12">
+                <thead>
+                    <tr>
+                        <th class="col-lg-2 col-md-2">Expenditure Date</th>
+                        <th class="col-lg-2 col-md-2">Expenditure Type</th>
+                        <th class="col-lg-2 col-md-2">Localization</th>
+                        <th class="col-lg-2 col-md-2">Company Name</th>
+                        <th class="col-lg-2 col-md-2">SO No/Explanation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="v-align-middle">@item.FromDate.Value.ToString("dd/MM/yyyy")</td>
+                        <td class="v-align-middle">@item.UserExpenseType</td>
+                        <td class="v-align-middle">@item.Localization</td>
+                        <td class="v-align-middle">@item.ClientName</td>
+                        @if (@item.ServiceOrderNo != null)
+                        {
+                             <td class="v-align-middle">@item.ServiceOrderNo</td>
+                        }
+                        else
+                        {
+                            <td class="v-align-middle">@item.ExplanationforSONo</td>
+                        }
+
+                        <td class="v-align-middle">
+                        @if (@item.UserExpenseType == "Expenditure")
+                        {
+
+                             <a href="@Url.Action("Expenditure", "Employee", new { ExistingID = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="top" title="Update">
+                                            <i class="fa fa-pencil-square-o"></i></a>
+                            
+                        }
+                        else
+                        {
+
+                            
+                            <a href="@Url.Action("Training", "Employee", new { ExistingID = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="top" title="Update">
+                                            <i class="fa fa-pencil-square-o"></i></a>
+                        }
+                        </td>
+
+                    </tr>
+                }
+                </tbody>
+            </table>*@
+            
+            
+            
+            <div class="table-responsive">
+   
+
+            <table class="table no-more-tables col-lg-12 table-color ">
+                <thead>
+                    <tr class="grid-headding-strips">
+           
+                       <th class="col-lg-2 col-md-2">Expenditure Date</th>
+                        <th class="col-lg-2 col-md-2">Expenditure Type</th>
+                        <th class="col-lg-2 col-md-2">Localization</th>
+                        <th class="col-lg-2 col-md-2">Company Name</th>
+                        <th class="col-lg-2 col-md-2">SO No/Explanation</th>
+                          <th class="col-lg-2 col-md-2"> Actions</th>
+
+ 
+                    </tr>
+                </thead>
+                <tbody>
+      @foreach (var item in Model)
+      {
+                    <tr>
+                        <td class="v-align-middle">@item.FromDate.Value.ToString("dd/MM/yyyy")</td>
+                        <td class="v-align-middle">@item.UserExpenseType</td>
+                        <td class="v-align-middle">@item.Localization</td>
+                        <td class="v-align-middle">@item.ClientName</td>
+                        @if (@item.ServiceOrderNo != null)
+                        {
+                             <td class="v-align-middle">@item.ServiceOrderNo</td>
+                        }
+                        else
+                        {
+                            <td class="v-align-middle">@item.ExplanationforSONo</td>
+                        }
+
+                        <td class="v-align-middle">
+                        @if (@item.UserExpenseType == "Expenditure")
+                        {
+                           @* @Html.ActionLink("Update", "Expenditure", "Employee", new { ExistingID = (int?)item.Id }, new { @class = "update" })*@
+
+                             <a href="@Url.Action("Expenditure", "Employee", new { ExistingID = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="top" title="Update">
+                                            <i class="fa fa-pencil-square-o"></i></a>
+                            
+                        }
+                        else
+                        {
+                            @*@Html.ActionLink("Update", "Training", "Employee", new { ExistingID = (int?)item.Id }, new { @class = "update" })*@
+
+                            
+                            <a href="@Url.Action("Training", "Employee", new { ExistingID = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="top" title="Update">
+                                            <i class="fa fa-pencil-square-o"></i></a>
+                        }
+                        </td>
+
+                    </tr>
+      }
+                </tbody>
+            </table>
+            
+
+        </div>
+            
+            
+            
+            <div class="col-lg-12 col-md-12">
+                <div id="myPager1" class="pull-right">
+                    @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                   "DraftedExpenditure", "Employee",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        )
+    )
+                </div>
+                
+            </div>
+           @* <div  class="col-lg-12 col-md-12"></div>*@
+        }
+        else
+        {
+             <div  class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+          <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+        }
+</div>
+</div>
+
+<script type="text/javascript">
+    $('.update,#myPager1').bind('contextmenu', function (e) {
+        alert("Mouse right click disabled");
+        return false;
+    }); 
+        </script>
+
+<script type="text/javascript">
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $(".update").click(function (e) {
+        e.preventDefault();
+
+        var redirecturl = $(this).attr('href');
+        $("#AdminLoadingBg").fadeIn();
+        $("#AdminLoadimg").show();
+
+        $.ajax({
+            url: redirecturl,
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+        })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+       });
+    });
+
+  
+   $(function () {
+       $('#myPager1').on('click', 'a', function (e) {
+           e.preventDefault();
+           if (this.href != "") {
+               $("#AdminLoadingBg").fadeIn();
+               $("#AdminLoadimg").show();
+               $.ajax({
+                   url: this.href,
+                   type: 'GET',
+
+                   cache: false,
+                   success: function (result) {
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                       $('#some_grid1_container').html(result);
+                   }
+               });
+           }
+       });
+   });
+
+
+</script>

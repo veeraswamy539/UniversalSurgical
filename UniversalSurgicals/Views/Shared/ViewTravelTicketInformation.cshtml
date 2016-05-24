@@ -1,0 +1,289 @@
+﻿@using Universal.BusinessEntities;
+@model TravelDesk 
+@Scripts.Render("~/bundles/jqueryval")
+<div class="col-lg-12 search-strip">
+</div>
+ 
+@*<form id="frmTravelTicketfiles">*@
+<div class="content-contTicket col-lg-12 col-md-12 no-padding margin-20 p-b-20">
+
+
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12  grid-headding">
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 " id="travel"><i class="fa fa-bus"></i> Detailed Ticket Information</div>
+           
+            
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right" style="float:right;">
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 text-right">
+                <a href="@Url.Action("TravelDesk","Shared")" class="md-trigger update frm-src-fld update"><i class="fa fa-arrow-left"></i> Travel Desk Page</a>
+               </div>
+
+                    <div class="clearfix">
+                    </div>
+               
+            </div>
+        </div>
+
+
+
+
+
+         <div class="col-lg-12 pop-txt-lab container-fluid emp-exd-frm" style="min-height: 250px; padding-top: 30px;">
+
+             @if (ViewBag.empList != null)
+             {
+
+        <div class="col-lg-4 col-md-4  m-b-10 ">
+            <div class="controls">
+                <span>Employee ID : </span>@Model.EmployeeId
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Travel From : </span>@Model.FromLocation
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Travel To : </span>@Model.ToLocation
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+ 
+                <span>Traveling Date : </span>@Model.TraveledFromDate.Value.ToShortDateString()
+            </div>
+        </div>
+                <div class="col-lg-6  col-md-6  m-b-10">
+            <div class="controls">
+                <span>Mode Of Transport for To Journey : </span>@Model.ModeofTransportFrom
+            </div>
+        </div>
+
+            <div class="clearfix">
+        </div>
+
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+            @if (@Model.TraveledToDate != null)
+            {
+                <span>Return Journey Date : </span>@Model.TraveledToDate.Value.ToShortDateString()
+            }
+            else
+            {
+            <span>Return Journey Date : </span>
+            }
+            
+            </div>
+        </div>
+
+                      <div class="col-lg-6  col-md-6  m-b-10">
+            <div class="controls">
+
+            <span>Mode Of Transport for Return Journey : </span>@Model.ModeofTransport
+   
+            </div>
+        </div>
+        
+        <div class="clearfix">
+        </div>
+
+
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Traveling Purpose : </span>@Model.Purpose
+            </div>
+        </div>
+
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Ticket Amount : </span>@Model.TotalTicketAmount
+            </div>
+        </div>
+
+             <div class="clearfix">
+        </div>
+
+
+        <div class="col-lg-10  col-md-10  m-b-10">
+            <div class="controls">
+                <span>Hotel Details : </span>@Model.HotelDetails
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Hotel Booked Amount : </span>@Model.HotelBookingAmount
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                       @if (@Model.CheckedIndate != null)
+            {
+                <span>Checked In Date : </span>@Model.CheckedIndate.Value.ToShortDateString()
+            }
+            else
+            {
+                <span>Checked In Date : </span>
+            }
+                
+                            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                       @if (@Model.CheckedOutdate != null)
+            {
+                 <span>Checked Out Date : </span>@Model.CheckedOutdate.Value.ToShortDateString()
+            }
+                       else
+                       {
+                        <span>Checked Out Date : </span>
+                       }
+               
+            </div>
+        </div>
+            
+ 
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Advance Amount : </span>@Model.AdvanceAmount
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12  col-md-12  m-b-10">
+            <div class="controls">
+                <span>Comment : </span>@Model.OverallComments
+            </div>
+        </div>
+   
+
+
+
+             }
+             </div>
+
+
+
+
+
+
+
+<div class=" container-fluid emp-exd-frm ">
+
+  @*                      @if (ViewBag.empList != null)
+                        {
+<div class="content-cont col-lg-12 col-md-12 ">
+<div class="col-lg-4 col-md-4">
+<span><b>Employee ID  :</b></span> 
+<span> <b>Name :</b></span> @Model.EmployeeName
+<span><b>Travel From :</b></span> 
+<span><b>Travel To  :</b></span> 
+</div>
+<div class="col-lg-4 col-md-4">
+<span><b>Traveling Date :</b></span> 
+<span><b>Return Journey Date : </b></span> 
+<span><b>Mode Of Transport for To Journey : </b></span>
+<span><b>Traveling Purpose : </b></span>
+</div>
+<div class="col-lg-4 col-md-4">
+<span><b>Ticket Amount : </b></span>
+<span><b>Hotel Details : </b></span> 
+<span><b>Hotel Booked Amount : </b></span> 
+<span><b>Checked In Date : </b></span>
+</div>
+
+
+
+<span><b>Checked Out Date : </b></span>
+<span><b>Advance Amount : </b></span>
+<span><b>Comment : </b></span>
+ </div>
+                        }*@
+
+      <div id="travelTicket" style="padding:26px;">             
+   @if (Model.travelTicketsCollection.Count > 0)
+   {
+
+       foreach (var i in Model.travelTicketsCollection)
+       {
+
+           if (Path.GetExtension(i.TicketImage) == ".pdf")
+           {
+           
+                <a  href="~/Content/TravelImages/@i.TicketImage" title='@i.TicketImage' target="_blank"  style="margin-right:15px;" download>
+                    <img   src="~/Content/Images/pdf1.png" alt="@i.TicketImage" width="200px" height="150px" style="background-color:#fff; border:1px solid #ccc;"/>
+                </a>
+       }
+       
+       
+       else  if (Path.GetExtension(i.TicketImage) == ".docx" || Path.GetExtension(i.TicketImage) == ".doc")
+           {
+           
+                <a  href="~/Content/TravelImages/@i.TicketImage" title='@i.TicketImage' target="_blank"  style="margin-right:15px;" download>
+                    <img   src="~/Content/Images/doc.png" alt="@i.TicketImage" width="200px" height="150px" style="background-color:#fff; border:1px solid #ccc;"/>
+                </a>
+       }
+       
+       
+       else
+       
+       
+       {
+                <a  href="~/Content/TravelImages/@i.TicketImage" title='@i.TicketImage' target="_blank"  style="margin-right:15px;" download>
+                    <img   src="~/Content/TravelImages/@i.TicketImage" alt="@i.TicketImage" width="200px" height="150px" style="border:1px solid #ccc;"/>
+                </a>
+               
+       }
+       }
+   }
+   else
+   {
+       <span>Tickets are not available</span>
+   }
+ </div>   
+ </div>
+
+ </div>  
+          <div class="clearfix">
+        </div>
+
+@*</form>*@
+
+
+
+@*<script type="text/javascript">
+   
+</script>*@
+<script type="text/javascript">
+    $(".update").click(function (e) {
+        e.preventDefault();
+
+        var redirecturl = $(this).attr('href');
+        //        alert(redirecturl);
+        $("#AdminLoadingBg").fadeIn();
+        $("#AdminLoadimg").show();
+        $.ajax({
+            url: redirecturl,
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+
+        })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+       });
+    });
+
+
+</script>

@@ -1,0 +1,499 @@
+﻿@using Universal.BusinessEntities;
+@model ServiceOrderNos_List
+@Scripts.Render("~/bundles/jqueryval")
+<form id="frmMultipleSONOs">
+@if (Model.Count != 0)
+{
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12" style="background-color:#333645; color:#fff;">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 " >Service Order Nos List</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+    
+        <table class="table no-more-tables col-lg-12">
+                <thead>
+                    <tr>
+                        <th class="col-lg-2 col-md-2">Service Order No</th>
+                        <th class="col-lg-2 col-md-2">SO Confirmation No</th>
+                        <th class="col-lg-2 col-md-2">SO Confirmation Date</th>
+                        <th class="col-lg-2 col-md-2">Explanation For SONO</th>
+                        <th class="col-lg-2 col-md-2">Serial NO For Instrument</th>
+                        <th class="col-lg-1 col-md-1">EDIT</th>
+                        <th class="col-lg-1 col-md-1">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="v-align-middle"><label class="sonos">@item.ServiceOrderNo</label></td>
+                        <td class="v-align-middle"><label class="socnos">@item.ServiceOrderConfirmationNo</label></td>
+                        <td class="v-align-middle">
+                        
+                        @if (item.ServiceOrderConfirmationNo != null && item.ServiceOrderConfirmationNo.Length > 0)
+                        {
+                            <label class="socDate">@item.ServiceOrderConfirmationDate.Value.ToString("dd-MM-yyyy").Replace("-","/")</label>    
+                        }
+                        
+                        </td>
+                        <td class="v-align-middle"><label class="Explanationsonos">@item.ExplanationforSONo</label></td>
+                        <td class="v-align-middle"><label class="serialnos">@item.SerialNoforInstrument</label></td>
+                        <td class="v-align-middle">
+                            <div class="btn editSO">
+                                <a href="#"><input type="hidden" value="@item.FK_UserExpense_Header_Id" /><input type="hidden" value="@item.Id" /> <i class="fa"></i> EDIT</a>
+                            </div>
+                        </td>
+                        <td class="v-align-middle">
+                            <div class="btn deleteSO">
+                                <a href="#"><input type="hidden" value="@item.FK_UserExpense_Header_Id" /><input type="hidden" value="@item.Id" /> <i class="fa"></i> DELETE</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+        </table>
+
+    </div>
+}
+
+
+
+
+<div class="md-modal md-effect-16" id="modal-161">
+    <div class="md-content">
+        <h3>
+            <div style="float: left"> Update SO & SOCNO </div>
+                <div style="float: right">
+                    <a href="#" id="SOCLOSE">X</a>
+                </div>
+        </h3>
+        <input type="hidden" id="HeaderExpenseID"/>
+        <input type="hidden" id="SONOID" />
+        <div class="col-lg-12 col-md-12" style="background-color:#fff;">
+       
+        <div class="clearfix"></div>
+        <div class="col-lg-12 col-md-12 no-padding m-t-20">
+
+          <div class="col-lg-4 col-md-3  m-b-10">
+                <div class="controls">               
+
+                       <input type="text" id="txtSONO1" maxlength="15" title="Service Order Number" placeholder="Service Order Number" class="form-control numericOnly" />
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4  m-b-10">
+                <div class="controls">               
+                 <input type="text" id="txtSOCNO1" maxlength="15" title="Service Order Confirmation Number" placeholder="Service Order Confirmation Number" class="form-control  numericOnly"/>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 col-md-4  m-b-10">
+                <div class="controls">               
+
+                      <input type="text" id="txtSOCNDate1" title="Service Order Confirmation Date" placeholder="Service Order Confirmation Date" class="form-control " />
+                </div>
+            </div> 
+             
+        </div>
+        
+        <div class="clearfix"></div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+
+
+            <div class="col-lg-4 col-md-4  m-b-10">
+                <div class="controls">               
+
+                      
+                       <input type="text" id="txtUpdateExplanation" maxlength="100" placeholder="Service Order No Explanation" title="Service Order Number Explanation" class="form-control "/>
+
+
+                </div>
+            </div> 
+             
+
+               <div class="col-lg-4 col-md-4  m-b-10">
+                <div class="controls">        
+                       <input type="text" id="txtUpdateInstrument" maxlength="20" title="Serial Number for instruments" placeholder="Serial Number for instruments"  class="form-control"/>
+                </div>
+            </div> 
+             
+         
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-lg-4 col-md-4  m-b-20 pull-right m-t-10">
+            <div class="controls">
+                <button type="submit" id="btnUpdateSONOS" name="btnUpdateComment" value="Update Comment">Submit</button>
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="popuppositionleft">
+ <div class="alert alert-warning" id="updateocwarning" runat="server">
+<strong>Warning !</strong><br /><label id="updateocerrormessage"></label>
+
+
+</div>
+
+</div>
+
+</div>
+
+<div class="md-overlay"></div>
+
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".popuppositionleft").hide();
+        $(".numericOnly").bind('keypress', function (event) {
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57) && event.which != 8 && event.which != 0 && event.which != 118 && event.which != 99) {
+                event.preventDefault();
+            }
+            if (($(this).val().indexOf('.') != -1) && event.which != 8 && ($(this).val().substring($(this).val().indexOf('.'), $(this).val().indexOf('.').length).length > 2)) {
+                event.preventDefault();
+            }
+        });
+        var keyDown = false, ctrl1 = 17, vKey1 = 86, Vkey1 = 118;
+        $('.numericOnly').keydown(function (e) {
+            if (e.keyCode == ctrl1) keyDown = true;
+        }).keyup(function (e) {
+            if (e.keyCode == ctrl1) keyDown = false;
+        });
+        $('.numericOnly').on('keypress', function (e) {
+            if (!e) var e = window.event;
+            if (e.keyCode > 0 && e.which == 0) return true;
+            if (e.keyCode) code = e.keyCode;
+            else if (e.which) code = e.which;
+            var character = String.fromCharCode(code);
+            if (character == '\b' || character == ' ' || character == '\t') return true;
+            if (keyDown && (code == vKey || code == Vkey)) return (character);
+            else return (/[0-9]$/.test(character));
+        }).on('focusout', function (e) {
+            var $this = $(this);
+            $this.val($this.val().replace(/[^0-9]/g, ''));
+        }).on('paste', function (e) {
+            var $this = $(this);
+            setTimeout(function () {
+                $this.val($this.val().replace(/[^0-9]/g, ''));
+            }, 5);
+        });
+
+
+
+        var HeaderID = '';
+        $('#txtSOCNDate1').datepicker();
+
+        $('.editSO').click(function (e) {
+            e.preventDefault();
+            var SONOs = $(this).closest('tr').find('.sonos').text();
+            var SOCNO = $(this).closest('tr').find('.socnos').text();
+            var SOCDate = $(this).closest('tr').find('.socDate').text();
+            var explanation = $(this).closest('tr').find('.Explanationsonos').text();
+            var insturmentnos = $(this).closest('tr').find('.serialnos').text();
+
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+            var SOID = $(this).find('a > input[type=hidden]').next().val();
+
+            var redirecturl = $(this).attr('href');
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $('#modal-161').show();
+
+                $("#HeaderExpenseID").val('');
+                $('#SONOID').val('');
+                $('#txtSONO1').val('');
+                $('#txtSOCNO1').val('');
+                $('#txtSOCNDate1').val('');
+                $('#txtUpdateExplanation').val('');
+                $('#txtUpdateInstrument').val('');
+
+                $('#txtSONO1').val(SONOs);
+                $('#txtSOCNO1').val(SOCNO);
+                $('#txtSOCNDate1').val(SOCDate);
+                $('#txtSOCNDate1').datepicker('update');
+                $('#txtUpdateExplanation').val(explanation);
+                $('#txtUpdateInstrument').val(insturmentnos);
+
+
+                $('#SONOID').val('');
+                $('#SONOID').val(SOID);
+                $("#HeaderExpenseID").val(HeaderID);
+                $('#modal-161').addClass('md-modal md-effect-16 md-show');
+                $('#uploaddiv').html('');
+                $('#uploaddiv').html(result);
+            })
+            .error(function (event, jqxhr, settings, exception) {
+                alert(exception);
+            });
+        });
+
+        $("#SOCLOSE").click(function (e) {
+            e.preventDefault();
+            $('#modal-161').removeClass('md-show');
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#HeaderExpenseID").val('');
+            $('#SONOID').val('');
+            $('#txtSONO1').val('');
+            $('#txtSOCNO1').val('');
+            $('#txtSOCNDate1').val('');
+            $('#txtUpdateExplanation').val('');
+            $('#txtUpdateInstrument').val('');
+        });
+
+
+        $('#btnUpdateSONOS').click(function (e) {
+            e.preventDefault();
+            var ServiceONo = $('#txtSONO1').val();
+            var ServiceConfirmationNo = $('#txtSOCNO1').val();
+            var SerialConfirmationDate = $('#txtSOCNDate1').val();
+            var ExplanationForSO = $('#txtUpdateExplanation').val();
+            var InstrumentNoforSO = $('#txtUpdateInstrument').val();
+            var SONOID = $('#SONOID').val();
+            HeaderID = $('#HeaderExpenseID').val();
+            var Type = 'EDIT';
+
+            if (ServiceONo.length > 0) {
+                if (ServiceConfirmationNo.length > 0) {
+                    if (ServiceONo.length >= 10 && ServiceONo.length <= 15) {
+                        if (ServiceConfirmationNo != 0) {
+                            if (ServiceConfirmationNo.length >= 10 && ServiceConfirmationNo.length <= 15) {
+                                if (SerialConfirmationDate.length > 0) {
+                                    if ($.datepicker.parseDate("dd/mm/yy", expenditureDate) <= $.datepicker.parseDate("dd/mm/yy", SerialConfirmationDate)) {
+                                        $.ajax({
+                                            url: '/Employee/MultipleSONos',
+                                            type: "POST",
+                                            cache: true,
+                                            data: { Data: HeaderID, SONOID: SONOID, SOType: Type, SONO: ServiceONo, SOCNO: ServiceConfirmationNo, SOCDate: SerialConfirmationDate, Explanation: ExplanationForSO, InstrumentNo: InstrumentNoforSO },
+                                            success: function (data) {
+                                                $('#modal-161').removeClass('md-show');
+                                                $("#modal-16").fadeOut();
+                                                $(".md-overlay").fadeOut();
+                                                $.ajax({
+                                                    url: '/Employee/MultipleSONos',
+                                                    type: "POST",
+                                                    cache: false,
+                                                    data: { Data: HeaderID },
+                                                    dataType: 'html',
+                                                    success: function (data) {
+                                                        $("#divSONos").html('');
+                                                        $("#divSONos").html(data);
+                                                    },
+                                                    error: function (event, jqxhr, settings, exception) {
+                                                        alert(exception);
+                                                    }
+                                                });
+                                            },
+                                            error: function (event, jqxhr, settings, exception) {
+                                                alert(exception);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        $(".popuppositionleft").fadeIn();
+                                        $('#updateocerrormessage').text('Confirmation date should be greater-than expenditure date');
+                                        $('#updateocerrormessage').show();
+                                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+                                        $('#txtSOCNDate1').focus();
+                                    }
+
+                                }
+                                else {
+                                    $(".popuppositionleft").fadeIn();
+                                    $('#updateocerrormessage').text('Please Select Confirmation Date');
+                                    $('#updateocerrormessage').show();
+                                    $('.popuppositionleft').delay(3000).fadeOut('slow');
+                                    $('#txtSOCNDate1').focus();
+                                }
+                            }
+                            else {
+                                $(".popuppositionleft").fadeIn();
+                                $('#updateocerrormessage').text('SO Confirmation NO Must be 10 Digits');
+                                $('#updateocerrormessage').show();
+                                $('.popuppositionleft').delay(3000).fadeOut('slow');
+                                $('#txtSOCNO1').focus();
+                            }
+                        }
+                        else {
+                            $(".popuppositionleft").fadeIn();
+                            $('#updateocerrormessage').text('SO NO Must be 10 Digits');
+                            $('#updateocerrormessage').show();
+                            $('.popuppositionleft').delay(3000).fadeOut('slow');
+                            $('#txtSONO1').focus();
+                        }
+                    }
+                }
+                else {
+                    if (ServiceONo.length >= 10 && ServiceONo.length <= 15) {
+                        $.ajax({
+                            url: '/Employee/MultipleSONos',
+                            type: "POST",
+                            cache: false,
+                            cache: true,
+                            data: { Data: HeaderID, SONOID: SONOID, SOType: Type, SONO: ServiceONo, SOCNO: ServiceConfirmationNo, SOCDate: SerialConfirmationDate, Explanation: ExplanationForSO, InstrumentNo: InstrumentNoforSO },
+                            success: function (data) {
+                                $('#modal-161').removeClass('md-show');
+                                $("#modal-16").fadeOut();
+                                $(".md-overlay").fadeOut();
+                                $.ajax({
+                                    url: '/Employee/MultipleSONos',
+                                    type: "POST",
+                                    data: { Data: HeaderID },
+                                    dataType: 'html',
+                                    success: function (data) {
+                                        $("#divSONos").html('');
+                                        $("#divSONos").html(data);
+                                    },
+                                    error: function (event, jqxhr, settings, exception) {
+                                        alert(exception);
+                                    }
+                                });
+
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                alert(exception);
+                            }
+                        });
+                    }
+                    else {
+                        $(".popuppositionleft").fadeIn();
+                        $('#updateocerrormessage').text('SO NO Must be 10 Digits');
+                        $('#updateocerrormessage').show();
+                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+                        $('#txtSONO1').focus();
+                    }
+                }
+            }
+            else if (ExplanationForSO.length > 0) {
+                if (InstrumentNoforSO.length > 0) {
+                    $.ajax({
+                        url: '/Employee/MultipleSONos',
+                        type: "POST",
+                        cache: false,
+                        data: { Data: HeaderID, SONOID: SONOID, SOType: Type, SONO: ServiceONo, SOCNO: ServiceConfirmationNo, SOCDate: SerialConfirmationDate, Explanation: ExplanationForSO, InstrumentNo: InstrumentNoforSO },
+                        success: function (data) {
+
+                            $('#modal-161').removeClass('md-show');
+                            $("#modal-16").fadeOut();
+                            $(".md-overlay").fadeOut();
+
+                            $.ajax({
+                                url: '/Employee/MultipleSONos',
+                                type: "POST",
+                                data: { Data: HeaderID },
+                                dataType: 'html',
+                                success: function (data) {
+                                    $("#divSONos").html('');
+                                    $("#divSONos").html(data);
+                                },
+                                error: function (event, jqxhr, settings, exception) {
+                                    alert(exception);
+                                }
+                            });
+
+                        },
+                        error: function (event, jqxhr, settings, exception) {
+                            alert(exception);
+                        }
+                    });
+                }
+                else {
+                    $(".popuppositionleft").fadeIn();
+                    $('#updateocerrormessage').text('Please Enter Instrument Number');
+                    $('#updateocerrormessage').show();
+                    $('.popuppositionleft').delay(3000).fadeOut('slow');
+                    $('#txtUpdateInstrument').focus();
+                    return false;
+                }
+            }
+            else {
+                $(".popuppositionleft").fadeIn();
+                $('#updateocerrormessage').text('Please Enter Values in Appropriate Fileds');
+                $('#updateocerrormessage').show();
+                $('.popuppositionleft').delay(3000).fadeOut('slow');
+                return false;
+            }
+
+
+        });
+
+
+        $('.deleteSO').click(function (e) {
+            e.preventDefault();
+            HeaderID = $(this).find('a > input[type=hidden]').val();
+            var SOID = $(this).find('a > input[type=hidden]').next().val();
+            var Type = 'DELETE';
+            $.ajax({
+                url: '/Employee/MultipleSONos',
+                type: "POST",
+                cache: false,
+                data: { Data: HeaderID, SONOID: SOID, SOType: Type },
+                dataType: 'html',
+                success: function (data) {
+
+                    MultipleSONOListView(HeaderID);
+
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    alert(exception);
+                }
+            });
+
+
+            function MultipleSONOListView(HeaderID) {
+
+                $.ajax({
+                    url: '/Employee/MultipleSONos',
+                    type: "POST",
+                    cache: false,
+                    data: { Data: HeaderID },
+                    dataType: 'html',
+                    success: function (data) {
+                        $("#divSONos").html('');
+                        $("#divSONos").html(data);
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(exception);
+                    }
+                });
+
+            }
+
+
+        });
+
+
+
+
+
+
+
+
+
+    });
+
+
+</script>

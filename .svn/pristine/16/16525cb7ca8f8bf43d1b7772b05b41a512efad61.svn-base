@@ -1,0 +1,168 @@
+﻿@using Universal.BusinessEntities;
+@model Employees
+@Scripts.Render("~/bundles/jqueryval")
+<form id="frmChangePassword">
+
+        <div class="col-lg-12" style="min-height:250px; padding-top:30px;">
+            <div class="col-lg-12 col-md-4  m-b-10 ">
+                <div class="controls">
+                    @Html.PasswordFor(Model => Model.Password, new { @class = "form-control", @placeholder = "Old Password", @id = "txtOldPassword", @Title = "Old Password" })
+                    @Html.ValidationMessageFor(Model => Model.Password)
+                    @*<label id="notvalidmessage" ></label>*@
+                </div>
+            </div>
+             <div class="clearfix"></div>
+            <div class="col-lg-12  col-md-6  m-b-10">
+                <div class="controls">
+                    @Html.PasswordFor(Model => Model.NewPassword, new { @class = "form-control", @placeholder = "New Password", @id = "txtNewPassword", @Title = "New Password" })
+                    @Html.ValidationMessageFor(Model => Model.NewPassword)
+                </div>
+            </div>
+             <div class="clearfix"></div>
+              <div class="col-lg-12  col-md-6  m-b-10">
+                <div class="controls">
+                    @Html.PasswordFor(Model => Model.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password", @id = "txtConfirmPassword", @Title = "Confirm Password" })
+                    @Html.ValidationMessageFor(Model => Model.ConfirmPassword)
+                </div>
+            </div>
+            @if (ViewBag.Id != null)
+            {
+                <input type="hidden" value="@ViewBag.Id" id="hdnId" />
+            }
+               <div class="clearfix"></div>
+               <div class="col-lg-6 col-md-6  m-b-6 pull-right">
+                <div class="controls">
+                  <button type="submit" class="md-trigger" id="btnChangePassword" name="btnChangePassword" value="Change Password">Change Password</button>
+             </div>
+             </div>
+
+                         <div class="col-lg-2 col-md-4  m-b-10 pull-right">
+                <div class="controls">
+             
+                <button type="reset" class="md-trigger btnClear" id="btnClear" name="Clear" value="Clear Zone">Clear</button>
+               
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+         <div class="alert alert-success" id="result" style="display: none; width:80%; text-align:center; margin-left:30px;"></div>
+
+         @*<label id="successmsg"></label>*@
+
+         <div class="popuppositionleft">
+ <div class="alert alert-warning" id="changewarning" runat="server">
+<strong>Warning !</strong><br /><label id="notvalidmessage"></label>
+
+
+</div>
+
+</div>
+
+<div id="ChangePasswordLoadimg" runat="server" style="text-align: center; padding: 50px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:40%; left:5%;"> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+
+        </div>
+
+</form>
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".popuppositionleft").hide();
+
+
+        $("#txtOldPassword").change(function (e) {
+
+            var password = $('#txtOldPassword').val();
+            var id = $("#hdnId").val();
+            $.ajax({
+                url: '/Shared/VerifyOldPassword',
+                type: "GET",
+                data: { password: password, id: id },
+                success: function (data) {
+                    if (data >= 1) {
+                        $('#changewarning').hide();
+                        $('#txtOldPassword').attr("value");
+                    }
+                    else {
+
+                        $(".popuppositionleft").fadeIn();
+                        $('#notvalidmessage').text('Please enter correct old password');
+                        $('#notvalidmessage').show();
+                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+
+                        $("#txtOldPassword").val("");
+                        $('#txtOldPassword').focus();
+                    }
+                },
+
+                error: function (event, jqxhr, settings, exception) {
+                    //                    alert(jqxhr);
+                }
+            });
+        });
+
+        $("#btnChangePassword").click(function (e) {
+            e.preventDefault();
+
+            var valid = $("#frmChangePassword").valid();
+            var id = $("#hdnId").val();
+            var password = $("#txtNewPassword").val();
+            if (valid) {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+
+                //                $("#ChangePasswordLoadimg").show();
+
+                $.ajax({
+
+                    url: '/Shared/changepassword',
+                    type: 'POST',
+                    data: { password: password, id: id },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+//                        alert('hi');
+//                        $('#popuppositionleft').hide();
+                        //                        $("#ChangePasswordLoadimg").hide();
+                        $('#result').text(data.Text);
+                        $('#result').show();
+                        $('#txtOldPassword,#txtNewPassword,#txtConfirmPassword').val("");
+                        $('#popuppositionleft').hide();
+
+                        setTimeout(function () {
+                            $("#modal-16cPassword").fadeOut();
+                            $(".md-overlay").fadeOut();
+                        }, 2000);
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        //                    alert(jqxhr);
+                    }
+                });
+            }
+            else return;
+        });
+
+        $("#btnClear").click(function () {
+            $("#frmChangePassword").trigger('reset');
+            $("#txtOldPassword-error").empty();
+            $("#txtNewPassword-error").empty();
+            $("#txtConfirmPassword-error").empty();
+
+        });
+
+
+    });
+   
+    </script>

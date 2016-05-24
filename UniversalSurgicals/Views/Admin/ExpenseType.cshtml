@@ -1,0 +1,329 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.ExpenseType>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="../../Scripts/loadajax.js" type="text/javascript"></script>
+<script src="../../Scripts/js/tabs_accordian.js" type="text/javascript"></script>
+<div class="col-lg-12 search-strip">
+    @* @if (Model.Count != 0)
+            {*@
+    <div class="col-lg-8 col-md-8">
+        <div class="col-lg-8 col-md-8 search-fld no-padding">
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter your Expense name", @required = "required", @class = "form-control",@maxlength="100",@Title="Expense name" })</div>
+        <div class="col-lg-4 col-md-4  ">
+            <a href="#" id="searchBtn" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa fa-search">
+            </i> Search</a>
+
+        </div>
+    </div>
+    @* }*@
+    <div class="col-lg-4">
+        <a class="md-trigger  frm-src-fld" data-modal="modal-16" id="expbtn" style="cursor: pointer;">
+            <i class="fa fa-credit-card"></i><i class="fa fa-plus plus-border"></i>  Create Expense
+            Type</a>
+    </div>
+</div>
+<div id="some_grid1_container">
+    <div class="content-cont col-lg-12 col-md-12 no-padding">
+        <div class="clearfix">
+        </div>
+        <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+
+
+@*            <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                    <i class="fa fa-money" aria-hidden="true"></i>Expense Types</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="clearfix">
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+       
+
+
+
+                        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <i class="fa fa-money" style="color: #08a9c6; font-size: 24px;"></i> Expense Types</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="clearfix">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="clearfix">
+            </div>
+            @if (Model.Count != 0)
+            {
+            
+                <table class="table no-more-tables col-lg-12 table-color">
+                    <thead>
+                        <tr class="grid-headding-strips">
+                            <th class="col-lg-3 col-md-3">
+                                <div id="sortdiv">
+                                    @* @Ajax.ActionLink("Zone Name", "ZonesList", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions { UpdateTargetId = "some_grid_container" })*@
+                                    @Html.ActionLink("ExpenseName", "ExpenseType", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                                </div>
+                            </th>
+                            <th class="col-lg-3 col-md-3">
+                                Description
+                            </th>
+                            <th class="col-lg-3 col-md-3">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="v-align-middle">@item.ExpenseName
+                                </td>
+                                <td class="v-align-middle">@item.Description
+                                </td>
+                                <td class="v-align-middle">
+                                    @*@Html.ActionLink("Update", "UpdateExpenseType", "Admin", new { id = (int?)item.id }, new { @class = "update" })*@
+                                    <a href="@Url.Action("UpdateExpenseType", "Admin", new { id = (int?)item.id })" class="update update-icon" data-toggle="tooltip" data-placement="top" title="Update">
+                                        <i class="fa fa-pencil-square-o"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            
+            
+                <div class="col-lg-12 col-md-12">
+                    <div id="myPagerex" class="pull-right">
+                        @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                         "ExpenseType", "Admin",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        )
+    )
+                    </div>
+                    @* @Html.PagedListPager((IPagedList)Model, page => Url.Action("ExpenseType", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "test" }))*@
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-12 col-md-12">
+                    No Expenses
+                </div>
+            
+            }
+        </div>
+    </div>
+</div>
+<div class="md-modal md-effect-16" id="modal-16">
+    <div class="md-content">
+        <h3 style="padding-bottom: 40px;">
+            <div style="float: left;">
+                Create Expense Type</div>
+            <div style="float: right">
+                <a href="#" id="expepopclose">X</a></div>
+        </h3>
+        <div style="background-color: #fff;">
+            @Html.Action("CreateExpenseType", "Admin")
+        </div>
+    </div>
+</div>
+<div class="md-modal md-effect-16" id="modal-161">
+    <div class="md-content">
+        <h3>
+            <div style="float: left">
+                Update Expense Type
+            </div>
+            <div style="float: right">
+                <a href="#" id="updatExpclse">X</a></div>
+        </h3>
+        <div style="background-color: #fff;" id="uploaddiv">
+        </div>
+    </div>
+</div>
+<div class="md-overlay">
+</div>
+<!-- the overlay element -->
+
+ <script type="text/javascript">
+     $('.update,#myPagerex,#sortdiv').bind('contextmenu', function (e) {
+         alert("Mouse right click disabled");
+         return false;
+     }); 
+        </script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(this).scrollTop(0);
+        $('[data-toggle="tooltip"]').tooltip();
+
+
+        $("#updatExpclse").click(function () {
+
+            $("#modal-161").fadeOut();
+            $(".md-overlay").fadeOut();
+
+        });
+
+        $("#expepopclose").click(function () {
+
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#txtExpenseName-error").empty();
+
+
+
+            $("#txtDesc-error").empty();
+
+            //            $("#txtGroupName").text('');
+
+            $('#txtExpenseName,#txtDesc').val("");
+
+
+
+        });
+
+
+        $("#expbtn").click(function () {
+
+            $("#modal-16").fadeIn();
+            $(".md-overlay").fadeIn();
+        });
+
+        $('#searchBtn').click(function (e) {
+            e.preventDefault();
+
+            if ($('#SearchString').val() != "") {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: "/Admin/ExpenseType",
+                    type: 'GET',
+                    cache: false,
+                    data: { searchString: $('#SearchString').val() },
+
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html("");
+
+                        $('#divPartial').html(result);
+                    }
+                });
+            }
+            else {
+                return;
+            }
+            return false;
+        });
+
+
+        $(function () {
+            $('#sortdiv').on('click', 'a', function (e) {
+                e.preventDefault();
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html("");
+                        $('#divPartial').html(result);
+                    }
+                });
+                return false;
+            });
+        })
+
+        $(function () {
+            $('#myPagerex').on('click', 'a', function (e) {
+                e.preventDefault();
+                if (this.href != "") {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+                    $.ajax({
+                        url: this.href,
+                        type: 'GET',
+
+                        cache: false,
+                        success: function (result) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            $('#divPartial').html("");
+
+                            $('#divPartial').html(result);
+                        }
+                    });
+                }
+            });
+        });
+        $(".md-overlay").click(function (e) {
+            $('#modal-161').removeClass('md-show');
+        });
+        $(".update").click(function (e) {
+            e.preventDefault();
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+            var redirecturl = $(this).attr('href');
+
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                cache: false,
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+           if (result.indexOf("Session") != -1) {
+               $("#modal-161").fadeOut();
+               $(".md-overlay").fadeOut();
+
+               $('#divPartial').html('');
+               $('#divPartial').html(result);
+           }
+           else {
+               $('#modal-161').show();
+               $('#modal-161').addClass('md-modal md-effect-16 md-show');
+               //  alert(result);
+               $('#uploaddiv').html(result);
+           }
+
+       })
+       .error(function (xhr, status) {
+           // alert("2");
+       });
+        });
+
+
+    });
+</script>
+<script src="../../Scripts/classie.js"></script>
+<script src="../../Scripts/modalEffects.js"></script>
+<!-- for the blur effect -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+</script>
+<script src="../../Scripts/cssParser.js"></script>
+<script src="../../Scripts/css-filters-polyfill.js"></script>

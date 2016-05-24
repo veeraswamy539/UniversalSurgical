@@ -1,0 +1,702 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.Leave>
+@*    @Scripts.Render("~/bundles/jqueryui")*@
+@Scripts.Render("~/bundles/jqueryval")
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 search-strip">
+    <div class="col-lg-12 col-md-12">
+        @if (Session["AccountMgr"] != null || Session["TravelManager"] != null || Session["Manager"] != null)
+        {
+            <div class="col-lg-3 col-md-3 search-fld ">
+                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter Employee ID", @required = "required", @class = "form-control", @maxlength = "20", @Title="Employee ID" })
+            </div>
+            
+        }
+        <div class="col-lg-3 dt-pik">
+            <div class="input-append success date">
+                @Html.TextBox("FromDate", "", new { @placeholder = "From Date", @required = "required",@Title="From Date" })
+                <span class="add-on"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <div class="col-lg-3 dt-pik ">
+            <div class="input-append success date">
+                @Html.TextBox("ToDate", "", new { @placeholder = "To Date", @required = "required",@Title="To Date"})
+                <span class="add-on"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4  ">
+            <a href="#" id="searchBtn" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa fa-search">
+            </i> Search</a>
+        </div>
+    </div>
+    @if (Session["Employee"] != null)
+    {
+         
+          
+        <div class="col-lg-3 col-md-3 pull-right">
+            <a href="#" id="btnrequestLeave" class="col-lg-12 col-md-12 frm-src-fld md-trigger"
+                data-modal="modal-16">Request Leave</a></div>
+      
+    
+     
+
+@*<div class="col-lg-3 pull-right" id="totalleaves"><a href="@Url.Action("Leave", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16"><i class="fa fa-history"></i> Total Leave List</a>    </div> *@
+
+    }
+    <div class="col-lg-3 pull-right" id="returntotravellist" style="display: none;">
+        <a href="@Url.Action("Leave", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16">
+            <i class="fa fa-history"></i>Leave List</a>
+    </div>
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="test">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <i class="fa fa-calendar"></i> Leave Information</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        @if (Model.Count != 0)
+        {
+
+            <table class="table no-more-tables col-lg-12  table-color">
+                <thead>
+                    <tr class="grid-headding-strips">
+                        @if (Session["Employee"] != null)
+                        {
+
+                        }
+                        else
+                        {
+
+                            <th class="col-lg-1 col-md-1 text-center">
+                                Emp ID
+                            </th>
+                        }
+                        @if (Session["Employee"] != null)
+                        {
+
+
+                        }
+                        else
+                        {
+                            <th class="col-lg-2 col-md-2 text-center">
+                                Employee Name
+                            </th>
+
+                        }
+                        <th class="col-lg-2 col-md-2 text-center">
+                            <div id="sortdiv">
+                                @* @Ajax.ActionLink("Zone Name", "ZonesList", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions { UpdateTargetId = "some_grid_container" })*@
+                                @Html.ActionLink("Leave From", "Leave", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                            </div>
+                        </th>
+                        <th class="col-lg-1 col-md-1 text-center">
+                            Leave To
+                        </th>
+                        <th class="col-lg-2 col-md-2 text-center">
+                            Leave Type
+                        </th>
+                        <th class="col-lg-1 col-md-1 text-center">
+                            submitted
+                        </th>
+                        <th class="col-lg-1 col-md-1 text-center">
+                            Status
+                        </th>
+
+                        <th class="col-lg-1 col-md-1 text-center">
+                            View
+                        </th>
+
+                        <th class="col-lg-1 col-md-1 text-center">
+                            &nbsp;
+                        </th>
+                   
+                        <th class="col-lg-1 col-md-1 text-center">
+                            &nbsp;
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        
+                    
+                        
+                        
+                        <tr>
+                            @if (Session["Employee"] != null)
+                            {
+
+                            }
+                            else
+                            {
+
+                                <td class="v-align-middle text-center">@item.EmpUserID
+                                </td>
+                            }
+                            @if (Session["Employee"] != null)
+                            {
+
+
+                            }
+                            else
+                            {
+                                <td class="v-align-middle text-center">@item.EMPFullName
+                                </td>
+                            }
+                            <td class="v-align-middle text-center">@item.LeaveFrom.Value.ToString("dd'/'MM'/'yyyy")
+                            </td>
+                            @if (item.LeaveTo != null)
+                            {
+                                <td class="v-align-middle text-center">@item.LeaveTo.Value.ToString("dd'/'MM'/'yyyy")
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="v-align-middle text-center">
+                                    No
+                                </td>
+                            }
+                            <td class="v-align-middle text-center">@item.LeaveType
+                            </td>
+                            <td class="v-align-middle text-center">@item.CreatedDate.Value.ToString("dd'/'MM'/'yyyy")
+                            </td>
+                            <td class="v-align-middle text-center">
+                                @(@item.LeaveStatus.HasValue ? item.LeaveStatus == true ? "Approved" : "Rejected" : "Pending")
+                            </td>
+
+                
+         
+                            <td class="v-align-middle  text-center">
+                                @if (Session["Employee"] != null || Session["AccountMgr"] != null || Session["Manager"] != null || Session["TravelManager"] != null)
+                                {
+                              
+                                
+@* @Html.ActionLink("View", "LeaveView", "Shared", new { id = (int?)item.Id }, new { @class = "Leaveview" })*@
+
+                                    <a href="@Url.Action("LeaveView", "Shared", new { id = (int?)item.Id })" class="updateTravel update-icon Leaveview" data-toggle="tooltip" data-placement="left" title="Detailed View">
+                                        <i class="fa fa-eye eyesize"></i></a>
+ 
+                                   
+                                }
+                            </td>
+
+
+
+
+                                               <td class="v-align-middle  text-center">
+                            @if ((Session["Manager"] != null && !item.LeaveStatus.HasValue) || ((Session["AccountMgr"] != null && !item.LeaveStatus.HasValue) && (item.UserGroup != 3)))
+                            {
+                         
+                                
+                                    @Html.ActionLink("Accept/", "LeaveStatusPopup", "Shared", new { id = item.Id, empid = item.Employee_ID, lvfrom = item.LeaveFrom, lvto = item.LeaveTo },
+                                                   new { @class = "md-trigger acceptbtn" })
+                                    @Html.ActionLink("Reject", "LeaveStatusPopup", "Shared", new { id = item.Id, empid = item.Employee_ID, lvfrom = item.LeaveFrom, lvto = item.LeaveTo },
+                                                   new { @class = "md-trigger rejectbtn" })
+                                
+                            }
+                            
+                       
+                            
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            
+            <div class="col-lg-12 col-md-12">
+                <div id="myPager" class="pull-right">
+                    @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                         "Leave",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        ),
+
+        new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded }
+    )
+                </div>
+                @* @Html.PagedListPager((IPagedList)Model, page => Url.Action("Leave", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "test" }))*@
+            </div>
+        }
+        else
+        {
+            <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+             <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+            
+        }
+    </div>
+</div>
+<div class="md-modal1 md-effect-16" id="modal-161">
+    <div class="md-content">
+        <h3>
+            <div style="float: left">
+                Leave Information
+            </div>
+            <div style="float: right; margin-top: -5px;">
+                <a href="#" id="viewTraveldeskclse"><i class="fa fa-times"></i></a>
+            </div>
+        </h3>
+        <div style="background-color: #fff;" id="divPartialTravel">
+        </div>
+    </div>
+</div>
+@if (Session["Employee"] != null)
+{
+    <div class="md-modal md-effect-16" id="modal-16">
+        <div class="md-content">
+            <h3 style="padding-bottom: 40px;">
+                <div style="float: left;">
+                    Request Leave</div>
+                <div style="float: right">
+                    <a href="#" id="Leavepopclose">X</a></div>
+            </h3>
+            <div style="background-color: #fff;">
+                @Html.Action("CreateLeave", "Employee")
+            </div>
+        </div>
+    </div>
+}
+@if (Session["Manager"] != null || Session["AccountMgr"] != null)
+{
+    <div class="md-modal md-effect-16" id="modal-16">
+        @Html.Action("LeaveStatusPopup", "Shared")
+    </div>
+}
+<div class="md-overlay">
+</div>
+
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+
+          <script type="text/javascript">
+              $('.updateTravel,#myPager,#sortdiv').bind('contextmenu', function (e) {
+                  alert("Mouse right click disabled");
+                  return false;
+              }); 
+        </script>
+
+<script type="text/javascript">
+
+
+    function GetLeaveRecords() {
+
+        if (($('#SearchString').val() != "" && $("#SearchString").length > 0) || ($("#FromDate").val().length > 0)) {
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: "/Shared/Leave",
+                type: 'GET',
+                cache: false,
+                data: { searchString: $('#SearchString').val(), fromDate: $('#FromDate').val(), toDate: $('#ToDate').val() },
+
+                success: function (result) {
+                    $("#AdminLoadingBg").fadeOut();
+                    $("#AdminLoadimg").hide();
+                    $('#divPartial').html(result);
+                    $("#totalleaves").show();
+                    $("#returntotravellist").show();
+                }
+            });
+        }
+        else {
+            return;
+        }
+
+    }
+
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+
+
+        function getStatusPopup(href, status) {
+
+
+
+            $.ajax({
+                url: href,
+                data: { status: status },
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+
+
+
+
+           $('#modal-16').show();
+           $('#modal-16').addClass('md-modal md-effect-16 md-show');
+           // $('#divPartial').empty();
+           //  $('#divPartial').val("");
+           $('#modal-16').show();
+           //  alert(result);
+           $('#modal-16').html('');
+           $('#modal-16').html(result);
+
+       })
+       .error(function (xhr, status) {
+           // alert("2");
+       });
+
+
+        }
+
+
+
+
+
+        $(".acceptbtn").click(function (e) {
+            e.preventDefault();
+
+
+            var status = "true";
+
+            $("#modal-16").fadeIn();
+            $(".md-overlay").fadeIn();
+            $('#msg1').show();
+            $('#msg2').hide();
+
+            var redirecturl = $(this).attr('href');
+
+            getStatusPopup(redirecturl, status);
+
+        });
+
+
+
+        $(".rejectbtn").click(function (e) {
+            e.preventDefault();
+
+            var status = "false";
+            $("#modal-16").fadeIn();
+            $(".md-overlay").fadeIn();
+            $('#msg1').hide();
+            $('#msg2').show();
+
+            var redirecturl = $(this).attr('href');
+
+
+
+            getStatusPopup(redirecturl, status);
+
+
+        });
+
+
+
+        //        $("#FromDate").change(function () {
+
+
+        //            var fromdate = document.getElementById("FromDate").value;
+        //            var todate = document.getElementById("ToDate").value;
+
+        //            if ((Date.parse(fromdate) < Date.parse(todate))) {
+        //                alert("Fromdate should be less than Todate");
+        //                document.getElementById("FromDate").value = "";
+        //            }
+
+
+
+
+
+        //        });
+
+        //        $("#ToDate").change(function () {
+
+        //            var todate = document.getElementById("ToDate").value;
+        //            var fromdate = document.getElementById("FromDate").value;
+
+        //            if ((Date.parse(fromdate) > Date.parse(todate))) {
+        //                alert("Todate should be greater than Fromdate");
+        //                document.getElementById("ToDate").value = "";
+        //            }
+
+        //        });
+
+
+        $('#FromDate,#ToDate').datepicker().on('changeDate', function (ev) {
+            ev.preventDefault();
+
+            $(this).datepicker('hide');
+
+
+            GetLeaveRecords();
+
+        });
+
+
+        $("#viewTraveldeskclse").click(function () {
+            $("#modal-161").fadeOut();
+            $(".md-overlay").fadeOut();
+
+            var todate = document.getElementById("ToDate").value;
+            var fromdate = document.getElementById("FromDate").value;
+
+            if ((Date.parse(fromdate) > Date.parse(todate))) {
+                alert("Todate should be greater than Fromdate");
+                document.getElementById("ToDate").value = "";
+            }
+
+            else {
+
+                if (this.name == "FromDate")
+                    GetLeaveRecords();
+
+            }
+
+
+
+            var fromdate = document.getElementById("FromDate").value;
+            var todate = document.getElementById("ToDate").value;
+
+            if ((Date.parse(fromdate) < Date.parse(todate))) {
+                alert("Fromdate should be less than Todate");
+                document.getElementById("FromDate").value = "";
+            }
+            else {
+                if (this.name == "ToDate")
+                    GetLeaveRecords();
+
+            }
+
+        });
+
+        $(".md-overlay").click(function (e) {
+            $('#modal-161').removeClass('md-show');
+        });
+
+
+
+
+
+        $("#totalleaves").hide();
+
+        $("#btnrequestLeave").click(function () {
+            $("#modal-16").fadeIn();
+            $(".md-overlay").fadeIn();
+            $("#result").hide();
+            $('.alert-warning').hide();
+
+
+            $('#frmCreateLeave').trigger("reset");
+
+
+        });
+
+
+
+        //        $("#btnrequestLeave").click(function (e) {
+        //        e.preventDefault();
+        //            alert('popclick');
+        //            $("#modal-16").fadeIn();
+        //            $(".md-overlay").fadeIn();
+        //        });
+
+
+
+        $('#searchBtn').click(function (e) {
+            e.preventDefault();
+            // alert();
+
+
+            GetLeaveRecords();
+
+
+        });
+
+
+        $(function () {
+            $('#sortdiv').on('click', 'a', function (e) {
+                e.preventDefault();
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html(result);
+                    }
+                });
+                return false;
+            });
+        })
+
+        $(function () {
+            $('#myPager').on('click', 'a', function () {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html(result);
+                    }
+                });
+                return false;
+            });
+        });
+        $(".md-overlay").click(function (e) {
+            $('#modal-161').removeClass('md-show');
+        });
+
+
+        $("#Leavepopclose").click(function () {
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#lblnoofdays").empty();
+            $("#lblvalidation").empty();
+            $("#ddlLeaveType-error").empty();
+            $("#txtleavereason-error").empty();
+            $("#dtLeaveForm-error").empty();
+            $("#dtLeaveTo-error").empty();
+
+            $('.alert-warning').hide();
+            $('#createleaveerrormessage').hide();
+
+        });
+        $("#Leavepopclose1").click(function () {
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+        });
+
+        $("#btnok").click(function () {
+
+            $("#acceptbtn").hide();
+            $("#rejectbtn").hide();
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+
+
+        });
+
+
+        $("#btncancel").click(function () {
+
+
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+
+
+        });
+
+
+        $(".Leaveview").click(function (e) {
+            e.preventDefault();
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+            var redirecturl = $(this).attr('href');
+
+            $.ajax({
+                url: this.href,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+
+           if (result.indexOf("Session") != -1) {
+               $("#modal-161").fadeOut();
+               $(".md-overlay").fadeOut();
+
+               $('#divPartial').html('');
+               $('#divPartial').html(result);
+           }
+           else {
+               $('#modal-161').show();
+               $('#modal-161').addClass('md-modal md-effect-16 md-show');
+               // $('#divPartial').empty();
+               //  $('#divPartial').val("");
+               $('#divPartialTravel').show();
+               //  alert(result);
+               $('#divPartialTravel').html('');
+               $('#divPartialTravel').html(result);
+           }
+
+
+
+
+       })
+       .error(function (xhr, status) {
+           // alert("2");
+       });
+        });
+
+
+
+
+        $(".update").click(function (e) {
+
+
+            e.preventDefault();
+
+            var redirecturl = $(this).attr('href');
+            //        alert(redirecturl);
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+           $('#divPartial').show();
+           //alert(result);
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+           //alert("2");
+       });
+        });
+
+
+
+
+    });
+</script>
+<script src="../../Scripts/classie.js"></script>
+<script src="../../Scripts/modalEffects.js"></script>
+<!-- for the blur effect -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+</script>
+<script src="../../Scripts/cssParser.js"></script>
+<script src="../../Scripts/css-filters-polyfill.js"></script>

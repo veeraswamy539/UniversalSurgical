@@ -1,0 +1,237 @@
+﻿@using Universal.BusinessEntities;
+@model TravelDesk
+@Scripts.Render("~/bundles/jqueryval")
+<form id="frmCreateTravelDesk1">
+<div id="some_grid_container1">
+<div class="col-lg-12 search-strip">
+
+@*  <div class="col-lg-3 pull-right"><a href="@Url.Action("TravelDesk", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16"><i class="fa fa-history"></i> Travel Desk List</a>     
+</div>
+*@
+        </div>
+
+ 
+        </div>
+
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="test">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 "><i class="fa fa-bus"></i>
+                Assign Advance Amount</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <br />
+                    <br />
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+ 
+         
+
+
+        <div id="advnAmount">
+            <div class="col-lg-12">
+
+                       <div class="col-lg-3 col-md-6  m-b-10">
+                <div class="controls">
+                    @if (ViewBag.empList != null)
+                    {
+                      
+                        @Html.DropDownList("EmployeeId", ViewBag.empList as List<SelectListItem>, "Select Employee", new { @class = "form-control", @id = "ddlZone", @placeholder = "Select Employee ID", @Title = "Select Employee ID" })
+                        @Html.ValidationMessageFor(Model => Model.EmployeeId)
+                      
+                    }
+                </div>
+            </div>
+              
+
+     
+                <div class="col-lg-3 col-md-4  m-b-10 ">
+                    <div class="controls">
+                        @Html.TextBoxFor(Model => Model.AdvanceAmount, new { @class = "form-control", @id = "txtAdvanceamount", @placeholder = "Adavnce Amount", @Title = "Advance Amount", @maxlength = "6" })
+                        @Html.ValidationMessageFor(Model => Model.AdvanceAmount)
+                    </div>
+                </div>
+                
+
+            </div>
+            </div>
+
+            <div class="clearfix">
+        </div>
+            
+           @* OverallComments*@
+            <div class="col-lg-12 col-md-12  m-b-10 ">
+                    <div class="controls">
+                        @Html.TextAreaFor(Model => Model.OverallComments, new { @class = "form-control", @id = "txtComments", @placeholder = "Over all Comments", @Title = "Comments" })
+                        
+                    </div>
+                </div>
+
+
+        @*submit and reset buttons*@
+        <div class="col-lg-3" style="text-align:right; width: 100%">
+            <div>
+                <button type="submit" class="md-trigger" id="btntravelsend" name="btntravelsend" data-toggle="tooltip" data-placement="top" title="Submit Travel Information"
+                    value="Send">
+                    Send</button>
+            </div>
+        </div>
+         <div class="clearfix"></div>
+
+         <div class="alert alert-success" id="result" style="display: none; width:40%; text-align:center; margin-left:30px;"></div>
+    </div>
+    </div>
+
+    </form>
+<script type="text/javascript">
+
+
+
+
+    $(document).ready(function () {
+
+
+        $("#txtToJourney").change(function () {
+
+            var startDate = document.getElementById("txtticketbookeddate").value;
+            var endDate = document.getElementById("txtToJourney").value;
+
+            if ((Date.parse(startDate) >= Date.parse(endDate))) {
+                alert("End date should be greater than Start date");
+                document.getElementById("txtToJourney").value = "";
+            }
+        });
+
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $(function () {
+            $(document).tooltip();
+        });
+        $('.date').datepicker().on('changeDate', function (ev) {
+            ev.preventDefault();
+            $(this).datepicker('hide');
+
+        });
+        $('#returnjourney').click(function () {
+            $("#tojourney").toggle(this.checked);
+            $("#txtToJourney").val('');
+        });
+
+
+        $('#advanceamt').click(function () {
+            $("#advnAmount").toggle(this.checked);
+
+        });
+
+
+
+        $('#hotelbooking').click(function () {
+            $("#hotelbokingdiv").toggle(this.checked);
+            $("#txtHotelDetails").val('');
+            $("#txtHotelamount").val('');
+
+
+        });
+
+        $("#btntravelsend").click(function (e) {
+            e.preventDefault();
+            var valid = $("#frmCreateTravelDesk").valid();
+
+            if (valid) {
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/TravelDesk/CreateTravel',
+                    data: $("#frmCreateTravelDesk").serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if (data.Available === true) {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                            $(':input', $("#frmCreateTravelDesk"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                            $('#modelbg').hide();
+                            $('#modelbg').hide();
+
+                            setTimeout(function () {
+
+                                $.ajax({
+                                    url: "/TravelDesk/CreateAdvanceAmount",
+                                    contentType: 'application/html; charset=utf-8',
+                                    type: 'GET',
+                                    dataType: 'html'
+
+                                })
+                   .success(function (result) {
+                       $('#divPartial').show();
+                       //  alert(result);
+                       $('#divPartial').html(result);
+                   })
+                   .error(function (xhr, status) {
+                       // alert("2");
+                   });
+                            }, 7000);
+
+
+
+                        }
+                        else {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                        }
+
+
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+
+                });
+            }
+            else {
+
+                // alert('else');
+                return;
+
+            }
+
+        });
+
+
+
+        $(".update").click(function (e) {
+            e.preventDefault();
+
+            var redirecturl = $(this).attr('href');
+            //        alert(redirecturl);
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+           $('#divPartial').show();
+           //alert(result);
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+           //alert("2");
+       });
+        });
+
+
+
+
+    });
+</script>

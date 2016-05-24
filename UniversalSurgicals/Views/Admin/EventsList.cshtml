@@ -1,0 +1,263 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.Events>
+
+
+<div class="col-lg-12 search-strip">
+    <div class="col-lg-8 col-md-8">
+        <div class="col-lg-8 col-md-8 search-fld no-padding">
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter Event Title", @required = "required", @class = "form-control ", @maxlength = "150", @Title = "Event Title" })</div>
+        <div class="col-lg-4 col-md-4  ">
+            <a href="#" id="searchBtn" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa fa-search">
+            </i> Search</a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3">
+        <a href="@Url.Action("EventPosting", "Admin")" class="md-trigger update frm-src-fld" data-modal="modal-16" >
+            <i class="fa fa-bullhorn"></i> Post Event </a>
+    </div>
+</div>
+<div id="divJobsList">
+    <div class="content-cont col-lg-12 col-md-12 no-padding">
+        <div class="clearfix">
+        </div>
+        <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+            <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 ">
+                    <i class="fa fa-bullhorn"></i> Events List
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right">
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="clearfix">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            @if (Model.Count != 0)
+            {
+            
+                <table class="table no-more-tables col-lg-12 table-color">
+                    <thead>
+                        <tr class="grid-headding-strips">
+                            <th class="col-lg-3 col-md-3">
+                                Event Title
+                            </th>
+                            <th class="col-lg-3 col-md-3">
+                                Event Venue
+                            </th>
+                            <th class="col-lg-3 col-md-3">
+                                <div id="sortdivJobs">
+                                    @Html.ActionLink("Event Date", "EventsList", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, status = @ViewBag.status })
+                                </div>
+                            </th>
+                            <th class="col-lg-1 col-md-1">
+                                Status
+                            </th>
+                            <th class="col-lg-1 col-md-1">
+                                View
+                            </th>
+                            <th class="col-lg-1 col-md-1">
+                                Edit
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="v-align-middle">@item.Title
+                                </td>
+                                <td class="v-align-middle">@item.Venue
+                                </td>
+                                <td class="v-align-middle">@item.Date.AddHours(5.30).ToString("dd/MM/yyyy")
+                                </td>
+                                <td class="v-align-middle">
+                                    @if (@item.Status)
+                                    {
+                                        @: Active
+                                    }
+                                    else
+                                    {
+                                    
+                                        @: Inactive
+                                                                                                                                            }
+                                </td>
+                                <td class="v-align-middle">
+                                    <a href="@Url.Action("EventView", "Admin", new { id = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="left" title="View Complete Event Details">
+                                        <i class="fa fa-eye eyesize"></i></a>
+                                </td>
+                                <td class="v-align-middle">
+                                    <a href="@Url.Action("UpdateEvent", "Admin", new { id = (int?)item.Id })" class="update update-icon" id="usergroupempupdate" data-toggle="tooltip" data-placement="top" title="Update">
+                                        <i class="fa fa-pencil-square-o"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            
+            
+                <div class="col-lg-12 col-md-12">
+                    <div id="myPagerJobs" class="pull-right">
+                        @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                      "EventsList", "Admin",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+
+            }
+        )
+    )
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-12 col-md-12 m-t-20 m-l-20">
+                    No Events Found
+                </div>
+            
+            }
+        </div>
+    </div>
+</div>
+<div class="md-overlay">
+</div>
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<!-- the overlay element -->
+<script type="text/javascript">
+    $('.update,#sortdivblock').bind('contextmenu', function (e) {
+        alert("Mouse right click disabled");
+        return false;
+    }); 
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#searchBtn').click(function (e) {
+            e.preventDefault();
+
+            if ($('#SearchString').val() != "") {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: "/Admin/EventsList",
+                    type: 'GET',
+                    cache: false,
+                    data: { searchString: $('#SearchString').val() },
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html('');
+                        $('#divPartial').empty();
+                        $('#divPartial').html(result);
+                    }
+                });
+            }
+            else {
+                return;
+            }
+            return false;
+        });
+
+
+        $(function () {
+            $('#sortdivJobs').on('click', 'a', function (e) {
+                e.preventDefault();
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html('');
+                        $('#divPartial').empty();
+                        $('#divPartial').html(result);
+                    }
+                });
+                return false;
+            });
+        })
+
+        $(function () {
+            $('#myPagerJobs').on('click', 'a', function (e) {
+                e.preventDefault();
+                if (this.href != "") {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+
+                    $.ajax({
+                        url: this.href,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            $('#divPartial').html('');
+                            $('#divPartial').empty();
+                            $('#divPartial').html(result);
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+        $(".update").click(function (e) {
+            e.preventDefault();
+
+            var redirecturl = $(this).attr('href');
+            //        alert(redirecturl);
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html('');
+           $('#divPartial').empty();
+           //alert(result);
+           //window.location.reload();
+           
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+           //alert("2");
+       });
+        });
+    });
+</script>
+<script src="../../Scripts/classie.js"></script>
+<script src="../../Scripts/modalEffects.js"></script>
+<!-- for the blur effect -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+</script>
+<script src="../../Scripts/cssParser.js"></script>
+<script src="../../Scripts/css-filters-polyfill.js"></script>

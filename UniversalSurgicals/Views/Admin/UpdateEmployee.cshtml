@@ -1,0 +1,1829 @@
+﻿@using Universal.BusinessEntities;
+@model Employees
+@Scripts.Render("~/bundles/jqueryval")
+<style>
+    body
+    {
+        background-color: #e5e9ec;
+    }
+    .page-content
+    {
+        position: relative !important;
+        width: auto !important;
+    }
+    .datepicker-dropdown.datepicker-orient-left::before
+    {
+        left: 179px;
+    }
+    .datepicker-dropdown.datepicker-orient-left::after
+    {
+        left: 180px;
+    }
+</style>
+
+
+
+
+<form id="frmUpdateEmployee">
+<div id="some_grid_container1">
+    <div class="col-lg-12 search-strip">
+        <div class="col-lg-3 pull-right">
+            <a href="@Url.Action("EmployeeList", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16">
+               <i class="fa fa-arrow-left"></i> Employees List</a>
+        </div>
+    </div>
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="test">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                Update Employee</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <br />
+                    <br />
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12 ">
+            <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6  m-t-10 m-b-10 ">
+                <i class="fa fa-info-circle"></i> Personal Details</div>
+        </div>
+       
+        <div class="col-lg-12">
+            @Html.HiddenFor(model => model.Id)
+            @*employee id*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Employee_ID, new { @class = "form-control alphanumericOnly", @id = "txtEmpId", @placeholder = "Employee ID", @Title = "Employee ID", @disabled = "disabled" })
+                   @Html.HiddenFor(model => model.Employee_ID)
+                    @Html.ValidationMessageFor(model => model.Employee_ID)
+                </div>
+            </div>
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @id = "txtpassword", @placeholder = "Employee Password", @Title = "Employee Password" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+            </div>
+            @*first name*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @id = "txtfname", @placeholder = "First Name", @Title = "First Name" })
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+            </div>
+            @*middle name*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.MiddleName, new { @class = "form-control", @id = "txtmname", @placeholder = "Middle Name", @Title = "Middle Name" })
+                    @Html.ValidationMessageFor(model => model.MiddleName)
+                </div>
+            </div>
+
+</div>
+ <div class="clearfix">
+                </div>
+  <div class="col-lg-12">
+            @*last name  *@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @id = "txtlname", @placeholder = "Last Name", @Title = "Last Name" })
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+            </div>
+       
+            @*fathers name*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.FathersName, new { @class = "form-control", @id = "txtFathersName", @placeholder = "Father's Name", @Title = "Father's Name" })
+                    @Html.ValidationMessageFor(model => model.FathersName)
+                </div>
+            </div>
+            @*mothers name*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.MothersName, new { @class = "form-control", @id = "txtMothersName", @placeholder = "Mother's Name", @Title = "Mother's Name" })
+                    @Html.ValidationMessageFor(model => model.MothersName)
+                </div>
+            </div>
+
+            @*Date of Birth*@
+            <div class=" col-lg-3  col-md-3  m-b-10 ">
+                @* <div class="controls ">*@
+                <div class="input-append success date col-md-12 col-lg-12 no-padding">
+                    @Html.TextBoxFor(model => model.DOB, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtDOB", placeholder = "Date of birth", @Title = "Date of Birth", @type = "date-local" })
+                    @Html.ValidationMessageFor(model => model.DOB)
+                    <span class="add-on"><i class="fa fa-calendar"></i></span>
+                </div>
+                @* </div>*@
+              
+            </div>
+
+            </div>
+              <div class="clearfix">
+                </div>
+                <div class="col-lg-12">
+            @*gender*@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @if (ViewBag.Genders != null)
+                    {
+                        @Html.DropDownListFor(model => model.Gender, ViewBag.Genders as List<SelectListItem>, "Select Gender", new { @class = "form-control", @id = "ddlGender", @Title = "Gender" })
+                        @Html.ValidationMessageFor(model => model.Gender)
+                    }
+                </div>
+            </div>
+        
+    
+        
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @if (Model.FK_UserGroup != null)
+                    {
+                        @Html.DropDownListFor(model => model.FK_UserGroup, ViewBag.UserGroups as List<SelectListItem>, "Select User Group", new { @class = "form-control", @id = "ddlUsergroup", @placeholder = "User Group", @Title = "User Group" })
+                        @Html.ValidationMessageFor(model => model.FK_UserGroup)
+                      
+                        if (Model.FK_UserGroup.Value == 1)
+                        {
+                        }
+
+                    }
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @if (ViewBag.Zones != null)
+                    {   
+                        @Html.DropDownListFor(model => model.FK_LocationorZone, ViewBag.Zones as List<SelectListItem>, "Select Zone", new { @class = "form-control", @id = "ddlZone", @placeholder = "Zone", @Title = "Zone" })
+                        @Html.ValidationMessageFor(model => model.FK_LocationorZone)
+                    }
+                </div>
+            </div>
+            @if (Model.FK_UserGroup.Value == 3 || Model.FK_UserGroup.Value == 4)
+            {
+                <div class="col-lg-3  col-md-3  m-b-10" id="mgrdiv">
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.ManagerId, ViewBag.ManagersList as List<SelectListItem>, "Select Manager", new { @class = "form-control", @placeholder = "Manager", @Title = "Manager" })
+                        @Html.ValidationMessageFor(model => model.ManagerId)
+                    </div>
+                </div>
+                 <div class="col-lg-3 col-md-3  m-b-10 " id="accountmgrdiv">
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.AccountManagerId, ViewBag.AccountManagersList as List<SelectListItem>, "Select Account Manager", new { @class = "form-control", @id = "ddlAccountMgr", @placeholder = "Account Manager", @Title = "Account Manager" })
+                        @Html.ValidationMessageFor(model => model.AccountManagerId)
+                    </div>
+                </div>
+            }
+            else if (Model.FK_UserGroup.Value == 2)
+            {
+                 <div class="col-lg-3  col-md-3  m-b-10" id="mgrdiv" style="display:none">
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.ManagerId, ViewBag.ManagersList as List<SelectListItem>, "Select Manager", new { @class = "form-control", @placeholder = "Manager", @Title = "Manager" })
+                        @Html.ValidationMessageFor(model => model.ManagerId)
+                    </div>    </div>
+                 <div class="col-lg-3 col-md-3  m-b-10 " id="accountmgrdiv">
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.AccountManagerId, ViewBag.AccountManagersList as List<SelectListItem>, "Select Account Manager", new { @class = "form-control", @id = "ddlAccountMgr", @placeholder = "Account Manager", @Title = "Account Manager" })
+                        @Html.ValidationMessageFor(model => model.AccountManagerId)
+                    </div>
+                </div>
+                
+               
+            }
+            else if (Model.FK_UserGroup.Value == 1)
+            {
+            
+                    <div class="col-lg-3  col-md-3  m-b-10" style="display:none"  id="mgrdiv" >
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.ManagerId, ViewBag.ManagersList as List<SelectListItem>, "Select Manager", new { @class = "form-control", @placeholder = "Manager", @Title = "Manager" })
+                        @Html.ValidationMessageFor(model => model.ManagerId)
+                    </div>
+                        </div>
+                
+                 <div class="col-lg-3 col-md-3  m-b-10 " style="display:none" id="accountmgrdiv"  >
+                    <div class="controls" >
+                        @Html.DropDownListFor(model => model.AccountManagerId, ViewBag.AccountManagersList as List<SelectListItem>, "Select Account Manager", new { @class = "form-control", @id = "ddlAccountMgr", @placeholder = "Account Manager", @Title = "Account Manager" })
+                        @Html.ValidationMessageFor(model => model.AccountManagerId)
+                    </div>
+                </div>
+               
+            
+            }
+            else
+            {
+                  <div class="col-lg-3  col-md-3  m-b-10"   id="mgrdiv" >
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.ManagerId, ViewBag.ManagersList as List<SelectListItem>, "Select Manager", new { @class = "form-control", @placeholder = "Manager", @Title = "Manager" })
+                        @Html.ValidationMessageFor(model => model.ManagerId)
+                    </div>
+                        </div>
+                
+                 <div class="col-lg-3 col-md-3  m-b-10 " id="accountmgrdiv"  >
+                    <div class="controls" >
+                        @Html.DropDownListFor(model => model.AccountManagerId, ViewBag.AccountManagersList as List<SelectListItem>, "Select Account Manager", new { @class = "form-control", @id = "ddlAccountMgr", @placeholder = "Account Manager", @Title = "Account Manager" })
+                        @Html.ValidationMessageFor(model => model.AccountManagerId)
+                    </div>
+                </div>
+            }
+        
+      <div class="clearfix">
+                </div>
+        <div class="col-lg-12">
+            @*PAN No*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.PANNo, new { @class = "form-control", @id = "txtPANNo", Maxlength = "10", @placeholder = "PAN No", @Title = "PAN No" })
+                    @Html.ValidationMessageFor(model => model.PANNo)
+                </div>
+            </div>
+       
+       
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.AadharNo, new { @class = "form-control  numericOnly", Maxlength = "12", @id = "txaadhar", @placeholder = "Aadhar No", @Title = "Aadhar No" })
+                    @Html.ValidationMessageFor(model => model.AadharNo)
+                </div>
+            </div>
+            @*Driving Licence No*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.DrivingLicenceNo, new { @class = "form-control", @id = "txtDrivingLiceneNo", Maxlength = "25", @placeholder = "Driving Licence No", @Title = "Driving Licence No" })
+                    @Html.ValidationMessageFor(model => model.DrivingLicenceNo)
+                </div>
+            </div>
+       
+            @*Sap business id*@
+            <div class=" col-lg-3  col-md-3  m-b-10 ">
+                <div class="input-append success date col-md-12 col-lg-12 no-padding">
+                    @Html.TextBoxFor(model => model.DrivingLicenceExpiryDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtDLE", @placeholder = "Driving Licence Expiry Date", @Title = "Driving Licence Expiry Date", @type = "date-local" })
+                   
+                    <span class="add-on"><i class="fa fa-calendar"></i></span>
+                     @Html.ValidationMessageFor(model => model.DrivingLicenceExpiryDate)
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+            </div> 
+            <div class="clearfix">
+                </div>
+             <div class="col-lg-12">
+            @*PF no*@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.PFNo, new { @class = "form-control", @id = "txtPFNo", Maxlength = "15", @placeholder = "PF No", @Title = "PF No" })
+                    @Html.ValidationMessageFor(model => model.PFNo)
+                </div>
+            </div>
+            @*UAN for PF*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.UANforPFNo, new { @class = "form-control", @id = "txtUANforPF", Maxlength = "25", @placeholder = "UAN for PF No", @Title = "UAN for PF No" })
+                    @Html.ValidationMessageFor(model => model.UANforPFNo)
+                </div>
+            </div>
+            @*ESI No*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.ESINo, new { @class = "form-control", @id = "txtESINo", Maxlength = "20", @placeholder = "ESI No", @Title = "ESI No" })
+                    @Html.ValidationMessageFor(model => model.ESINo)
+                </div>
+            </div>
+      
+            @*Blood Group*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.BloodGroup, new { @class = "form-control", @id = "txtBloodGroup", @placeholder = "Blood Group", @Title = "Blood Group" })
+                    @Html.ValidationMessageFor(model => model.BloodGroup)
+                </div>
+            </div>
+            </div>
+             <div class="clearfix">
+                </div>
+               <div class="col-lg-12">
+            @*Mobile No*@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control numericOnly", @id = "txtMobileNo", @placeholder = "Mobile No", Maxlength = "10", @Title = "Mobile No" })
+                    @Html.ValidationMessageFor(model => model.MobileNo)
+                </div>
+            </div>
+            @*Emergency contact name*@
+            <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.EmergencyContactPerson, new { @class = "form-control", @id = "txtEmergencyContactPerson", @placeholder = "Emergency Contact Person Name", @Title = "Emergency Contact Person Name" })
+                    @Html.ValidationMessageFor(model => model.EmergencyContactPerson)
+                </div>
+            </div>
+            @*Emergency contact number*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.EmergencyContactNo, new { @class = "form-control numericOnly", @id = "txtEmergencyContactNo", Maxlength = "10", @placeholder = "Emergency Contact No", @Title = "Emergency Contact No" })
+                    @Html.ValidationMessageFor(model => model.EmergencyContactNo)
+                </div>
+            </div>
+       
+            @*Date of joining*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="input-append success date col-md-12 col-lg-12 no-padding">
+                    @Html.TextBoxFor(model => model.DOJ, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtDOJ", @placeholder = "Date of Joining", @Title = "Date of Joining", @type = "date-local" })
+                    @Html.ValidationMessageFor(model => model.DOJ)
+                    <span class="add-on"><i class="fa fa-calendar"></i></span>
+                     <label id="lblvalidation" style="color:#ff6d93"></label>
+                </div>
+            </div>
+            </div>
+             <div class="clearfix">
+                </div>
+            <div class="col-lg-12">
+            @*Personal Mail ID*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.PersonalEmailID, new { @class = "form-control", @id = "txtPersonalMailId", @placeholder = "Personal Mail-ID", @Title = "Personal Mail-ID" })
+                    @Html.ValidationMessageFor(model => model.PersonalEmailID)
+                </div>
+            </div> 
+            @*Company Mail ID*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.CompanyMailID, new { @class = "form-control", @id = "txtCompanyMailId", @placeholder = "Company Mail-ID", @Title = "Company Mail-ID" })
+                    @Html.ValidationMessageFor(model => model.CompanyMailID)
+                </div>
+            </div>
+      
+            @*Vehcile Type*@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.VehicleType, new List<SelectListItem>{ 
+                     new SelectListItem { Text = "Four-Wheeler", Value = "FourWheeler"},
+                      new SelectListItem { Text = "Two-Wheeler", Value = "TwoWheeler" },  
+                      }, "Select Vehicle Type", new { @class = "form-control", @id = "ddlvehicleType", @placeholder = "Select Vehicle Type", @Title = "vehicle Type" })
+                    @Html.ValidationMessageFor(model => model.VehicleType)
+                </div>
+            </div>
+            </div>
+             <div class="clearfix">
+                </div>
+             <div class="col-lg-12">
+            @if (Model.VehicleType == "FourWheeler")
+            {
+
+
+                if (Model.LumpsumAmount != 0)
+                {
+                        <div class="col-lg-3 col-md-3  m-b-10" id="divLumpsumAmountDDL">
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.LumpsumAmountDDL, new List<SelectListItem>
+
+{ 
+   new SelectListItem { Text = "Want to give Lumpsum amount", Value = "lumpsum",Selected=true},
+   new SelectListItem { Text = "Want to give Conveyance amount", Value = "convayance" },
+  
+}, "Select Payment type", new { @class = "form-control", @id = "lumpsumORnot", @Title = "Lumpsum Amount or Conveyance" })
+                    @Html.ValidationMessageFor(model => model.LumpsumAmountDDL)
+                </div>
+            </div>
+               <div class="col-lg-3 col-md-3 m-b-10"  id="divtxtConveyance">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Conveyance, new { @class = "form-control", Maxlength = "15", @id = "txtConveyance", @placeholder = "Conveyance", @Title = "Conveyance", disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Conveyance)
+                </div>
+            </div>
+               <div class="col-lg-3 col-md-3 m-b-10" id="divtxtLumpsumAmount">
+                <div class="controls" >
+                    @Html.TextBoxFor(model => model.LumpsumAmount, new { @class = "form-control", @id = "txtLumpsumAmount", Maxlength = "15", @placeholder = "Lumpsum Amount", @Title = "Lumpsum Amount" })
+                    @Html.ValidationMessageFor(model => model.LumpsumAmount)
+                </div>
+            </div>
+                }
+                else
+                {
+                        <div class="col-lg-3 col-md-3  m-b-10" id="divLumpsumAmountDDL">
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.LumpsumAmountDDL, new List<SelectListItem>
+
+{ 
+   new SelectListItem { Text = "Want to give Lumpsum amount", Value = "lumpsum"},
+   new SelectListItem { Text = "Want to give Conveyance amount", Value = "convayance",Selected=true },
+  
+}, "Select Payment type", new { @class = "form-control", @id = "lumpsumORnot", @Title = "Lumpsum Amount or Conveyance" })
+                    @Html.ValidationMessageFor(model => model.LumpsumAmountDDL)
+                </div>
+            </div>
+                 <div class="col-lg-3 col-md-3 m-b-10"  id="divtxtConveyance">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Conveyance, new { @class = "form-control", @id = "txtConveyance", @placeholder = "Conveyance", @Title = "Conveyance", Maxlength = "15", })
+                    @Html.ValidationMessageFor(model => model.Conveyance)
+                </div>
+            </div>
+               <div class="col-lg-3 col-md-3 m-b-10" id="divtxtLumpsumAmount">
+                <div class="controls" >
+                    @Html.TextBoxFor(model => model.LumpsumAmount, new { @class = "form-control", @id = "txtLumpsumAmount", Maxlength = "15", @placeholder = "Lumpsum Amount", @Title = "Lumpsum Amount", disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.LumpsumAmount)
+                </div>
+            </div>
+                }
+
+
+
+            }
+            else if (Model.VehicleType == "TwoWheeler")
+            {
+                <div class="col-lg-3 col-md-3  m-b-10" id="divLumpsumAmountDDL">
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.LumpsumAmountDDL, new List<SelectListItem>
+
+{ 
+   new SelectListItem { Text = "Want to give Lumpsum amount", Value = "lumpsum"},
+   new SelectListItem { Text = "Want to give Conveyance amount", Value = "convayance"},
+  
+}, "Select Payment type", new { @class = "form-control", @id = "lumpsumORnot", @Title = "Lumpsum Amount or Conveyance", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.LumpsumAmountDDL)
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 m-b-10"  id="divtxtConveyance">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Conveyance, new { @class = "form-control", @id = "txtConveyance", @placeholder = "Conveyance", @Title = "Conveyance" })
+                    @Html.ValidationMessageFor(model => model.Conveyance)
+                </div>
+            </div>
+                <div class="col-lg-3 col-md-3 m-b-10" id="divtxtLumpsumAmount">
+                <div class="controls" >
+                    @Html.TextBoxFor(model => model.LumpsumAmount, new { @class = "form-control", @id = "txtLumpsumAmount", Maxlength = "8", @placeholder = "Lumpsum Amount", @Title = "Lumpsum Amount", disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.LumpsumAmount)
+                </div>
+            </div>
+            }
+            </div>
+            @* Conveyance *@
+             <div class="clearfix">
+                </div>
+           
+          <div class="col-lg-12">
+            
+            <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.PassportNumber, new { @class = "form-control", @id = "txtPassportNo", Maxlength = "8", @placeholder = "Passport No", @Title = "Passport No" })
+                    @Html.ValidationMessageFor(model => model.PassportNumber)
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="input-append success date col-md-12 col-lg-12 no-padding">
+                    @Html.TextBoxFor(model => model.PassportValidateDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtPassportValidate", @Title = "Passport Validate", @placeholder = "Passport Validate", @type = "date-local" })
+                    @Html.ValidationMessageFor(model => model.PassportValidateDate)
+                    <span class="add-on"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.SAPBussinessId, new { @class = "form-control", @id = "txtSapBusinessId", Maxlength = "50", @placeholder = "SAP Business Id", @Title = "SAP Business Id" })
+                    @Html.ValidationMessageFor(model => model.SAPBussinessId)
+                </div>
+            </div>
+
+            
+        </div>
+        <div class="clearfix">
+        </div>
+        @*contact Information*@
+        <div class="col-lg-12 ">
+            <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6  m-t-10 m-b-10 ">
+                <i class="fa fa-location-arrow"></i> Contact Information</div>
+        </div>
+         <div class="clearfix">
+                </div>
+        <div class="col-lg-12">
+            @*Permanent Address*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextAreaFor(model => model.PermanentAddress, new { @class = "form-control", @id = "txtPermanentAddress", @placeholder = "Permanent Address", @Title = "Permanent Address" })
+                    @Html.ValidationMessageFor(model => model.PermanentAddress)
+                </div>
+            </div>
+            @*Permanent State*@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @if (ViewBag.States != null)
+                    {   
+                        @Html.DropDownList("FK_PermanentState", ViewBag.States as List<SelectListItem>, "Select Permanent State", new { @class = "form-control", @id = "ddlPermanentState", @Title = "Permanent State" })
+                        @Html.ValidationMessageFor(model => model.FK_PermanentState)
+                    }
+                </div>
+            </div>
+            @*Permanent city*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @if (ViewBag.CitiesList != null)
+                    {
+                      
+                        @Html.DropDownListFor(model => model.FK_PermanentCity, ViewBag.CitiesList as List<SelectListItem>, "Select Permanent District", new { @class = "form-control", @id = "ddlPermanentCity", @placeholder = "Permanent District", @Title = "Permanent District" })
+                        @Html.ValidationMessageFor(model => model.FK_PermanentCity)
+                      
+                    }
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.PermanentCityname, new { @class = "form-control", @id = "txtPermanenntcityname", @placeholder = "Permanent City Name", @Title = " Permanent City Name" })
+                    @Html.ValidationMessageFor(model => model.PermanentCityname)
+                </div>
+            </div>
+              <div class="clearfix">
+        </div>
+            @*pincode*@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.PermanentPincode, new { @class = "form-control numericOnly", @id = "txtPincode", @placeholder = "Pincode", @Title = "Pincode", Maxlength = "6" })
+                    @Html.ValidationMessageFor(model => model.PermanentPincode)
+                </div>
+            </div>
+        </div>
+
+
+         <div class="clearfix">
+        </div>
+        <div class="col-lg-12">
+       
+        @Html.CheckBoxFor(model => model.SameAddress, new { @id = "chksameAddress" })
+  
+        <span>Current Address same as Permanent Address</span>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12">
+            @*Temparary Address*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextAreaFor(model => model.TempAddress, new { @class = "form-control", @id = "txtTempAddress", @placeholder = "Current Address", @Title = "Current Address" })
+                    @Html.ValidationMessageFor(model => model.TempAddress)
+                </div>
+            </div>
+            @*Temp States*@
+            <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @if (ViewBag.States1 != null)
+                    {   
+                        @Html.DropDownListFor(model => model.FK_TempState, ViewBag.States1 as List<SelectListItem>, "Select Current State", new { @class = "form-control", @id = "ddlTempState", @Title = "Current State" })
+                        @Html.ValidationMessageFor(model => model.FK_TempState)
+                    }
+                </div>
+            </div>
+            @* Temp Cities *@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @if (ViewBag.CitiesList2 != null)
+                    {
+                      
+                        @Html.DropDownListFor(model => model.FK_TempCity, ViewBag.CitiesList2 as List<SelectListItem>, "Select Current District", new { @class = "form-control", @id = "FK_TempCity", @placeholder = "Current District", @Title = "Current District" })
+                        @Html.ValidationMessageFor(model => model.FK_TempCity)
+                      
+                    }
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.CurrentCityname, new { @class = "form-control", @id = "txtCurrentcityname", @placeholder = "Current City Name", @Title = " Current City Name" })
+                    @Html.ValidationMessageFor(model => model.CurrentCityname)
+                </div>
+            </div>
+            <div class="clearfix">
+              </div>
+            @*Temp Pincode*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.TempPincode, new { @class = "form-control numericOnly", @id = "txtTempPincode", @placeholder = "Current Pincode", @Title = "Current Pincode", Maxlength = "6" })
+                    @Html.ValidationMessageFor(model => model.TempPincode)
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12 ">
+            <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6  m-t-10 m-b-10  ">
+                <i class="fa fa-inr"></i> Bank Information</div>
+        </div>
+         <div class="clearfix">
+                </div>
+        @*Bank Information*@
+        <div class="col-lg-12">
+            @*Bank Name*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.BankName, new { @class = "form-control", @id = "txtBankName", @placeholder = "Bank Name", @Title = "Bank Name" })
+                    @Html.ValidationMessageFor(model => model.BankName)
+                </div>
+            </div>
+            @*Branch & Location*@
+            <div class="col-lg-3 col-md-3  m-b-10 ">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.BranchandLocation, new { @class = "form-control", @id = "txtBranchAndLocation", @placeholder = "Branch & Location", @Title = "Branch & Location" })
+                    @Html.ValidationMessageFor(model => model.BranchandLocation)
+                </div>
+            </div>
+            @*Account No*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.BankAccountNo, new { @class = "form-control numericOnly", @id = "txtAccountNo", Maxlength = "20", @placeholder = "Account No", @Title = "Account No" })
+                    @Html.ValidationMessageFor(model => model.BankAccountNo)
+                </div>
+            </div>
+            @*Bank IFSC Code*@
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.BankIFSCCode, new { @class = "form-control", @id = "txtIFSCCode", @placeholder = "IFSC Code", Maxlength = "15", @Title = "IFSC Code" })
+                    @Html.ValidationMessageFor(model => model.BankIFSCCode)
+                </div>
+            </div>
+            </div>
+             <div class="clearfix">
+                </div>
+               <div class="col-lg-12">
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.NoOfLeaves, new { @class = "form-control", @id = "txtNoofLeaves", @placeholder = "No.of Leaves", @Title = "No Of Leaves" })
+                    @Html.ValidationMessageFor(model => model.NoOfLeaves)
+                </div>
+            </div>
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.Status, new List<SelectListItem>{ 
+                     new SelectListItem { Text = "Active", Value = "True"},
+                      new SelectListItem { Text = "Inactive", Value = "False" },  
+                      }, "Select Employee Status", new { @class = "form-control", @id = "ddlstatus", @placeholder = "Select Employee Status", @Title = "Select Employee Status" })
+                    @Html.ValidationMessageFor(model => model.Status)
+                    @* @Html.ValidationMessageFor(model => model.LeavingReason)*@
+                </div>
+            </div>
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="input-append success date col-md-12 col-lg-12 no-padding">
+                    @Html.TextBoxFor(model => model.CompanyLeftDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtCompanyLeftDate", placeholder = "Company Left Date", @Title = "Company Left Date", @type = "" })
+                     @Html.ValidationMessageFor(model => model.CompanyLeftDate)
+                    <span class="add-on"><i class="fa fa-calendar"></i></span>
+                    <label id="lblvalidationleftDate" style="color:#ff6d93"></label>
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+            <div class="col-lg-3  col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.TextAreaFor(model => model.LeavingReason, new { @class = "form-control", @id = "txtLeavingReason", @placeholder = "Company Leaving Reason", @Title = "Company Leaving Reason", @maxlength = "3000" })
+                    @* @Html.ValidationMessageFor(model => model.LeavingReason)*@
+                </div>
+            </div>
+            </div>
+             <div class="clearfix">
+                </div>
+              <div class="col-lg-12">
+                 <div class="col-lg-3 col-md-3  m-b-10">
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.MaritalStatus, new List<SelectListItem>
+
+{ 
+   new SelectListItem { Text = "Single", Value = "Single"},
+   new SelectListItem { Text = "Married", Value = "Married" },
+  
+}, "Select Marital Status", new { @class = "form-control", @id = "ddlMaritalStatus", @Title = "Marital Status" })
+                    @Html.ValidationMessageFor(model => model.MaritalStatus)
+                </div>
+            </div>
+        
+            <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.NOK, new { @class = "form-control", @id = "txtNOK", @placeholder = "NOK", @Title = "NOK" })
+                    @Html.ValidationMessageFor(model => model.NOK)
+                </div>
+            </div>
+        
+      
+            <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="controls">
+                     @Html.TextBoxFor(model => model.ProfilePicturePath, new { type = "file", @class = "form-control", @placeholder = "Profile Picture", @Title = "Profile Picture", @id = "ProfilePicturePath" })
+                  @*  <input type="file" name="UploadFile" />*@
+                 @* @if (Model.ProfilePicturePath != null && Model.ProfilePicturePath != "")
+                  {*@
+                    <img src="~/Content/ProfileImg/@Html.DisplayFor(model => model.ProfilePicturePath)" style="height:100px;width:100px; " alt ="img" id="imgDisplay"/>
+                @*  }
+                  else
+                  {
+                  
+                  }
+                    *@
+                </div>
+            </div>
+           <div class="col-lg-3 col-md-3 m-b-10">
+                <div class="controls dfl-buttom">
+                       <input type="button" value="Delete Image" name="btnDelete" id="btnDelete" />
+                     </div>
+            </div>
+       </div>
+        <div class="clearfix">
+                </div>
+        @*update and reset buttons*@
+         <div class="col-lg-12">
+          <div class="controls" style="display: none">
+                @Html.TextBoxFor(model => model.Temimagepath)
+                <input type="hidden" value="@Model.ProfilePicturePath" id="actualpic" name="actualpic"/>
+            </div>
+       <div class="col-lg-4 col-md-6 pull-right text-right m-b-20">
+    <div class="dfl-buttom col-lg-6 col-md-4 col-sm-12 col-xs-12">
+                <input type="submit" value="Update" name="Update" id="btnUpdate" />
+                </div>
+                 <div class="dfl-buttom col-lg-6 col-md-4 col-sm-12 col-xs-12">
+                <input type="reset" value="Cancel" name="Cancel" id="btnCancel" />
+            </div>
+        </div>
+        <div id="result">
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+
+<div class="popuppositionsucess">
+
+ <div class="alert alert-success" id="UpdateProfileSucess" runat="server">
+<strong>Success !</strong><br /><label id="UpdateProfileSucessspan"></label>
+
+</div>
+</div>
+
+<div class="popupposition">
+ <div class="alert alert-warning" id="updateProfilewarning" runat="server">
+<strong>Warning !</strong><br /><label id="updateemperrormessage"></label>
+
+</div>
+
+</div>
+
+
+
+
+
+<div id="UpdateEmployeeLoadimg" runat="server" style="text-align: center; padding: 50px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:40%; left:5%;"> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+
+
+
+
+</form>
+
+
+
+
+  <!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+
+                     <script type="text/javascript">
+                         $('.update').bind('contextmenu', function (e) {
+                             alert("Mouse right click disabled");
+                             return false;
+                         }); 
+        </script>
+
+
+      
+
+<script type="text/javascript">
+
+
+    
+
+    function uploadfileForIE() {
+
+
+       
+
+        var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none"></iframe>');
+
+        $("body").append(iframe);
+
+        var form = $('#frmUpdateEmployee');
+
+ 
+
+        form.attr("action", "/Admin/ProfileImageUpload");
+        form.attr("method", "post");
+
+        form.attr("encoding", "multipart/form-data");
+        form.attr("enctype", "multipart/form-data");
+
+        form.attr("target", "postiframe");
+        form.attr("file", $('#ProfilePicturePath').val());
+
+      
+
+        form.submit();
+
+        return false;
+    }
+
+
+
+    $(document).ready(function () {
+
+
+
+
+
+
+
+        //        alert(navigator.userAgent.toUpperCase().indexOf('MSIE'))
+
+        //        alert(navigator.userAgent.toUpperCase().indexOf('MSIE') >= 0)
+
+        $('#ProfilePicturePath').bind('change', function () {
+
+            //this.files[0].size gets the size of your file.
+
+
+            var val = $(this).val().toLowerCase();
+
+            var regex = new RegExp("(.*?)\.(jpg|jpeg|png|gif)$");
+
+            if ($.browser.msie && (parseInt($.browser.version) == 9 || parseInt($.browser.version) == 8)) {
+
+
+
+                //                alert(!(regex.test(eval)));
+
+                //                if (!(regex.test(eval))) {
+
+                //                    $('#imgDisplay').attr('src', '');
+
+                //                    alert('Unsupported file');
+                //                    $("#ProfilePicturePath").replaceWith($("#ProfilePicturePath").clone(true));
+
+                //                    $('#imgDisplay').hide();
+
+                //                }
+                //                else {
+                //                }
+
+            }
+            else {
+
+
+
+                if (this.files[0].size >= 6097152 || !(regex.test(val))) {
+
+                    if (!(regex.test(val)) && val != "") {
+                        //                        $(this).val('');
+                        $('#imgDisplay').attr('src', '');
+
+
+                        $("#ProfilePicturePath").replaceWith($("#ProfilePicturePath").clone(true));
+
+                        $('#imgDisplay').hide();
+                    }
+                    else {
+
+
+                        $('#imgDisplay').attr('src', '');
+
+                        $(this).val('');
+                        $("#ProfilePicturePath").replaceWith($("#ProfilePicturePath").clone(true));
+                        $('#imgDisplay').hide();
+
+                    }
+
+                }
+                else {
+
+
+                }
+
+            }
+
+
+        });
+
+
+        var imgpath = $("#actualpic").val();
+        //        alert(imgpath);
+        if (imgpath != null && imgpath != "") {
+            $('#imgDisplay').show();
+        }
+        else {
+            $('#imgDisplay').hide();
+        }
+
+
+        $('.popupposition').hide();
+        $('.popuppositionsucess').hide();
+
+        $.validator.addMethod("date", function (value, element) {
+            if (value != "") {
+                return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+            }
+            else {
+
+                return true;
+            }
+        },
+    "Please enter a date in the format dd/mm/yyyy."
+       );
+        var DOB = $("#txtDOB").val().split("-");
+
+        var PassportValidate = $("#txtPassportValidate").val().split("-");
+
+
+
+        var DLE = $("#txtDLE").val().split("-");
+        var txtDOJ = $("#txtDOJ").val().split("-");
+        if ($("#txtDOB").val().length > 0) {
+            $("#txtDOB").val(DOB[0] + '/' + DOB[1] + '/' + DOB[2]);
+        }
+
+        if ($("#txtPassportValidate").val().length > 0) {
+
+            $("#txtPassportValidate").val(PassportValidate[0] + '/' + PassportValidate[1] + '/' + PassportValidate[2]);
+
+        }
+
+        if ($("#txtCompanyLeftDate").val().length > 0) {
+            var CompanyLeftDate = $("#txtCompanyLeftDate").val().split("-");
+            $("#txtCompanyLeftDate").val(CompanyLeftDate[0] + '/' + CompanyLeftDate[1] + '/' + CompanyLeftDate[2]);
+            //            alert("DSFs");
+        }
+
+
+        if ($("#txtDLE").val().length > 0) {
+
+            $("#txtDLE").val(DLE[0] + '/' + DLE[1] + '/' + DLE[2]);
+
+        }
+        if ($("#txtDOJ").val().length > 0) {
+
+            $("#txtDOJ").val(txtDOJ[0] + '/' + txtDOJ[1] + '/' + txtDOJ[2]);
+
+        }
+        if ($("#chksameAddress").prop('checked') == true) {
+            //do something
+            $("#txtTempAddress").prop('disabled', true);
+            $("#ddlTempState").prop('disabled', true);
+            $("#FK_TempCity").prop('disabled', true);
+            $("#txtTempPincode").prop('disabled', true);
+            $("#txtCurrentcityname").prop('disabled', true);
+            $("#txtPermanentAddress").prop('disabled', false);
+            $("#ddlPermanentState").prop('disabled', false);
+            $("#FK_PermanentCity").prop('disabled', false);
+            $("#txtPincode").prop('disabled', false);
+            $("#txtPermanenntcityname").prop('disabled', false);
+        }
+        else {
+            $("#txtPermanentAddress").prop('disabled', false);
+            $("#ddlPermanentState").prop('disabled', false);
+            $("#FK_PermanentCity").prop('disabled', false);
+            $("#txtPincode").prop('disabled', false);
+            $("#txtPermanenntcityname").prop('disabled', false);
+
+
+            $("#txtTempAddress").prop('disabled', false);
+            $("#ddlTempState").prop('disabled', false);
+            $("#FK_TempCity").prop('disabled', false);
+            $("#txtTempPincode").prop('disabled', false);
+            $("#txtCurrentcityname").prop('disabled', false);
+        }
+        $('#chksameAddress').change(function () {
+            if ($(this).is(":checked")) {
+
+                if ($("#txtPermanentAddress").val() != "") {
+                    //                alert();
+                    $("#txtTempAddress").val('');
+                    $("#ddlTempState").val('');
+                    $("#FK_TempCity").val('');
+                    $("#txtTempPincode").val('');
+                    $("#txtCurrentcityname").val('');
+
+                    $("#txtTempAddress").prop('disabled', true);
+                    $("#ddlTempState").prop('disabled', true);
+                    $("#FK_TempCity").prop('disabled', true);
+                    $("#txtTempPincode").prop('disabled', true);
+                    $("#txtCurrentcityname").prop('disabled', true);
+
+                    $("#txtPermanentAddress").prop('disabled', false);
+                    $("#ddlPermanentState").prop('disabled', false);
+                    $("#FK_PermanentCity").prop('disabled', false);
+                    $("#txtPincode").prop('disabled', false);
+                    $("#txtPermanenntcityname").prop('disabled', false);
+                }
+
+                else {
+
+                    $("#txtPermanentAddress").prop('disabled', false);
+                    $("#ddlPermanentState").prop('disabled', false);
+                    $("#FK_PermanentCity").prop('disabled', false);
+                    $("#txtPincode").prop('disabled', false);
+                    $("#txtPermanenntcityname").prop('disabled', false);
+
+
+                    $("#txtTempAddress").prop('disabled', true);
+                    $("#ddlTempState").prop('disabled', true);
+                    $("#FK_TempCity").prop('disabled', true);
+                    $("#txtTempPincode").prop('disabled', true);
+                    $("#txtCurrentcityname").prop('disabled', true);
+                }
+
+            }
+            else {
+                //alert("not checked");
+                $("#txtPermanentAddress").prop('disabled', false);
+                $("#ddlPermanentState").prop('disabled', false);
+                $("#FK_PermanentCity").prop('disabled', false);
+                $("#txtPincode").prop('disabled', false);
+                $("#txtPermanenntcityname").prop('disabled', false);
+
+                $("#txtTempAddress").prop('disabled', false);
+                $("#ddlTempState").prop('disabled', false);
+                $("#FK_TempCity").prop('disabled', false);
+                $("#txtTempPincode").prop('disabled', false);
+                $("#txtCurrentcityname").prop('disabled', false);
+            }
+        });
+
+
+        $("#lumpsumORnot").change(function (e) {
+            e.preventDefault();
+
+            var lum = $('#lumpsumORnot').val();
+            //   alert(lum);
+            //        $('#divLumpsumAmountDDL').get(0).selectedIndex = 0;
+            //        $('#lumpsumORnot').val('');
+            if (lum == "convayance") {
+                document.getElementById("divLumpsumAmountDDL").style.display = "inline";
+                document.getElementById("divtxtLumpsumAmount").style.display = "none";
+                document.getElementById("divtxtConveyance").style.display = "inline";
+                $("#txtConveyance").prop('disabled', false);
+                $("#txtLumpsumAmount").prop('disabled', false);
+                //                $('#txtConveyance').val('');
+                //                $('#txtLumpsumAmount').val('');
+                $('#txtConveyance').val('');
+                $('#txtLumpsumAmount').val('');
+                $("#txtConveyance").removeAttr('disabled');
+                $("#txtLumpsumAmount").removeAttr('disabled');
+
+            }
+            else if (lum == "lumpsum") {
+                document.getElementById("divLumpsumAmountDDL").style.display = "inline";
+                document.getElementById("divtxtConveyance").style.display = "none";
+                document.getElementById("divtxtLumpsumAmount").style.display = "inline";
+                $('#txtConveyance').val('');
+                $('#txtLumpsumAmount').val('');
+                //                $("txtConveyance").prop('disabled', false);
+                //                $("txtLumpsumAmount").prop('disabled', false);
+
+                $("#txtConveyance").prop('disabled', false);
+                $("#txtLumpsumAmount").prop('disabled', false);
+                $("#txtConveyance").removeAttr('disabled');
+                $("#txtLumpsumAmount").removeAttr('disabled');
+            }
+            else if (lum == "") {
+                document.getElementById("divLumpsumAmountDDL").style.display = "inline";
+                document.getElementById("divtxtConveyance").style.display = "none";
+                document.getElementById("divtxtLumpsumAmount").style.display = "none";
+                $('#txtConveyance').val('');
+                $('#txtLumpsumAmount').val('');
+                //                $("txtConveyance").prop('disabled', false);
+                //                $("txtLumpsumAmount").prop('disabled', false);
+                $("#txtConveyance").removeAttr('disabled');
+                $("#txtLumpsumAmount").removeAttr('disabled');
+                $("#txtConveyance").prop('disabled', false);
+                $("#txtLumpsumAmount").prop('disabled', false);
+            }
+
+
+        });
+        $("#ddlvehicleType").change(function (e) {
+            e.preventDefault();
+
+            var vehicle = $('#ddlvehicleType').val();
+            //            alert(vehicle);
+            $('#divLumpsumAmountDDL').get(0).selectedIndex = 0;
+            $('#lumpsumORnot').val('');
+            $("#lumpsumORnot").removeAttr('disabled');
+            $("#txtConveyance").prop('disabled', false);
+            if (vehicle == "FourWheeler") {
+                document.getElementById("divLumpsumAmountDDL").style.display = "inline";
+                document.getElementById("divtxtLumpsumAmount").style.display = "none";
+                document.getElementById("divtxtConveyance").style.display = "none";
+                $('#lumpsumORnot').val('');
+                $('#txtLumpsumAmount').val('');
+                $('#txtConveyance').val('');
+
+
+            }
+            else if (vehicle == "TwoWheeler") {
+                document.getElementById("divLumpsumAmountDDL").style.display = "none";
+                document.getElementById("divtxtConveyance").style.display = "inline";
+                document.getElementById("divtxtLumpsumAmount").style.display = "none";
+                $('#lumpsumORnot').val('');
+                $('#txtLumpsumAmount').val('');
+                $('#txtConveyance').val('');
+            }
+            else if (vehicle == "") {
+                document.getElementById("divLumpsumAmountDDL").style.display = "none";
+                document.getElementById("divtxtConveyance").style.display = "none";
+                document.getElementById("divtxtLumpsumAmount").style.display = "none";
+                $('#lumpsumORnot').val('');
+                $('#txtLumpsumAmount').val('');
+                $('#txtConveyance').val('');
+            }
+
+        });
+
+
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgDisplay').show();
+                    $('#imgDisplay').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        $('.date').datepicker().on('changeDate', function (ev) {
+            ev.preventDefault();
+            $(this).datepicker('hide');
+
+
+            if ($('#txtDOB').val() != "") {
+
+                validateDOBDOJdates = ValidateDOBDOJDates()
+
+            }
+
+            var valid = $("#frmUpdateEmployee").valid();
+
+            if (valid) {
+            }
+            else {
+                return;
+            }
+        });
+
+
+        var validateDOBDOJdates = false;
+
+
+        function ValidateDOBDOJDates() {
+
+            var doj;
+            var djyear
+            var dob = $("#txtDOB").val().split("/");
+
+            if ($("#txtDOJ").val() != "" && $("#txtDOJ").val() != null) {
+                doj = $("#txtDOJ").val().split("/");
+                djyear = new Date(doj[2], doj[1] - 1, doj[0]).getFullYear();
+            }
+            else {
+                var d = new Date();
+
+                var djyear = d.getFullYear();
+
+            }
+
+            var dbyear = new Date(dob[2], dob[1] - 1, dob[0]).getFullYear();
+
+            var age = djyear - dbyear;
+
+            //            alert(age >= 18)
+
+
+            if (age >= 18) {
+
+                $('#lblvalidation').text("");
+
+                return true;
+
+            }
+            else {
+
+                $('#lblvalidation').text("Age should be 18 years or more");
+
+                return false;
+
+            }
+
+        }
+
+        $("#ProfilePicturePath").change(function () {
+            $('#imgDisplay').show();
+            readURL(this);
+        });
+        $("#btnDelete").click(function (e) {
+            e.preventDefault();
+
+
+
+            //            uploadfileForIE();
+
+
+
+            var id = $("#actualpic").val();
+            //alert(id);
+            $("#actualpic").val('');
+            $('#imgDisplay').attr('src', "#");
+            $('#imgDisplay').hide();
+            $("#ProfilePicturePath").val('');
+        });
+        $("#btnCancel").click(function (e) {
+            e.preventDefault();
+            var id = $("#Id").val();
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: "/Admin/UpdateEmployee/" + id,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+                     .success(function (result) {
+                         $("#AdminLoadingBg").fadeOut();
+                         $("#AdminLoadimg").hide();
+                         $('#divPartial').html('');
+                         $('#divPartial').html(result);
+
+                     })
+                      .error(function (xhr, status) {
+                          $("#AdminLoadingBg").fadeOut();
+                          $("#AdminLoadimg").hide();
+                      });
+        });
+
+        $(".numericOnly").bind('keypress', function (e) {
+            if (e.keyCode == '9' || e.keyCode == '16') {
+                return;
+            }
+            var code;
+            if (e.keyCode) code = e.keyCode;
+            else if (e.which) code = e.which;
+            if (e.which == 46) {
+                return false;
+            }
+            if (code == 8 || code == 46) {
+                return true;
+            }
+            if (code < 48 || code > 57) {
+                return false;
+            }
+        });
+
+
+        //Allow users to enter alphabets only(Small & Caps)
+        $(".charOnly").bind('keypress', function (e) {
+            if ((e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 96 && e.keyCode < 123) || e.keyCode == 8)
+                return true;
+            else {
+                return false;
+            }
+        });
+
+        //Allow users to enter alphanumeric
+        $(".alphanumericOnly").bind('keypress', function (e) {
+            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 95 && e.keyCode <= 122)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        });
+
+        $(function () {
+            $(document).tooltip();
+        });
+
+
+        function UploadProfileImg(file, empid) {
+            // alert("hjkhj");
+            var files = $("#ProfilePicturePath").get(0).files;
+            // alert(files);
+            if (files.length > 0) {
+
+
+
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    if (files.length > 0) {
+                        data.append(file, files[0]);
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: '/Admin/UploadProfileImage?id=' + empid,
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            // console.log(result);
+                        },
+                        error: function (xhr, status, p3, p4) {
+                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                err = JSON.parse(xhr.responseText).Message;
+                            console.log(err);
+                        }
+                    });
+                }
+                else {
+
+
+                    //                    uploadfileForIE();
+
+
+                    $(".popupposition").fadeIn();
+                    //                    $('#updateemperrormessage').text("This browser doesn't support HTML5 file uploads!");
+                    $('#updateemperrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+
+                }
+            }
+        }
+        $("#ddlstatus").change(function (e) {
+            e.preventDefault();
+
+            var statusval = $("#ddlstatus").val();
+
+            if (statusval == "False") {
+
+                if ($("#txtCompanyLeftDate").val() != "") {
+                    $("#lblvalidationleftDate").hide();
+                    $("#lblvalidationleftDate").text('');
+
+                }
+                else {
+                    $("#lblvalidationleftDate").show();
+                    $("#lblvalidationleftDate").text("Please enter company left date");
+
+                }
+            }
+            else {
+                $("#txtCompanyLeftDate").val('');
+                $("#txtLeavingReason").val('');
+                $("#lblvalidationleftDate").hide();
+                $("#lblvalidationleftDate").text('');
+
+            }
+
+        });
+
+        function checkingStatus() {
+
+            var statusval = $("#ddlstatus").val();
+
+            if (statusval == "False") {
+                if ($("#txtCompanyLeftDate").val() != "") {
+                    $("#lblvalidationleftDate").hide();
+                    $("#lblvalidationleftDate").text('');
+                    return true;
+                }
+                else {
+                    $("#lblvalidationleftDate").show();
+                    $("#lblvalidationleftDate").text("Please enter company left date");
+                    return false;
+                }
+            }
+            else {
+                $("#txtCompanyLeftDate").val('');
+                $("#txtLeavingReason").val('');
+                $("#lblvalidationleftDate").hide();
+                $("#lblvalidationleftDate").text('');
+                return true
+            }
+        }
+        $("#btnUpdate").click(function (e) {
+            e.preventDefault();
+
+
+
+            //  alert("update");
+            var valid = $("#frmUpdateEmployee").valid();
+            //   alert(valid);
+            // alert($("#frmUpdateEmployee").serialize());
+
+
+            $('#txtEmpId').val()
+
+            var valid = $("#frmUpdateEmployee").valid();
+
+
+            var empid = $('#txtEmpId').val();
+
+            var filename = $('input[type=file]').val().split('\\').pop();
+
+            if (filename != "" && filename != null) {
+                $('#Temimagepath').val(filename);
+            }
+
+
+
+
+            var validateDOBDOJdates = ValidateDOBDOJDates()
+            var checkingStatusvar = checkingStatus()
+            if (valid && validateDOBDOJdates && checkingStatusvar) {
+                $("#UpdateEmployeeLoadimg").show();
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Admin/UpdateEmployee',
+                    data: $("#frmUpdateEmployee").serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#UpdateEmployeeLoadimg").hide();
+                        //                        $('#result').text(data.Text);
+
+                        $('.popuppositionsucess').fadeIn();
+                        // $('#UpdateProfileSucessspan').text('Employee Registration Successfully Completed');
+                        $('.UpdateProfileSucessspan').show();
+                        $('#UpdateProfileSucessspan').text(data.Text);
+                        //                         alert(data.Text);
+                        $('.UpdateProfileSucessspan').show();
+                        //                        $('.popuppositionsucess').delay(7000).fadeOut('slow');
+
+                        if ($.browser.msie && (parseInt($.browser.version) == 9 || parseInt($.browser.version) == 8)) {
+
+                            uploadfileForIE()
+
+                        }
+
+
+                        // alert(data.Text);
+                        if (filename != "" && filename != null) {
+
+                            UploadProfileImg(filename, empid);
+                            // alert("upload");
+                        }
+
+
+
+                        if (data.Available === true) {
+                            //                            $('#result').text(data.Text);
+                            //                           $('#result').show();
+                            $(':input', $("#frmUpdateEmployee"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                            setTimeout(function () {
+
+                                $.ajax({
+                                    url: "/Shared/EmployeeList",
+                                    contentType: 'application/html; charset=utf-8',
+                                    type: 'GET',
+                                    cache: false,
+                                    dataType: 'html'
+
+                                })
+                     .success(function (result) {
+                         $('#divPartial').html(result);
+
+
+                     })
+                      .error(function (xhr, status) {
+                      });
+
+                            }, 3000);
+                        }
+                        else {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                        }
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+
+                });
+            }
+            else {
+                return;
+
+            }
+
+        });
+
+        $("#mgrdiv").show();
+        $("#accountmgrdiv").show();
+        var us = $("#ddlUsergroup").val();
+        if (us == 3) {
+            document.getElementById("mgrdiv").style.display = "inline";
+            document.getElementById("accountmgrdiv").style.display = "inline";
+
+        }
+        else if (us == 1) {
+            document.getElementById("mgrdiv").style.display = "none";
+            document.getElementById("accountmgrdiv").style.display = "none";
+        }
+        else if (us == 2 || us == 4) {
+            document.getElementById("mgrdiv").style.display = "none";
+            document.getElementById("accountmgrdiv").style.display = "inline";
+        }
+        else {
+            document.getElementById("mgrdiv").style.display = "inline";
+            document.getElementById("accountmgrdiv").style.display = "inline";
+
+        }
+        $("#ddlUsergroup").change(function (e) {
+            e.preventDefault();
+            var usergroupvalue = $('#ddlUsergroup').val();
+            //alert(usergroupvalue);
+            $('#ManagerId').get(0).selectedIndex = 0;
+            $('#ddlAccountMgr').get(0).selectedIndex = 0;
+            if (usergroupvalue == 3) {
+                document.getElementById("mgrdiv").style.display = "inline";
+                document.getElementById("accountmgrdiv").style.display = "inline";
+
+            }
+            else if (usergroupvalue == 1) {
+                document.getElementById("mgrdiv").style.display = "none";
+                document.getElementById("accountmgrdiv").style.display = "none";
+            }
+            else if (usergroupvalue == 2 || usergroupvalue == 4) {
+                document.getElementById("mgrdiv").style.display = "none";
+                document.getElementById("accountmgrdiv").style.display = "inline";
+            }
+            else {
+                document.getElementById("mgrdiv").style.display = "inline";
+                document.getElementById("accountmgrdiv").style.display = "inline";
+
+            }
+        });
+
+        $("#ddlPermanentCity").change(function (e) {
+            e.preventDefault();
+            $("#txtPermanenntcityname").val('');
+
+        });
+
+        $("#FK_TempCity").change(function (e) {
+            e.preventDefault();
+            $("#txtCurrentcityname").val('');
+
+        });
+        $("#lblvalidationleftDate").hide();
+        $("#lblvalidationleftDate").text('');
+
+
+
+        $("#ddlPermanentState").change(function (e) {
+            e.preventDefault();
+            var stateId = $('#ddlPermanentState').val();
+            if (stateId != null) {
+                $.ajax({
+                    url: '/Admin/FillCities',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: { StateId: stateId },
+                    success: function (cities) {
+                        $("#ddlPermanentCity").empty();
+                        $("#ddlPermanentCity").append($("<option />").val('').text("Select Permanent District"));
+                        $.each(cities, function (i, city) {
+                            $("#ddlPermanentCity").val();
+                            $("#ddlPermanentCity").append('<option value="' + city.Value + '">' + city.Text + '</option>');
+                        });
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                    }
+                });
+            }
+            if (stateId == "") {
+                $("#ddlPermanentCity").html("");
+                $("#ddlPermanentCity").empty();
+                $("#ddlPermanentCity").append($("<option />").val('').text("Select Permanent District"));
+                $.each(cities, function (i, city) {
+                    $("#ddlPermanentCity").append('<option value="' + city.Value + '">' + city.Text + '</option>');
+                });
+
+            }
+        });
+    });
+
+    $("#ddlTempState").change(function (e) {
+        e.preventDefault();
+        var tempStateId = $('#ddlTempState').val();
+        $.ajax({
+            url: '/Admin/FillCities',
+            type: "GET",
+            data: { StateId: tempStateId },
+            success: function (cities) {
+                $("#FK_TempCity").html("");
+                $("#FK_TempCity").append($("<option />").val('').text("Select Current District"));
+                $.each(cities, function (i, city) {
+                    $("#FK_TempCity").val();
+                    $("#FK_TempCity").append('<option value="' + city.Value + '">' + city.Text + '</option>');
+                });
+            },
+            error: function (event, jqxhr, settings, exception) {
+            }
+        });
+
+        if (tempStateId == "") {
+            $("#FK_TempCity").html("");
+            $("#FK_TempCity").empty();
+            $("#FK_TempCity").append($("<option />").val('').text("Select Current District"));
+            $.each(cities, function (i, city) {
+                $("#FK_TempCity").append('<option value="' + city.Value + '">' + city.Text + '</option>');
+            });
+        }
+
+    });
+
+
+    $("#txtEmpId").change(function (e) {
+        e.preventDefault();
+        var EmployeeID = $('#txtEmpId').val();
+        $.ajax({
+            url: '/Admin/CheckEmployeeID',
+            type: "GET",
+            data: { EmpID: EmployeeID },
+            success: function (data) {
+                if (data >= 1) {
+                    $("#txtEmpId").val("");
+                   
+                    $(".popupposition").fadeIn();
+                    $('#updateemperrormessage').text("Employee ID already exist, please enter new Employee ID");
+                    $('#updateemperrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtEmpId').focus();
+                }
+            },
+            error: function (event, jqxhr, settings, exception) {
+
+            }
+        });
+
+    });
+
+
+//    $("#ddlZone").change(function (e) {
+//        e.preventDefault();
+//        var zoneId = $('#ddlZone').val();
+//        if (zoneId > 0) {
+//            $.ajax({
+//                url: '/Admin/GetManagersList',
+//                type: "GET",
+//                data: { ZoneId: zoneId },
+//                success: function (data) {
+//                    $("#ManagerId").empty();
+//                    $("#ManagerId").append($("<option />").val('').text("Select Manager"));
+//                    $.each(data, function () {
+//                        $("#ManagerId").append($("<option />").val(this.Id).text(this.Employee_ID + " [" + this.FirstName + "] "));
+//                    });
+//                },
+//                error: function (event, jqxhr, settings, exception) {
+//                }
+//            });
+//        }
+//        else {
+//            $("#ManagerId").empty();
+//            $("#ManagerId").append($("<option />").val('').text("Select Manager"));
+//        }
+
+//    });
+
+
+
+    $(".update").click(function (e) {
+
+        e.preventDefault();
+
+//        $("#UpdateEmployeeLoadimg").show();
+        $("#AdminLoadingBg").fadeIn();
+        $("#AdminLoadimg").show();
+        var redirecturl = $(this).attr('href');
+
+        
+        $.ajax({
+            url: redirecturl,
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+
+        })
+       .success(function (result) {
+//           $("#UpdateEmployeeLoadimg").hide();
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html('');
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+
+       });
+    });
+
+   $("#txtPassportNo").change(function (e) {
+       e.preventDefault();
+       var passport = $('#txtPassportNo').val();
+
+       $.ajax({
+           url: '/Admin/VerifyPassportNumber',
+           type: "GET",
+           data: { passport: passport },
+           success: function (data) {
+               if (data >= 1) {
+                   $("#txtPassportNo").val("");
+                   $(".popupposition").fadeIn();
+                   $('#updateemperrormessage').text("Passport Number already exist, please enter new number");
+                   $('#updateemperrormessage').show();
+                   $('.popupposition').delay(3000).fadeOut('slow');
+                   $('#txtPassportNo').focus();
+               }
+           },
+           error: function (event, jqxhr, settings, exception) {
+               //                    alert(jqxhr);
+           }
+       });
+   });
+
+   $("#txaadhar").change(function (e) {
+       e.preventDefault();
+       var adharno = $('#txaadhar').val();
+
+       $.ajax({
+           url: '/Admin/CheckAadharID',
+           type: "GET",
+           data: { AadharID: adharno },
+           success: function (data) {
+               // alert(data);
+               if (data >= 1) {
+                   $("#txaadhar").val("");
+                   $(".popupposition").fadeIn();
+                   $('#updateemperrormessage').text("Aadhar number already exist, please enter new number");
+                   $('#updateemperrormessage').show();
+                   $('.popupposition').delay(3000).fadeOut('slow');
+                   $('#txaadhar').focus();
+               }
+           },
+           error: function (event, jqxhr, settings, exception) {
+               //                    alert(jqxhr);
+           }
+       });
+   });
+
+   $("#txtPANNo").change(function (e) {
+       e.preventDefault();
+       var pan = $('#txtPANNo').val();
+
+       $.ajax({
+           url: '/Admin/CheckPancard',
+           type: "GET",
+           data: { Pancard: pan },
+           success: function (data) {
+               if (data >= 1) {
+                   $("#txtPANNo").val("");
+                   $(".popupposition").fadeIn();
+                   $('#updateemperrormessage').text("Pancard number already exist, please enter new number");
+                   $('#updateemperrormessage').show();
+                   $('.popupposition').delay(3000).fadeOut('slow');
+                   $('#txtPANNo').focus();
+               }
+           },
+           error: function (event, jqxhr, settings, exception) {
+               //                    alert(jqxhr);
+           }
+       });
+   });
+
+   $("#txtDrivingLiceneNo").change(function (e) {
+       e.preventDefault();
+       var driving = $('#txtDrivingLiceneNo').val();
+
+       $.ajax({
+           url: '/Admin/CheckDrivingLicenceNo',
+           type: "GET",
+           data: { DrivingLicence: driving },
+           success: function (data) {
+               if (data >= 1) {
+                   $("#txtDrivingLiceneNo").val("");
+                   $(".popupposition").fadeIn();
+                   $('#updateemperrormessage').text("Driving licence number already exist, please enter new number");
+                   $('#updateemperrormessage').show();
+                   $('.popupposition').delay(3000).fadeOut('slow');
+                   $('#txtDrivingLiceneNo').focus();
+               }
+           },
+           error: function (event, jqxhr, settings, exception) {
+               //                    alert(jqxhr);
+           }
+       });
+   });
+
+
+</script>

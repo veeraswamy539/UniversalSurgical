@@ -1,0 +1,2695 @@
+﻿@using Universal.BusinessEntities;
+@model Employees
+@Scripts.Render("~/bundles/jqueryval")
+
+@{
+    ViewBag.Title = "Training";
+}
+
+<div class="col-lg-12 usr-top-flds">
+    <div class="col-md-6">
+        <div class="radio radio-success">
+            <input id="yes" type="radio" name="optionyes" value="yes" checked="checked" />
+                <label for="yes">Domestic </label>
+                <input id="no" type="radio" name="optionyes" value="no" />
+                <label for="no">International</label>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12 col-md-12 no-padding" id="Domesticexpend" style="display:none;">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">Domestic Expenditure</div>
+        </div>
+        
+        <div class="clearfix"></div>
+
+        <div class="col-lg-12 p-t-20">
+            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6 no-padding ">
+                <div class="col-md-12 emp-exp-dt pull-right ">
+                    <div class=" input-append success col-lg-11 no-padding">
+                        <input type="text" id="txtDate" class="form-control" title="Select Date"/>
+                        <span class="add-on"> <i id="faDate" class="fa fa-calendar" title="Select Date"></i></span> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6" style="display:none">
+                <div class="checkbox check-info">
+                    <input id="chkMobile" type="checkbox" />
+                    <label for="chkMobile">Mobile </label>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6" id="divMobile">
+                <div class="controls">
+                    <input type="text" id="txtMobileBill" placeholder="Mobile Bill" class="form-control numericOnly" title="Mobile Bill" maxlength ="6" />
+                </div>
+            </div>
+            
+            <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6 " style="display:none">
+                <div class="checkbox check-info">
+                    <input id="chkInternet" type="checkbox" />
+                    <label for="chkInternet">Internet </label>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6" id="divInternet">
+                <div class="controls">
+                    <input type="text" id="txtInternetBill" placeholder="Internet Bill" class="form-control numericOnly" title="Internet Bill" maxlength="6" />
+                </div>
+            </div>
+
+         </div>
+
+        <div class="clearfix"></div>
+        
+        <div class="col-lg-12 p-t-20">
+            <div class="col-lg-3 col-md-4  m-b-10 ">
+                <div class="controls">
+                    <input type="text" id="txtTrainingName" placeholder="Training" class="form-control charOnly" title="Training" maxlength ="100"  />
+                </div>
+            </div>
+       
+
+            <div class="col-lg-3 col-md-3 no-padding   m-b-20">
+                <div class="col-lg-12" >
+                    @if (ViewBag.ExpenseTypeDetailsList != null)
+                    {
+                        @Html.DropDownList("ddlExpenditureType", ViewBag.ExpenseTypeDetailsList as List<SelectListItem>, new { @class = "form-control", @id = "ddlExpenditureType", @Title = "Select Expenditure Type" })
+                    }
+                </div>
+            </div>
+ 
+
+                <div class="col-lg-3  col-md-3" id="LocFrom">
+                    <div class="controls">
+                        <input type="text" id="txtFrom" placeholder="From Location" class="form-control charOnly" title="From Location" maxlength ="50"  />
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-3" id="divLocTo">
+                    <div class="controls">
+                        <input type="text" id="txtToLocation" class="form-control charOnly" placeholder="To Location" title="To Location" maxlength ="50" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3" id="divReason" style="Display:none">
+                    <div class="controls">
+                        <input type="text" id="txtReason" placeholder="Expense Details" class="form-control" title="Expense Details" maxlength ="500" />
+                    </div>
+                </div>
+
+     <div class="clearfix" id="clrDiv"> </div>
+
+                <div class="col-lg-3 col-md-3  m-b-20" id="divKm" >
+                    <div class="controls">
+                        <input type="text" id="txtKms" placeholder="KM’s" class="form-control numericOnly1" title="Km's" maxlength="6" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3  m-b-20">
+                    <div class="controls">
+                        <input type="text" id="txtAmount" placeholder="Amount" class="form-control numericOnly1" title="Amount"  maxlength="9" />
+                    </div>
+                </div>   
+           
+
+        </div>
+
+        <div class="col-lg-12">
+                <div class="col-lg-12  col-md-4 m-b-10">
+                    <div class="controls">
+                        <input type="text" id="txtLocalComments" placeholder="Comments" class="form-control" title="Comments" maxlength ="500"  />
+                    </div>
+                </div>
+            </div>
+
+        
+         <div class="col-lg-12">
+                 <div class="col-lg-3 pull-right">        
+           
+                        <div class="controls">
+                            <input type="submit" value="Add More Expenses" id="btnDomesticAdd" class="form-control" />
+                        </div>
+                  </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="Internationalexpend" style="display:none; margin-top:0px;"> 
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">International Expenditure</div>
+        </div>
+        
+        
+        <div class="col-lg-12 p-t-20">
+
+        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6 no-padding">
+                    <div class="col-md-12 emp-exp-dt pull-right">
+                        <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                            <input type="text" class="form-control" id ="txtIDate" title="Select Date" />
+                            <span class="add-on"> <i class="fa fa-calendar"></i></span> 
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+        
+        <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6" style="display:none">
+                    <div class="checkbox check-info">
+                        <input id="chkOutMobile" type="checkbox" />
+                        <label for="chkOutMobile">Mobile </label>
+                    </div>
+                </div>
+        
+        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6" id="divOutMobile">
+            <div class="controls">
+                <input type="text" id="txtOutMobileBill" placeholder="Mobile Bill" class="form-control numericOnly" title="Mobile Bill" maxlength ="6" />
+            </div>
+        </div>
+        
+        <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6 " style="display:none">
+            <div class="checkbox check-info">
+                <input id="chkOutInternet" type="checkbox" />
+                <label for="chkOutInternet">Internet </label>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6" id="divOutInternet">
+            <div class="controls">
+                <input type="text" id="txtOutInternetBill" placeholder="Internet Bill" class="form-control numericOnly" title="Internet Bill" maxlength ="100" />
+            </div>
+        </div>
+
+        </div>
+
+        <div class="clearfix"></div>
+        
+        <div class="col-lg-12 p-t-20">
+            <div class="col-lg-4 col-md-4  m-b-10 ">
+                <div class="controls">
+                    <input type="text" id="txtITraining" placeholder="Training" class="form-control charOnly" title="Training" maxlength = "100" />
+                </div>
+            </div>
+       
+          
+            <div class="col-lg-4 col-md-4 no-padding   m-b-20">
+               
+                   @Html.DropDownList("ExpenditureType", ViewBag.ExpenseTypeList as List<SelectListItem>, "Select Expenditure Type", new { @class = "form-control", @id = "ddlOutExpenditureType", @Title = "Expenditure Type" })
+                 
+               
+            </div>
+
+             <div class="col-lg-4" >
+                    <select id="ddlOutExpenditureTypeDetail" class="form-class" title="Select Expenditure Type Detail">
+                       <option value="0">Select Expenditure Type Details</option>
+                    </select>
+                </div>
+
+
+        <div class="clearfix">
+        </div>
+                
+                <div class="col-lg-4  col-md-4 m-b-10" id="divIFrom">
+                    <div class="controls">
+                        <input type="text" id="txtIFrom" placeholder="From Location" class="form-control charOnly" title="From Location" maxlength="50" />
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 m-b-10" id="divITo">
+                    <div class="controls"> 
+                        <input type="text" id="txtITo" class="form-control charOnly" placeholder="To Location" title="To Location" maxlength ="50" />
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 m-b-10" id="divIReason" style="Display:none">
+                    <div class="controls">
+                        <input type="text" id="txtIReason" placeholder="Expense Details" class="form-control" title="Reason" maxlength ="500" />
+                    </div>
+                </div>
+
+                <div class="col-lg-4 m-b-20 ">
+                    <div class="controls">
+                        <input type="text" id="txtIAmount" placeholder="Amount" class="form-control numericOnly1" title="Amount" maxlength ="9" />
+                    </div>
+                </div>  
+
+
+            
+
+        </div>
+
+        <div class="col-lg-12">
+            <div class="col-lg-12 col-md-4 m-b-10">
+                <div class="controls">
+                    <input type="text" id="txtComments" placeholder="Comments" class="form-control" title="Comments" maxlength ="500"  />
+                </div>
+            </div>
+        </div>
+
+         <div class="col-lg-12">
+        <div class="col-lg-3 pull-right">
+            <div class="controls">
+                <input type="submit" value="Add More Expenses" id="btnIAdd" class="form-control" />
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div id="expenselist" class="content-cont" style="margin-top:0px">
+</div>
+
+@*submit and reset buttons*@
+<div class="col-lg-6 dfl-buttom pull-right"  id="divLocal" >
+     
+       <div class=" col-lg-4 col-md-4 ">  <input type="submit" value="Save" name="Save" id="btnSave" /></div>
+       <div class=" col-lg-4 col-md-4 ">  <input type="submit" value="Submit" name="Submit" id="btnSubmit" /></div>
+      <div class=" col-lg-4 col-md-4 ">   <input type="reset" id="btnIReset" name="Reset" value="Reset" /></div>
+ 
+
+    @if (ViewBag.ExpenseHeaderID != null)
+    {
+        @Html.TextBox("txtExistingHeaderID", (int)ViewBag.ExpenseHeaderID, new { @id = "txtExistingHeaderID", @style="Display:none" })
+    }
+
+    <input type="text" id="txtHeaderID" style="Display:none" />
+    @Html.TextBoxFor(model => model.Conveyance, new { @id="txtConveyanceValue", @style="display:none" })
+</div>
+
+
+
+<div class="popuppositionsucess">
+    <div class="alert alert-success" id="localexpendituresubmit" runat="server" >
+        <strong>Success !</strong><br />
+       <label id="trainingsucessresult"></label>
+    </div>
+</div>
+
+
+<div class="popupposition">
+ <div class="alert alert-warning" id="Expenditurewarning" runat="server">
+<strong>Warning !</strong><br /><label id="trainingerrormessage"></label>
+
+
+</div>
+
+</div>
+
+
+
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        var keyDown = false, ctrl = 17, vKey = 86, Vkey = 118;
+
+        $(document).keydown(function (e) {
+            if (e.keyCode == ctrl) keyDown = true;
+        }).keyup(function (e) {
+            if (e.keyCode == ctrl) keyDown = false;
+        });
+
+        $('.numericOnly').on('keypress', function (event) {
+            if ((event.which < 48 || event.which > 57) && event.which != 8 && event.which != 0 && event.which != 118 && event.which != 99) {
+                event.preventDefault();
+            }
+            //                            if (!e) var e = window.event;
+            //                            if (e.keyCode > 0 && e.which == 0) return true;
+            //                            if (e.keyCode) code = e.keyCode;
+            //                            else if (e.which) code = e.which;
+            //                            var character = String.fromCharCode(code);
+            //                            if (character == '\b' || character == ' ' || character == '\t') return true;
+            //                            if (keyDown && (code == vKey || code == Vkey)) return (character);
+            //                            else return (/[0-9]$/.test(character));
+        }).on('focusout', function (e) {
+            var $this = $(this);
+            $this.val($this.val().replace(/[^0-9]/g, ''));
+        }).on('paste', function (e) {
+            var $this = $(this);
+            setTimeout(function () {
+                $this.val($this.val().replace(/[^0-9]/g, ''));
+            }, 5);
+        });
+
+
+        $('.charOnly').on('keypress', function (e) {
+            if (!e) var e = window.event;
+            if (e.keyCode > 0 && e.which == 0) return true;
+            if (e.keyCode) code = e.keyCode;
+            else if (e.which) code = e.which;
+            var character = String.fromCharCode(code);
+            if (character == '\b' || character == ' ' || character == '\t') return true;
+            if (keyDown && (code == vKey1 || code == Vkey1)) return (character);
+            else return (/[aA-zZ ]$/.test(character));
+        }).on('focusout', function (e) {
+            var $this = $(this);
+            $this.val($this.val().replace(/[^aA-zZ '']/g, ''));
+        }).on('paste', function (e) {
+            var $this = $(this);
+            setTimeout(function () {
+                $this.val($this.val().replace(/[^aA-zZ '']/g, ''));
+            }, 5);
+        });
+
+
+
+
+        $('.numericOnly1').on('keypress', function (event) {
+
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57) && event.which != 8 && event.which != 0 && event.which != 118 && event.which != 99) {
+                event.preventDefault();
+            }
+            if (($(this).val().indexOf('.') != -1) && event.which != 8 && ($(this).val().substring($(this).val().indexOf('.'), $(this).val().indexOf('.').length).length > 2)) {
+                event.preventDefault();
+            }
+            //                        if (!e) var e = window.event;
+            //                        if (e.keyCode > 0 && e.which == 0) return true;
+            //                        if (e.keyCode) code = e.keyCode;
+            //                        else if (e.which) code = e.which;
+            //                        var character = String.fromCharCode(code);
+            //                        if (character == '\b' || character == ' ' || character == '\t') return true;
+            //                        if (keyDown && (code == vKey || code == Vkey)) return (character);
+            //                        else return (/[0-9.]$/.test(character));
+        }).on('focusout', function (e) {
+            var $this = $(this);
+            $this.val($this.val().replace(/[^0-9.]/g, ''));
+        }).on('paste', function (e) {
+            var $this = $(this);
+            setTimeout(function () {
+                $this.val($this.val().replace(/[^0-9.]/g, ''));
+            }, 5);
+        });
+
+
+
+
+        $(this).scrollTop(0);
+        $('.popupposition').hide();
+        $(".popuppositionsucess").hide();
+
+        //bind datepicker to date controller
+        $('#txtDate').datepicker("setDate", new Date());
+        $('#txtIDate').datepicker("setDate", new Date());
+
+
+        //Allow users to enter alphabets only(Small & Caps)
+        $(".charOnly").bind('keypress', function (e) {
+            if ((e.which > 64 && e.which < 91) || (e.which > 96 && e.which < 123) || e.which == 8 || e.which == 32 || e.which == 0 || e.which == 46)
+                return true;
+            else {
+                return false;
+            }
+        });
+
+
+        $("#divKm").hide();
+        $('#ddlExpenditureType').change(function (e) {
+            e.preventDefault();
+            var statusID = $('#ddlExpenditureType option:selected').text();
+            if (statusID == "Other") {
+                $("#divReason").show();
+                $('#txtReason').val('');
+                $('#txtFrom').val('');
+                $('#txtToLocation').val('');
+                $("#LocFrom").hide();
+                $("#divLocTo").hide();
+                $("#divKm").hide();
+                $("#clrDiv").hide();
+                $("#divAmount").show();
+                $("#txtKms").val('');
+                $("#txtAmount").val('');
+            }
+            else if (statusID == "Bike") {
+                $("#LocFrom").show();
+                $('#txtFrom').val('');
+                $('#txtToLocation').val('');
+                $("#divLocTo").show();
+                $("#divReason").hide();
+                $("#divKm").show();
+                $("#divAmount").show();
+                $("#txtKms").val('');
+                $("#txtAmount").val('');
+            }
+            else if (statusID == "Car") {
+                $("#LocFrom").show();
+                $("#divLocTo").show();
+                $("#divKm").show();
+                $("#clrDiv").show();
+                $("#divReason").hide();
+                $("#divAmount").show();
+                $("#txtKms").val('');
+                $("#txtAmount").val('');
+            }
+            else {
+                $("#LocFrom").show();
+                $('#txtFrom').val('');
+                $('#txtToLocation').val('');
+                $("#divLocTo").show();
+                $("#divConveyance").hide();
+                $("#divReason").hide();
+                $("#divKm").hide();
+                $("#divAmount").show();
+                $("#txtKms").val('');
+                $("#txtAmount").val('');
+            }
+
+        });
+
+        var Reason = "";
+        var trainigDate = ""
+        var ClientName = ""
+        var ClientManagerName = "";
+        var SOServiceStatus = "";
+        var SONo = "";
+        var SOExplanation = "";
+        var OrderConfirmationNo = "";
+        var FromLocation = "";
+        var ToLocation = "";
+        var ExpenditureType = "";
+        var Kms = "";
+        var Conveyance = "";
+        var Amount = "";
+        var ExpenditureHeaderID = "";
+        var ExpenditureTypeDetail = "";
+        var Localization = "";
+        var comments = "";
+        var Mobile = "";
+        var Internet = "";
+        var MobileID = "";
+        var InternetID = "";
+        var FromStatus = "";
+
+        //div of domestic and International based on selection of radio button
+        $("#Domesticexpend").show();
+        $('input[type=radio][name=optionyes]').change(function () {
+            if (this.value == 'yes') {
+                $("#Domesticexpend").show();
+                $("#Internationalexpend").hide();
+                ClearDomesticTrainingControls();
+                $('#txtDate').datepicker("setDate", new Date());
+                var TodayDate = $('#txtDate').val();
+                CheckExpenditureLeave(TodayDate);
+            }
+            else if (this.value == 'no') {
+                $("#Internationalexpend").show();
+                $("#Domesticexpend").hide();
+                InternationalTrainingControls();
+                $('#txtIDate').datepicker("setDate", new Date());
+                var TodayDate = $('#txtIDate').val();
+                CheckExpenditureLeave(TodayDate);
+            }
+        });
+
+        function ClearDomesticTrainingControls() {
+            $('#txtDate').val('');
+            $('#txtTrainingName').val('');
+            $("#txtHeaderID").val('');
+            $("#expenselist").html('');
+            $('#txtDate').attr('disabled', false);
+            $('#txtTrainingName').attr('disabled', false);
+            $("#chkMobile").attr('checked', false);
+            $('#divMobile').hide();
+            $('#txtMobileBill').val('');
+            $('#chkInternet').attr('checked', false);
+            $('#divInternet').hide();
+            $('#txtInternetBill').val('');
+            $('#ddlExpenditureType option:eq(0)').attr('selected', 'selected');
+            $('#txtFrom').val('');
+            $('#txtToLocation').val('');
+            $('#txtReason').val('');
+            $('#txtKms').val('');
+            $('#txtAmount').val('');
+            $('#txtLocalComments').val('');
+            $('#txtDate').datepicker("setDate", new Date());
+            $('#txtDate').datepicker("update");
+        }
+
+        function InternationalTrainingControls() {
+            $("#txtHeaderID").val('');
+            $("#expenselist").html('');
+            $('#txtITraining').attr('disabled', false);
+            $('#txtIDate').attr('disabled', false);
+            $('#txtITraining').val('');
+            $('#txtIDate').val('');
+            $('#txtIDate').datepicker("setDate", new Date());
+            $('#txtIDate').datepicker("update");
+            $("#chkOutMobile").attr('checked', false);
+            $('#divOutMobile').hide();
+            $('#txtOutMobileBill').val('');
+            $('#chkOutInternet').attr('checked', false);
+            $('#divOutInternet').hide();
+            $('#txtOutInternetBill').val('');
+            $('#ddlOutExpenditureType option:eq(0)').attr('selected', 'selected');
+            $('#ddlOutExpenditureTypeDetail option:eq(0)').attr('selected', 'selected');
+            $('#txtIFrom').val('');
+            $('#txtITo').val('');
+            $('#txtIReason').val('');
+            $('#txtIAmount').val('');
+            $('#txtComments').val('');
+
+            $('#divIReason').hide();
+            $('#divITo').show();
+            $('#divIFrom').show();
+            $('#txtIFrom').val('');
+            $('#txtITo').val('');
+            $('#txtIAmount').val('');
+        }
+
+        var ExistingHeaderID = $("#txtExistingHeaderID").val();
+
+        //from drafted expenditure
+        if (ExistingHeaderID > 0) {
+
+            $('#txtHeaderID').val(ExistingHeaderID);
+            ExpenditureHeaderID = ExistingHeaderID;
+
+            if (ExpenditureHeaderID > 0) {
+                $.ajax({
+                    url: '/Employee/DraftedExpenditure',
+                    type: "GET",
+                    data: { FromHeaderID: ExpenditureHeaderID },
+                    success: function (DataDetails) {
+                        if (DataDetails.length > 0) {
+                            $.each(DataDetails, function (i, headerData) {
+
+                                if (headerData.Localization == 'Domestic') {
+
+                                    $('#no').prop("checked", false);
+                                    $('#yes').prop("checked", true);
+                                    $('#Domesticexpend').show();
+                                    $('#Internationalexpend').hide();
+
+                                    var date = new Date(parseInt(headerData.FromDate.substr(6)));
+                                    // format display date (e.g. 04/10/2012)
+                                    var displayDate = $.datepicker.formatDate("dd/mm/yy", date);
+                                    $('#txtDate').val(displayDate);
+                                    $('#txtTrainingName').val(headerData.ClientName);
+
+                                    $('#txtDate').attr('disabled', true);
+                                    $('#txtTrainingName').attr('disabled', true);
+                                }
+                                else {
+
+                                    $('#no').prop("checked", true);
+                                    $('#yes').prop("checked", false);
+                                    $('#Domesticexpend').hide();
+                                    $('#Internationalexpend').show();
+
+                                    var date = new Date(parseInt(headerData.FromDate.substr(6)));
+                                    // format display date (e.g. 04/10/2012)
+                                    var displayDate = $.datepicker.formatDate("dd/mm/yy", date);
+                                    $('#txtIDate').val(displayDate);
+                                    $('#txtITraining').val(headerData.ClientName);
+
+                                    //readonly controls
+                                    $('#txtITraining').attr('disabled', true);
+                                    $('#txtIDate').attr('disabled', true);
+                                }
+
+                                if (headerData.Comments != null) {
+                                    $('#txtComments').val(headerData.Comments)
+                                }
+
+                            });
+                        }
+
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(jqxhr);
+                    }
+                });
+            }
+
+            ExpenseListView(ExpenditureHeaderID);
+        }
+        else {
+            var TodayDate = $('#txtDate').val();
+            CheckExpenditureLeave(TodayDate);
+        }
+
+        //check the expenditure if exist or not and leave check
+        $('#txtDate').on('changeDate', function (e) {
+            e.preventDefault();
+            var selectedDate = this.value;
+            var TodayDate = new Date();
+
+            if (Date.parse(e.date) <= Date.parse(TodayDate)) {
+                CheckExpenditureLeave(selectedDate);
+            }
+            else {
+
+
+                $(".popupposition").fadeIn();
+                $('#trainingerrormessage').text('Please Select Valid Date');
+                $('#trainingerrormessage').show();
+                $('.popupposition').delay(3000).fadeOut('slow');
+                $('#txtDate').datepicker("setDate", new Date());
+            }
+            $(this).datepicker('hide');
+        });
+
+        $('#txtIDate').on('changeDate', function (e) {
+            e.preventDefault();
+            var selectedDate = this.value;
+            var TodayDate = new Date();
+
+            if (Date.parse(e.date) <= Date.parse(TodayDate)) {
+                CheckExpenditureLeave(selectedDate);
+            }
+            else {
+                $(".popupposition").fadeIn();
+                $('#trainingerrormessage').text('Please Select Valid Date');
+                $('#trainingerrormessage').show();
+                $('.popupposition').delay(3000).fadeOut('slow');
+                $('#txtIDate').datepicker("setDate", new Date());
+            }
+            $(this).datepicker('hide');
+        });
+
+        function CheckExpenditureLeave(selectedDate) {
+            //verifying condition
+            $.ajax({
+                url: '/Employee/CheckExpenditure',
+                type: "GET",
+                data: { ExpenditureDate: selectedDate },
+                success: function (data) {
+                    if (data.expenditureDateInLeave == 1) {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                    }
+                    else if (data.expenditureDateInTraining == 0) {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Select Assigned Training Date');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                    }
+                    else if (data.ExpendituresInBlockedList == 1) {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                    }
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    alert(exception);
+                }
+            });
+        }
+
+        $('#divMobile').hide();
+        $('#divInternet').hide();
+        $('#chkMobile').click(function (e) {
+            var chkstatus = $('#chkMobile').is(":checked")
+            if (chkstatus == true) {
+                $('#divMobile').show();
+                $('#txtMobileBill').val('');
+            }
+            else {
+                $('#divMobile').hide();
+                $('#txtMobileBill').val('');
+            }
+        });
+
+        $('#chkInternet').click(function (e) {
+            var chlstatus = $('#chkInternet').is(":checked");
+            if (chlstatus == true) {
+                $('#divInternet').show();
+                $('#txtInternetBill').val('');
+            }
+            else {
+                $('#divInternet').hide();
+                $('#txtInternetBill').val('');
+            }
+        });
+
+        //button click function for Domestic Training
+        $('#btnDomesticAdd').click(function (e) {
+            e.preventDefault();
+
+            trainigDate = $('#txtDate').val();
+            ClientName = $('#txtTrainingName').val();
+            FromLocation = $('#txtFrom').val();
+            ToLocation = $('#txtToLocation').val();
+            ExpenditureType = $('#ddlExpenditureType option:selected').text();
+            Amount = $('#txtAmount').val();
+            Reason = $('#txtReason').val();
+            ExpenditureHeaderID = $('#txtHeaderID').val();
+            comments = $('#txtLocalComments').val();
+            Kms = $('#txtKms').val();
+            var date = new Date();
+
+            var chkInternet = $('#chkInternet').is(":checked");
+            Internet = $('#txtInternetBill').val();
+            var chkMobile = $('#chkMobile').is(":checked");
+            Mobile = $('#txtMobileBill').val();
+
+            if (trainigDate.length > 0) {
+                if ($.datepicker.parseDate("dd/mm/yy", trainigDate) <= Date.parse(date)) {
+                    if (ClientName.length > 0) {
+                        //validate InternetChk or Not
+                        if (chkInternet == true) {
+                            //validate Internet Amount
+                            if (Internet.length > 0) {
+                                if (chkMobile == true) {
+                                    if (Mobile.length > 0) {
+                                        FromDomestic();
+                                    }
+                                    else {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+                                        $('#txtMobileBill').focus();
+                                    }
+                                }
+                                else {
+                                    FromDomestic();
+                                }
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Internet Bill');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtInternetBill').focus();
+                            }
+                        }
+                        else {
+                            if (chkMobile == true) {
+                                if (Mobile.length > 0) {
+                                    FromDomestic();
+                                }
+                                else {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+                                    $('#txtMobileBill').focus();
+                                }
+                            }
+                            else {
+                                FromDomestic();
+                            }
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Training Name');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtTrainingName').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Valid Date');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtDate').datepicker("setDate", new Date());
+                }
+            }
+            else {
+                $(".popupposition").fadeIn();
+                $('#trainingerrormessage').text('Please Select Date');
+                $('#trainingerrormessage').show();
+                $('.popupposition').delay(3000).fadeOut('slow');
+                $('#txtDate').focus();
+            }
+        });
+
+        function FromDomestic() {
+            MobileID = "Mobile Bill";
+            InternetID = "Internet Bill";
+
+            if (ExpenditureType == 'Select') {
+                if (Mobile.length > 0 || Internet.length > 0) {
+                    if (ExpenditureHeaderID > 0) {
+                        InsertExpenditure();
+                        $('#txtTrainingName').attr('disabled', true);
+                        $('#txtDate').attr('disabled', true);
+                        ResetDomesticControls();
+                    }
+                    else {
+                        $.ajax({
+                            url: '/Employee/CheckExpenditure',
+                            type: "GET",
+                            data: { ExpenditureDate: trainigDate },
+                            success: function (data) {
+                                if (data.expenditureDateInLeave == 1) {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+
+                                }
+                                else if (data.expenditureDateInTraining == 0) {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Select Assigned Training Date');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+
+                                }
+                                else if (data.ExpendituresInBlockedList == 1) {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+
+                                }
+                                else {
+                                    Localization = "Domestic";
+                                    InsertExpenditure();
+                                    $('#txtTrainingName').attr('disabled', true);
+                                    $('#txtDate').attr('disabled', true);
+                                    ResetDomesticControls();
+                                }
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                alert(exception);
+                            }
+                        });
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Expenditure Type and Enter Details');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#ddlExpenditureType').focus();
+                }
+            }
+            else if (ExpenditureType == 'Other') {
+                if (Reason.length > 0) {
+                    if (Amount.length > 0) {
+                        //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                        if (ExpenditureHeaderID > 0) {
+                            Localization = "Domestic";
+                            InsertExpenditure();
+                            $('#txtTrainingName').attr('disabled', true);
+                            $('#txtDate').attr('disabled', true);
+                            ResetDomesticControls();
+                        }
+                        else {
+                            $.ajax({
+                                url: '/Employee/CheckExpenditure',
+                                type: "GET",
+                                data: { ExpenditureDate: trainigDate },
+                                success: function (data) {
+                                    if (data.expenditureDateInLeave == 1) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else if (data.expenditureDateInTraining == 0) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Select Assigned Training Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else if (data.ExpendituresInBlockedList == 1) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else {
+                                        Localization = "Domestic";
+                                        InsertExpenditure();
+                                        $('#txtTrainingName').attr('disabled', true);
+                                        $('#txtDate').attr('disabled', true);
+                                        ResetDomesticControls();
+                                    }
+                                },
+                                error: function (event, jqxhr, settings, exception) {
+                                    alert(exception);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Amount');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtAmount').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Enter Expense Details');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtReason').focus();
+                }
+            }
+            else {
+                if (FromLocation.length > 0) {
+                    if (ToLocation.length > 0) {
+                        if (Kms.length > 0) {
+                            if (Amount.length > 0) {
+                                //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                                if (ExpenditureHeaderID > 0) {
+                                    Localization = "Domestic";
+                                    InsertExpenditure();
+                                    $('#txtTrainingName').attr('disabled', true);
+                                    $('#txtDate').attr('disabled', true);
+                                    ResetDomesticControls();
+                                }
+                                else {
+                                    $.ajax({
+                                        url: '/Employee/CheckExpenditure',
+                                        type: "GET",
+                                        data: { ExpenditureDate: trainigDate },
+                                        success: function (data) {
+                                            if (data.expenditureDateInLeave == 1) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else if (data.expenditureDateInTraining == 0) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('Select Assigned Training Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else if (data.ExpendituresInBlockedList == 1) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else {
+                                                Localization = "Domestic";
+                                                InsertExpenditure();
+                                                $('#txtTrainingName').attr('disabled', true);
+                                                $('#txtDate').attr('disabled', true);
+                                                ResetDomesticControls();
+                                            }
+                                        },
+                                        error: function (event, jqxhr, settings, exception) {
+                                            alert(exception);
+                                        }
+                                    });
+                                }
+
+
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Amount');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtAmount').focus();
+                            }
+                        }
+                        else {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Please Enter Kms');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+                            $('#txtKms').focus();
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter To Location');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtToLocation').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Enter From Location');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtFrom').focus();
+                }
+            }
+        }
+
+        function InsertExpenditure() {
+
+            ExpenditureHeaderID = $('#txtHeaderID').val();
+
+            if (ExpenditureHeaderID > 0) {
+
+                $.ajax({
+                    url: '/Employee/LocalExpenditure',
+                    type: "POST",
+                    data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                        OrderConfirmationNo: OrderConfirmationNo,
+                        From: FromLocation, To: ToLocation,
+                        ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                        SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                        Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        ExpenseListView(ExpenditureHeaderID);
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(exception);
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: '/Employee/LocalExpenditure',
+                    type: "POST",
+                    data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                        OrderConfirmationNo: OrderConfirmationNo,
+                        From: FromLocation, To: ToLocation,
+                        ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                        SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                        Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $('#txtHeaderID').val(data);
+
+                        ExpenditureHeaderID = data;
+
+                        ExpenseListView(ExpenditureHeaderID);
+
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(exception);
+                    }
+                });
+
+            }
+        }
+
+        $('#btnReset').click(function (e) {
+            e.preventDefault();
+            ResetDomesticControls();
+        });
+
+        $('#btnIReset').click(function (e) {
+            e.preventDefault();
+
+            var selected = $('input[name=optionyes]:checked').val();
+
+            if (selected == 'yes') {
+                ClearDomesticTrainingControls();
+            }
+            else {
+                InternationalTrainingControls();
+            }
+        });
+
+        function ResetDomesticControls() {
+            $('#txtReason').val('');
+            $('#divReason').hide();
+            $('#LocFrom').show();
+            $('#divLocTo').show();
+            $('#txtFrom').val('');
+            $('#txtToLocation').val('');
+            $('#ddlExpenditureType option:eq(0)').attr('selected', 'selected');
+            $('#txtAmount').val('');
+
+            $("#chkMobile").attr('checked', false);
+            $('#divMobile').hide();
+            $('#txtMobileBill').val('');
+            $('#chkInternet').attr('checked', false);
+            $('#divInternet').hide();
+            $('#txtInternetBill').val('');
+            $('#txtLocalComments').val('');
+
+            $('#txtKms').val('');
+            $('#divKm').hide();
+        }
+
+        function ResetInternationalControls() {
+            $('#txtIReason').val('');
+            $('#divIReason').hide();
+            $('#divIFrom').show();
+            $('#divITo').show();
+            $('#txtIFrom').val('');
+            $('#txtITo').val('');
+            $('#txtIAmount').val('');
+            $('#txtComments').val('');
+            $('#ddlOutExpenditureType option:eq(0)').attr('selected', 'selected');
+            $('#ddlOutExpenditureTypeDetail').empty();
+            $('#ddlOutExpenditureTypeDetail').append('<option value="0">Select Expenditure Type Details</option');
+
+            $("#chkOutMobile").attr('checked', false);
+            $('#divOutMobile').hide();
+            $('#txtOutMobileBill').val('');
+            $('#chkOutInternet').attr('checked', false);
+            $('#divOutInternet').hide();
+            $('#txtOutInternetBill').val('');
+        }
+
+        function ExpenseListView(ExpenditureHeaderID) {
+
+            $.ajax({
+                url: '/Employee/ExpenseListByID',
+                type: "GET",
+                cache: false,
+                data: { Data: ExpenditureHeaderID },
+                dataType: 'html',
+                success: function (data) {
+                    $("#expenselist").html('');
+                    $("#expenselist").html(data);
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    alert(exception);
+                }
+            });
+
+        }
+
+        $('#divOutMobile').hide();
+        $('#divOutInternet').hide();
+        $('#chkOutMobile').click(function (e) {
+            var chkstatus = $('#chkOutMobile').is(":checked")
+            if (chkstatus == true) {
+                $('#divOutMobile').show();
+                $('#txtOutMobileBill').val('');
+            }
+            else {
+                $('#divOutMobile').hide();
+                $('#txtOutMobileBill').val('');
+            }
+        });
+
+        $('#chkOutInternet').click(function (e) {
+            var chlstatus = $('#chkOutInternet').is(":checked");
+            if (chlstatus == true) {
+                $('#divOutInternet').show();
+                $('#txtOutInternetBill').val('');
+            }
+            else {
+                $('#divOutInternet').hide();
+                $('#txtOutInternetBill').val('');
+            }
+        });
+
+        //bind expenditure type detail based on selections of expenditure type
+        $('#ddlOutExpenditureType').change(function (e) {
+            e.preventDefault();
+
+            var ExpenditureId = $('#ddlOutExpenditureType').val();
+
+            if (ExpenditureId > 0) {
+                $.ajax({
+                    url: '/Employee/ExpenditureTypeDetailsByID',
+                    type: "GET",
+                    data: { ExpenseTypeHeaderID: ExpenditureId },
+                    success: function (expenseTypeDetails) {
+                        $("#ddlOutExpenditureTypeDetail").html("");
+                        $('#ddlOutExpenditureTypeDetail').append('<option value="0">Select Expenditure Type Details</option');
+                        $.each(expenseTypeDetails, function (i, expensetypedetail) {
+                            $("#ddlOutExpenditureTypeDetail").append('<option value="' + expensetypedetail.ID + '">' + expensetypedetail.Description + '</option>');
+                        });
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(jqxhr);
+                    }
+                });
+            }
+
+        });
+
+
+        $('#ddlOutExpenditureTypeDetail').change(function (e) {
+            e.preventDefault();
+
+            var statusID = $('#ddlOutExpenditureTypeDetail option:selected').text();
+
+            if (statusID == "Other" || statusID == "Lodging" || statusID == "Parking/Toll" || statusID == "Breakfast" || statusID == "Lunch" || statusID == "Dinner") {
+                $('#divIReason').show();
+                $('#divITo').hide();
+                $('#divIFrom').hide();
+                $('#txtIFrom').val('');
+                $('#txtITo').val('');
+                $('#txtIAmount').val('');
+
+            }
+            else {
+                $('#txtIReason').val('');
+                $('#divIReason').hide();
+                $('#divITo').show();
+                $('#divIFrom').show();
+
+                $('#txtIFrom').val('');
+                $('#txtITo').val('');
+                $('#txtIAmount').val('');
+            }
+        });
+        var expenseType = "";
+        $('#btnIAdd').click(function (e) {
+            e.preventDefault();
+
+            trainigDate = $('#txtIDate').val();
+            ClientName = $('#txtITraining').val();
+            FromLocation = $('#txtIFrom').val();
+            ToLocation = $('#txtITo').val();
+            ExpenditureType = $('#ddlOutExpenditureTypeDetail option:selected').text();
+            Amount = $('#txtIAmount').val();
+            Reason = $('#txtIReason').val();
+            expenseType = $('#ddlOutExpenditureType option:selected').text();
+            var chkInternet = $('#chkOutInternet').is(":checked");
+            var date = new Date();
+            var chkmobile = $('#chkOutMobile').is(":checked");
+            Mobile = $('#txtOutMobileBill').val();
+            Internet = $('#txtOutInternetBill').val();
+            comments = $('#txtComments').val();
+            ExpenditureHeaderID = $('#txtHeaderID').val();
+
+            if (trainigDate.length > 0) {
+                if ($.datepicker.parseDate("dd/mm/yy", trainigDate) <= Date.parse(date)) {
+                    if (ClientName.length > 0) {
+                        if (chkInternet == true) {
+                            if (Internet.length > 0) {
+                                if (chkMobile == true) {
+                                    //validate mobile Amount
+                                    if (Mobile.length > 0) {
+                                        fromInternational();
+                                    }
+                                    else {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+                                        $('#txtOutMobileBill').focus();
+                                    }
+                                }
+                                else {
+                                    fromInternational();
+                                }
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Internet Bill');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtOutInternetBill').focus();
+                            }
+                        }
+                        else {
+                            if (chkmobile == true) {
+                                if (Mobile.length > 0) {
+                                    fromInternational();
+                                }
+                                else {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+                                    $('#txtOutMobileBill').focus();
+                                }
+                            }
+                            else {
+                                fromInternational();
+                            }
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Training Name');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtITraining').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Valid Date');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtIDate').datepicker("setDate", new Date());
+                }
+            }
+            else {
+                $(".popupposition").fadeIn();
+                $('#trainingerrormessage').text('Please Select Date');
+                $('#trainingerrormessage').show();
+                $('.popupposition').delay(3000).fadeOut('slow');
+                $('#txtIDate').focus();
+            }
+        });
+
+
+        function fromInternational() {
+
+            MobileID = "Mobile Bill";
+            InternetID = "Internet Bill";
+
+            if (expenseType == 'Select Expenditure Type') {
+
+                if (Mobile.length > 0 || Internet.length > 0) {
+                    if (ExpenditureHeaderID > 0) {
+                        InsertExpenditure();
+                        ResetInternationalControls();
+                        $('#txtITraining').attr('disabled', true);
+                        $('#txtIDate').attr('disabled', true);
+                    }
+                    else {
+                        OutCheckExpenditure();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Expenditure Type');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#ddlOutExpenditureType').focus();
+                }
+            }
+            else {
+                if (ExpenditureType == 'Select Expenditure Type Details') {
+
+                    if (Mobile.length > 0 || Internet.length > 0) {
+                        if (ExpenditureHeaderID > 0) {
+                            InsertExpenditure();
+                            ResetInternationalControls();
+                            $('#txtITraining').attr('disabled', true);
+                            $('#txtIDate').attr('disabled', true);
+                        }
+                        else {
+                            OutCheckExpenditure();
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Select Expenditure Type Detail');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#ddlOutExpenditureTypeDetail').focus();
+                    }
+                }
+                else if (ExpenditureType == 'Other' || ExpenditureType == "Lodging" || ExpenditureType == "Parking/Toll" || ExpenditureType == "Breakfast" || ExpenditureType == "Lunch" || ExpenditureType == "Dinner") {
+                    if (Reason.length > 0) {
+                        if (Amount.length > 0) {
+                            OutCheckExpenditure();
+                        }
+                        else {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Please Enter Amount');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Expense Details');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtOutReason').focus();
+                        return;
+                    }
+                }
+                else {
+                    if (FromLocation.length > 0) {
+                        if (ToLocation.length > 0) {
+
+                            if (Amount.length > 0) {
+                                OutCheckExpenditure()
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Amount');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtOutAmount').focus();
+                            }
+                        }
+                        else {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Please Enter To Location');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+                            $('#txtOutToLocation').focus();
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter From Location');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtOutFrom').focus();
+                    }
+                }
+            }
+        }
+
+        function OutCheckExpenditure() {
+
+            //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+            if (ExpenditureHeaderID > 0) {
+                InsertExpenditure();
+                ResetInternationalControls();
+                $('#txtITraining').attr('disabled', true);
+                $('#txtIDate').attr('disabled', true);
+            }
+            else {
+                $.ajax({
+                    url: '/Employee/CheckExpenditure',
+                    type: "GET",
+                    data: { ExpenditureDate: trainigDate },
+                    success: function (data) {
+                        if (data.expenditureDateInLeave == 1) {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                        }
+                        else if (data.expenditureDateInTraining == 0) {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Select Assigned Training Date');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                        }
+                        else if (data.ExpendituresInBlockedList == 1) {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                        }
+                        else {
+                            Localization = "International";
+                            InsertExpenditure();
+                            ResetInternationalControls();
+                            $('#txtITraining').attr('disabled', true);
+                            $('#txtIDate').attr('disabled', true);
+                        }
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(exception);
+                    }
+                });
+            }
+
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+
+            ExpenditureHeaderID = $('#txtHeaderID').val();
+
+            if (ExpenditureHeaderID > 0) {
+                $.ajax({
+                    url: '/Employee/ExpenditureListClose',
+                    type: "POST",
+                    data: { HeaderID: ExpenditureHeaderID, FromStatus: 'true' },
+                    success: function (data) {
+
+                        $(".popuppositionsucess").fadeIn();
+                        $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                        $('#trainingsucessresult').show();
+                        $('.popuppositionsucess').delay(3000).fadeOut('slow');
+
+
+                        $("#expenselist").html('');
+                        $('#no').prop("checked", false);
+                        $('#yes').prop("checked", true);
+
+                        $('#txtDate').attr('disabled', false);
+                        $('#txtTrainingName').attr('disabled', false);
+
+                        $('#txtITraining').attr('disabled', false);
+                        $('#txtIDate').attr('disabled', false);
+
+                        $('#txtDate').val('');
+                        $('#txtTrainingName').val('');
+
+                        $('#txtITraining').val('');
+                        $('#txtIDate').val('');
+
+                        ResetDomesticControls();
+                        ResetInternationalControls();
+
+                        $('#txtDate').datepicker("setDate", new Date());
+                        $('#txtDate').datepicker("update");
+                        $('#txtIDate').datepicker("setDate", new Date());
+                        $('#txtIDate').datepicker("update");
+                        $('#txtComments').val('');
+
+                        $('#txtHeaderID').val('');
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(exception);
+                    }
+                });
+            }
+            else {
+                //alert('Please add training expenditure details');
+
+                var selected = $('input[name=optionyes]:checked').val();
+
+                if (selected == 'yes') {
+                    FromStatus = true;
+                    fromSingleSaveandSubmit();
+                }
+                else {
+                    FromStatus = true;
+                    fromInternationalSaveSubmit();
+                }
+            }
+        });
+
+
+        $("#btnSave").click(function (e) {
+            e.preventDefault();
+
+            ExpenditureHeaderID = $('#txtHeaderID').val();
+
+            if (ExpenditureHeaderID > 0) {
+                $.ajax({
+                    url: '/Employee/ExpenditureListClose',
+                    type: "POST",
+                    data: { HeaderID: ExpenditureHeaderID, FromStatus: 'false' },
+                    success: function (data) {
+
+                        $(".popuppositionsucess").fadeIn();
+                        $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                        $('#trainingsucessresult').show();
+                        $('.popuppositionsucess').delay(3000).fadeOut('slow');
+
+                        $("#expenselist").html('');
+                        $('#no').prop("checked", false);
+                        $('#yes').prop("checked", true);
+
+                        $('#txtDate').attr('disabled', false);
+                        $('#txtTrainingName').attr('disabled', false);
+
+                        $('#txtITraining').attr('disabled', false);
+                        $('#txtIDate').attr('disabled', false);
+
+                        $('#txtDate').val('');
+                        $('#txtTrainingName').val('');
+
+                        $('#txtITraining').val('');
+                        $('#txtIDate').val('');
+
+                        ResetDomesticControls();
+                        ResetInternationalControls();
+
+                        $('#txtDate').datepicker("setDate", new Date());
+                        $('#txtDate').datepicker("update");
+                        $('#txtIDate').datepicker("setDate", new Date());
+                        $('#txtIDate').datepicker("update");
+
+                        $('#txtComments').val('');
+
+                        $('#txtHeaderID').val('');
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(exception);
+                    }
+                });
+            }
+            else {
+                //alert('Please add training expenditure details');
+
+                var selected = $('input[name=optionyes]:checked').val();
+
+                if (selected == 'yes') {
+                    FromStatus = false;
+                    fromSingleSaveandSubmit();
+                }
+                else {
+                    FromStatus = false;
+                    fromInternationalSaveSubmit();
+                }
+            }
+        });
+
+        function fromSingleSaveandSubmit() {
+
+            trainigDate = $('#txtDate').val();
+            ClientName = $('#txtTrainingName').val();
+            FromLocation = $('#txtFrom').val();
+            ToLocation = $('#txtToLocation').val();
+            ExpenditureType = $('#ddlExpenditureType option:selected').text();
+            Amount = $('#txtAmount').val();
+            Reason = $('#txtReason').val();
+            ExpenditureHeaderID = $('#txtHeaderID').val();
+            comments = $('#txtLocalComments').val();
+            Kms = $('#txtKms').val();
+            var date = new Date();
+
+            var chkInternet = $('#chkInternet').is(":checked");
+            Internet = $('#txtInternetBill').val();
+            var chkMobile = $('#chkMobile').is(":checked");
+            Mobile = $('#txtMobileBill').val();
+
+            if (trainigDate.length > 0) {
+                if ($.datepicker.parseDate("dd/mm/yy", trainigDate) <= Date.parse(date)) {
+                    if (ClientName.length > 0) {
+                        //validate InternetChk or Not
+                        if (chkInternet == true) {
+                            //validate Internet Amount
+                            if (Internet.length > 0) {
+                                if (chkMobile == true) {
+                                    if (Mobile.length > 0) {
+                                        FromDomesticSaveSubmit();
+                                    }
+                                    else {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+                                        $('#txtMobileBill').focus();
+                                    }
+                                }
+                                else {
+                                    FromDomesticSaveSubmit();
+                                }
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Internet Bill');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtInternetBill').focus();
+                            }
+                        }
+                        else {
+                            if (chkMobile == true) {
+                                if (Mobile.length > 0) {
+                                    FromDomesticSaveSubmit();
+                                }
+                                else {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+                                    $('#txtMobileBill').focus();
+                                }
+                            }
+                            else {
+                                FromDomesticSaveSubmit();
+                            }
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Training Name');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtTrainingName').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Valid Date');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtDate').datepicker("setDate", new Date());
+                }
+            }
+            else {
+                $(".popupposition").fadeIn();
+                $('#trainingerrormessage').text('Please Select Date');
+                $('#trainingerrormessage').show();
+                $('.popupposition').delay(3000).fadeOut('slow');
+                $('#txtDate').focus();
+            }
+        }
+
+
+        function FromDomesticSaveSubmit() {
+
+            MobileID = "Mobile Bill";
+            InternetID = "Internet Bill";
+
+            if (ExpenditureType == 'Select') {
+                if (Mobile.length > 0 || Internet.length > 0) {
+                    if (ExpenditureHeaderID > 0) {
+                        InsertExpenditure();
+                    }
+                    else {
+                        $.ajax({
+                            url: '/Employee/CheckExpenditure',
+                            type: "GET",
+                            data: { ExpenditureDate: trainigDate },
+                            success: function (data) {
+                                if (data.expenditureDateInLeave == 1) {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+
+                                }
+                                else if (data.expenditureDateInTraining == 0) {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Select Assigned Training Date');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+
+                                }
+                                else if (data.ExpendituresInBlockedList == 1) {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+
+                                }
+                                else {
+                                    Localization = "Domestic";
+
+                                    $.ajax({
+                                        url: '/Employee/LocalExpenditure',
+                                        type: "POST",
+                                        data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                                            OrderConfirmationNo: OrderConfirmationNo,
+                                            From: FromLocation, To: ToLocation,
+                                            ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                                            SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                                            Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            $('#txtHeaderID').val(data);
+                                            ExpenditureHeaderID = data;
+
+                                            //closing
+                                            $.ajax({
+                                                url: '/Employee/ExpenditureListClose',
+                                                type: "POST",
+                                                data: { HeaderID: data, FromStatus: FromStatus },
+                                                success: function (data) {
+
+                                                    if (FromStatus == true) {
+                                                        $(".popuppositionsucess").fadeIn();
+                                                        $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                                                        $('#trainingsucessresult').show();
+                                                        $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                    }
+                                                    else if (FromStatus == false) {
+                                                        $(".popuppositionsucess").fadeIn();
+                                                        $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                                                        $('#trainingsucessresult').show();
+                                                        $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                    }
+
+                                                    ClearDomesticTrainingControls();
+                                                    $('#txtHeaderID').val('');
+                                                },
+                                                error: function (event, jqxhr, settings, exception) {
+                                                    alert(exception);
+                                                }
+                                            });
+
+                                        },
+                                        error: function (event, jqxhr, settings, exception) {
+                                            alert(exception);
+                                        }
+                                    });
+
+                                }
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                alert(exception);
+                            }
+                        });
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Expenditure Type and Enter Details');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#ddlExpenditureType').focus();
+                }
+            }
+            else if (ExpenditureType == 'Other') {
+                if (Reason.length > 0) {
+                    if (Amount.length > 0) {
+                        //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                        if (ExpenditureHeaderID > 0) {
+                            Localization = "Domestic";
+                            InsertExpenditure();
+                            $('#txtTrainingName').attr('disabled', true);
+                            $('#txtDate').attr('disabled', true);
+                            ResetDomesticControls();
+                        }
+                        else {
+                            $.ajax({
+                                url: '/Employee/CheckExpenditure',
+                                type: "GET",
+                                data: { ExpenditureDate: trainigDate },
+                                success: function (data) {
+                                    if (data.expenditureDateInLeave == 1) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else if (data.expenditureDateInTraining == 0) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Select Assigned Training Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else if (data.ExpendituresInBlockedList == 1) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else {
+                                        Localization = "Domestic";
+
+                                        $.ajax({
+                                            url: '/Employee/LocalExpenditure',
+                                            type: "POST",
+                                            data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                                                OrderConfirmationNo: OrderConfirmationNo,
+                                                From: FromLocation, To: ToLocation,
+                                                ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                                                SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                                                Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                                            },
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                $('#txtHeaderID').val(data);
+                                                ExpenditureHeaderID = data;
+
+                                                //closing
+                                                $.ajax({
+                                                    url: '/Employee/ExpenditureListClose',
+                                                    type: "POST",
+                                                    data: { HeaderID: data, FromStatus: FromStatus },
+                                                    success: function (data) {
+
+                                                        if (FromStatus == true) {
+                                                            $(".popuppositionsucess").fadeIn();
+                                                            $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                                                            $('#trainingsucessresult').show();
+                                                            $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                        }
+                                                        else if (FromStatus == false) {
+                                                            $(".popuppositionsucess").fadeIn();
+                                                            $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                                                            $('#trainingsucessresult').show();
+                                                            $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                        }
+
+                                                        ClearDomesticTrainingControls();
+                                                        $('#txtHeaderID').val('');
+                                                    },
+                                                    error: function (event, jqxhr, settings, exception) {
+                                                        alert(exception);
+                                                    }
+                                                });
+
+                                            },
+                                            error: function (event, jqxhr, settings, exception) {
+                                                alert(exception);
+                                            }
+                                        });
+
+                                    }
+                                },
+                                error: function (event, jqxhr, settings, exception) {
+                                    alert(exception);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Amount');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtAmount').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Enter Expense Details');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtReason').focus();
+                }
+            }
+            else {
+                if (FromLocation.length > 0) {
+                    if (ToLocation.length > 0) {
+                        if (Kms.length > 0) {
+                            if (Amount.length > 0) {
+                                //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                                if (ExpenditureHeaderID > 0) {
+                                    Localization = "Domestic";
+                                    InsertExpenditure();
+                                    $('#txtTrainingName').attr('disabled', true);
+                                    $('#txtDate').attr('disabled', true);
+                                    ResetDomesticControls();
+                                }
+                                else {
+                                    $.ajax({
+                                        url: '/Employee/CheckExpenditure',
+                                        type: "GET",
+                                        data: { ExpenditureDate: trainigDate },
+                                        success: function (data) {
+                                            if (data.expenditureDateInLeave == 1) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else if (data.expenditureDateInTraining == 0) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('Select Assigned Training Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else if (data.ExpendituresInBlockedList == 1) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else {
+                                                Localization = "Domestic";
+
+                                                $.ajax({
+                                                    url: '/Employee/LocalExpenditure',
+                                                    type: "POST",
+                                                    data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                                                        OrderConfirmationNo: OrderConfirmationNo,
+                                                        From: FromLocation, To: ToLocation,
+                                                        ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                                                        SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                                                        Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                                                    },
+                                                    dataType: 'json',
+                                                    success: function (data) {
+                                                        $('#txtHeaderID').val(data);
+                                                        ExpenditureHeaderID = data;
+
+                                                        //closing
+                                                        $.ajax({
+                                                            url: '/Employee/ExpenditureListClose',
+                                                            type: "POST",
+                                                            data: { HeaderID: data, FromStatus: FromStatus },
+                                                            success: function (data) {
+
+                                                                if (FromStatus == true) {
+                                                                    $(".popuppositionsucess").fadeIn();
+                                                                    $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                                                                    $('#trainingsucessresult').show();
+                                                                    $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                                }
+                                                                else if (FromStatus == false) {
+                                                                    $(".popuppositionsucess").fadeIn();
+                                                                    $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                                                                    $('#trainingsucessresult').show();
+                                                                    $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                                }
+
+                                                                ClearDomesticTrainingControls();
+                                                                $('#txtHeaderID').val('');
+                                                            },
+                                                            error: function (event, jqxhr, settings, exception) {
+                                                                alert(exception);
+                                                            }
+                                                        });
+
+                                                    },
+                                                    error: function (event, jqxhr, settings, exception) {
+                                                        alert(exception);
+                                                    }
+                                                });
+
+                                            }
+                                        },
+                                        error: function (event, jqxhr, settings, exception) {
+                                            alert(exception);
+                                        }
+                                    });
+                                }
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Amount');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtAmount').focus();
+                            }
+                        }
+                        else {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Please Enter Kms');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+                            $('#txtKms').focus();
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter To Location');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtToLocation').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Enter From Location');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtFrom').focus();
+                }
+            }
+        }
+
+        function fromInternationalSaveSubmit() {
+
+            trainigDate = $('#txtIDate').val();
+            ClientName = $('#txtITraining').val();
+            FromLocation = $('#txtIFrom').val();
+            ToLocation = $('#txtITo').val();
+            ExpenditureType = $('#ddlOutExpenditureTypeDetail option:selected').text();
+            Amount = $('#txtIAmount').val();
+            Reason = $('#txtIReason').val();
+            expenseType = $('#ddlOutExpenditureType option:selected').text();
+            var chkInternet = $('#chkOutInternet').is(":checked");
+            var date = new Date();
+            var chkmobile = $('#chkOutInternet').is(":checked");
+            Mobile = $('#txtOutMobileBill').val();
+            Internet = $('#txtOutInternetBill').val();
+            comments = $('#txtComments').val();
+            ExpenditureHeaderID = $('#txtHeaderID').val();
+
+            if (trainigDate.length > 0) {
+                if ($.datepicker.parseDate("dd/mm/yy", trainigDate) <= Date.parse(date)) {
+                    if (ClientName.length > 0) {
+                        if (chkInternet == true) {
+                            if (Internet.length > 0) {
+                                if (chkMobile == true) {
+                                    //validate mobile Amount
+                                    if (Mobile.length > 0) {
+                                        fromInternationalSubmission();
+                                    }
+                                    else {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+                                        $('#txtOutMobileBill').focus();
+                                    }
+                                }
+                                else {
+                                    fromInternationalSubmission();
+                                }
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Internet Bill');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtOutInternetBill').focus();
+                            }
+                        }
+                        else {
+                            if (chkmobile == true) {
+                                if (Mobile.length > 0) {
+                                    fromInternationalSubmission();
+                                }
+                                else {
+                                    $(".popupposition").fadeIn();
+                                    $('#trainingerrormessage').text('Please Enter Mobile Bill');
+                                    $('#trainingerrormessage').show();
+                                    $('.popupposition').delay(3000).fadeOut('slow');
+                                    $('#txtOutMobileBill').focus();
+                                }
+                            }
+                            else {
+                                fromInternationalSubmission();
+                            }
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Training Name');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtITraining').focus();
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Valid Date');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#txtIDate').datepicker("setDate", new Date());
+                }
+            }
+            else {
+                $(".popupposition").fadeIn();
+                $('#trainingerrormessage').text('Please Select Date');
+                $('#trainingerrormessage').show();
+                $('.popupposition').delay(3000).fadeOut('slow');
+                $('#txtIDate').focus();
+            }
+        }
+
+        function fromInternationalSubmission() {
+
+            MobileID = "Mobile Bill";
+            InternetID = "Internet Bill";
+
+            if (expenseType == 'Select Expenditure Type') {
+
+                if (Mobile.length > 0 || Internet.length > 0) {
+                    if (ExpenditureHeaderID > 0) {
+                        InsertExpenditure();
+                    }
+                    else {
+                        //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                        if (ExpenditureHeaderID > 0) {
+                            InsertExpenditure();
+                            ResetInternationalControls();
+                            $('#txtITraining').attr('disabled', true);
+                            $('#txtIDate').attr('disabled', true);
+                        }
+                        else {
+                            $.ajax({
+                                url: '/Employee/CheckExpenditure',
+                                type: "GET",
+                                data: { ExpenditureDate: trainigDate },
+                                success: function (data) {
+                                    if (data.expenditureDateInLeave == 1) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else if (data.expenditureDateInTraining == 0) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Select Assigned Training Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else if (data.ExpendituresInBlockedList == 1) {
+                                        $(".popupposition").fadeIn();
+                                        $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                        $('#trainingerrormessage').show();
+                                        $('.popupposition').delay(3000).fadeOut('slow');
+
+                                    }
+                                    else {
+                                        Localization = "International";
+                                        $.ajax({
+                                            url: '/Employee/LocalExpenditure',
+                                            type: "POST",
+                                            data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                                                OrderConfirmationNo: OrderConfirmationNo,
+                                                From: FromLocation, To: ToLocation,
+                                                ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                                                SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                                                Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                                            },
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                $('#txtHeaderID').val(data);
+                                                ExpenditureHeaderID = data;
+
+                                                //closing
+                                                $.ajax({
+                                                    url: '/Employee/ExpenditureListClose',
+                                                    type: "POST",
+                                                    data: { HeaderID: data, FromStatus: FromStatus },
+                                                    success: function (data) {
+
+                                                        if (FromStatus == true) {
+                                                            $(".popuppositionsucess").fadeIn();
+                                                            $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                                                            $('#trainingsucessresult').show();
+                                                            $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                        }
+                                                        else if (FromStatus == false) {
+                                                            $(".popuppositionsucess").fadeIn();
+                                                            $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                                                            $('#trainingsucessresult').show();
+                                                            $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                        }
+
+                                                        InternationalTrainingControls();
+                                                        $('#txtHeaderID').val('');
+                                                    },
+                                                    error: function (event, jqxhr, settings, exception) {
+                                                        alert(exception);
+                                                    }
+                                                });
+
+                                            },
+                                            error: function (event, jqxhr, settings, exception) {
+                                                alert(exception);
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (event, jqxhr, settings, exception) {
+                                    alert(exception);
+                                }
+                            });
+                        }
+                    }
+                }
+                else {
+                    $(".popupposition").fadeIn();
+                    $('#trainingerrormessage').text('Please Select Expenditure Type');
+                    $('#trainingerrormessage').show();
+                    $('.popupposition').delay(3000).fadeOut('slow');
+                    $('#ddlOutExpenditureType').focus();
+                }
+            }
+            else {
+                if (ExpenditureType == 'Select Expenditure Type Details') {
+
+                    if (Mobile.length > 0 || Internet.length > 0) {
+                        if (ExpenditureHeaderID > 0) {
+                            InsertExpenditure();
+                        }
+                        else {
+                            //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                            if (ExpenditureHeaderID > 0) {
+                                InsertExpenditure();
+                                ResetInternationalControls();
+                                $('#txtITraining').attr('disabled', true);
+                                $('#txtIDate').attr('disabled', true);
+                            }
+                            else {
+                                $.ajax({
+                                    url: '/Employee/CheckExpenditure',
+                                    type: "GET",
+                                    data: { ExpenditureDate: trainigDate },
+                                    success: function (data) {
+                                        if (data.expenditureDateInLeave == 1) {
+                                            $(".popupposition").fadeIn();
+                                            $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                            $('#trainingerrormessage').show();
+                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                        }
+                                        else if (data.expenditureDateInTraining == 0) {
+                                            $(".popupposition").fadeIn();
+                                            $('#trainingerrormessage').text('Select Assigned Training Date');
+                                            $('#trainingerrormessage').show();
+                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                        }
+                                        else if (data.ExpendituresInBlockedList == 1) {
+                                            $(".popupposition").fadeIn();
+                                            $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                            $('#trainingerrormessage').show();
+                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                        }
+                                        else {
+                                            Localization = "International";
+                                            $.ajax({
+                                                url: '/Employee/LocalExpenditure',
+                                                type: "POST",
+                                                data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                                                    OrderConfirmationNo: OrderConfirmationNo,
+                                                    From: FromLocation, To: ToLocation,
+                                                    ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                                                    SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                                                    Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                                                },
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                    $('#txtHeaderID').val(data);
+                                                    ExpenditureHeaderID = data;
+
+                                                    //closing
+                                                    $.ajax({
+                                                        url: '/Employee/ExpenditureListClose',
+                                                        type: "POST",
+                                                        data: { HeaderID: data, FromStatus: FromStatus },
+                                                        success: function (data) {
+
+                                                            if (FromStatus == true) {
+                                                                $(".popuppositionsucess").fadeIn();
+                                                                $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                                                                $('#trainingsucessresult').show();
+                                                                $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                            }
+                                                            else if (FromStatus == false) {
+                                                                $(".popuppositionsucess").fadeIn();
+                                                                $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                                                                $('#trainingsucessresult').show();
+                                                                $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                            }
+
+                                                            InternationalTrainingControls();
+                                                            $('#txtHeaderID').val('');
+                                                        },
+                                                        error: function (event, jqxhr, settings, exception) {
+                                                            alert(exception);
+                                                        }
+                                                    });
+
+                                                },
+                                                error: function (event, jqxhr, settings, exception) {
+                                                    alert(exception);
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function (event, jqxhr, settings, exception) {
+                                        alert(exception);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Select Expenditure Type Detail');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#ddlOutExpenditureTypeDetail').focus();
+                    }
+                }
+                else if (ExpenditureType == 'Other' || ExpenditureType == "Lodging" || ExpenditureType == "Parking/Toll" || ExpenditureType == "Breakfast" || ExpenditureType == "Lunch" || ExpenditureType == "Dinner") {
+                    if (Reason.length > 0) {
+                        if (Amount.length > 0) {
+                            //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                            if (ExpenditureHeaderID > 0) {
+                                InsertExpenditure();
+                                ResetInternationalControls();
+                                $('#txtITraining').attr('disabled', true);
+                                $('#txtIDate').attr('disabled', true);
+                            }
+                            else {
+                                $.ajax({
+                                    url: '/Employee/CheckExpenditure',
+                                    type: "GET",
+                                    data: { ExpenditureDate: trainigDate },
+                                    success: function (data) {
+                                        if (data.expenditureDateInLeave == 1) {
+                                            $(".popupposition").fadeIn();
+                                            $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                            $('#trainingerrormessage').show();
+                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                        }
+                                        else if (data.expenditureDateInTraining == 0) {
+                                            $(".popupposition").fadeIn();
+                                            $('#trainingerrormessage').text('Select Assigned Training Date');
+                                            $('#trainingerrormessage').show();
+                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                        }
+                                        else if (data.ExpendituresInBlockedList == 1) {
+                                            $(".popupposition").fadeIn();
+                                            $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                            $('#trainingerrormessage').show();
+                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                        }
+                                        else {
+                                            Localization = "International";
+                                            $.ajax({
+                                                url: '/Employee/LocalExpenditure',
+                                                type: "POST",
+                                                data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                                                    OrderConfirmationNo: OrderConfirmationNo,
+                                                    From: FromLocation, To: ToLocation,
+                                                    ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                                                    SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                                                    Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                                                },
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                    $('#txtHeaderID').val(data);
+                                                    ExpenditureHeaderID = data;
+
+                                                    //closing
+                                                    $.ajax({
+                                                        url: '/Employee/ExpenditureListClose',
+                                                        type: "POST",
+                                                        data: { HeaderID: data, FromStatus: FromStatus },
+                                                        success: function (data) {
+
+                                                            if (FromStatus == true) {
+                                                                $(".popuppositionsucess").fadeIn();
+                                                                $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                                                                $('#trainingsucessresult').show();
+                                                                $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                            }
+                                                            else if (FromStatus == false) {
+                                                                $(".popuppositionsucess").fadeIn();
+                                                                $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                                                                $('#trainingsucessresult').show();
+                                                                $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                            }
+
+                                                            InternationalTrainingControls();
+                                                            $('#txtHeaderID').val('');
+                                                        },
+                                                        error: function (event, jqxhr, settings, exception) {
+                                                            alert(exception);
+                                                        }
+                                                    });
+
+                                                },
+                                                error: function (event, jqxhr, settings, exception) {
+                                                    alert(exception);
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function (event, jqxhr, settings, exception) {
+                                        alert(exception);
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Please Enter Amount');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+                            $('#txtOutAmount').focus();
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter Expense Details');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtOutReason').focus();
+                    }
+                }
+                else {
+                    if (FromLocation.length > 0) {
+                        if (ToLocation.length > 0) {
+                            if (Amount.length > 0) {
+                                //check expenditure ID if exist update expenditure and insert to expenditure detail else insert two records to two tables
+                                if (ExpenditureHeaderID > 0) {
+                                    InsertExpenditure();
+                                    ResetInternationalControls();
+                                    $('#txtITraining').attr('disabled', true);
+                                    $('#txtIDate').attr('disabled', true);
+                                }
+                                else {
+                                    $.ajax({
+                                        url: '/Employee/CheckExpenditure',
+                                        type: "GET",
+                                        data: { ExpenditureDate: trainigDate },
+                                        success: function (data) {
+                                            if (data.expenditureDateInLeave == 1) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else if (data.expenditureDateInTraining == 0) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('Select Assigned Training Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else if (data.ExpendituresInBlockedList == 1) {
+                                                $(".popupposition").fadeIn();
+                                                $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                                $('#trainingerrormessage').show();
+                                                $('.popupposition').delay(3000).fadeOut('slow');
+
+                                            }
+                                            else {
+                                                Localization = "International";
+                                                $.ajax({
+                                                    url: '/Employee/CheckExpenditure',
+                                                    type: "GET",
+                                                    data: { ExpenditureDate: trainigDate },
+                                                    success: function (data) {
+                                                        if (data.expenditureDateInLeave == 1) {
+                                                            $(".popupposition").fadeIn();
+                                                            $('#trainingerrormessage').text('You Have Already Applied for Leave, Please Select New Date');
+                                                            $('#trainingerrormessage').show();
+                                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                                        }
+                                                        else if (data.expenditureDateInTraining == 0) {
+                                                            $(".popupposition").fadeIn();
+                                                            $('#trainingerrormessage').text('Select Assigned Training Date');
+                                                            $('#trainingerrormessage').show();
+                                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                                        }
+                                                        else if (data.ExpendituresInBlockedList == 1) {
+                                                            $(".popupposition").fadeIn();
+                                                            $('#trainingerrormessage').text('Selected Date Has Been Blocked By Account Manager, Please Select New Date');
+                                                            $('#trainingerrormessage').show();
+                                                            $('.popupposition').delay(3000).fadeOut('slow');
+
+                                                        }
+                                                        else {
+                                                            Localization = "International";
+
+                                                            $.ajax({
+                                                                url: '/Employee/LocalExpenditure',
+                                                                type: "POST",
+                                                                data: { ExpenseDate: trainigDate, ClientName: ClientName, ServiceOrderNumber: SONo,
+                                                                    OrderConfirmationNo: OrderConfirmationNo,
+                                                                    From: FromLocation, To: ToLocation,
+                                                                    ExpenditureType: ExpenditureType, kms: Kms, amount: Amount,
+                                                                    SOExplanation: SOExplanation, ExpenditureTypeDetail: ExpenditureTypeDetail, Conveyance: "",
+                                                                    Localization: Localization, ExpenditureHeaderID: ExpenditureHeaderID, ClientManagerName: "", ReasonForOther: Reason, Comments: comments, Mobile: Mobile, MobileTypeID: MobileID, Internet: Internet, InternetID: InternetID
+                                                                },
+                                                                dataType: 'json',
+                                                                success: function (data) {
+                                                                    $('#txtHeaderID').val(data);
+                                                                    ExpenditureHeaderID = data;
+
+                                                                    //closing
+                                                                    $.ajax({
+                                                                        url: '/Employee/ExpenditureListClose',
+                                                                        type: "POST",
+                                                                        data: { HeaderID: data, FromStatus: FromStatus },
+                                                                        success: function (data) {
+
+                                                                            if (FromStatus == true) {
+                                                                                $(".popuppositionsucess").fadeIn();
+                                                                                $('#trainingsucessresult').text('Your Expenditure Submitted Successfully');
+                                                                                $('#trainingsucessresult').show();
+                                                                                $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                                            }
+                                                                            else if (FromStatus == false) {
+                                                                                $(".popuppositionsucess").fadeIn();
+                                                                                $('#trainingsucessresult').text('Your Expenditure Saved Successfully');
+                                                                                $('#trainingsucessresult').show();
+                                                                                $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                                                                            }
+
+                                                                            InternationalTrainingControls();
+                                                                            $('#txtHeaderID').val('');
+                                                                        },
+                                                                        error: function (event, jqxhr, settings, exception) {
+                                                                            alert(exception);
+                                                                        }
+                                                                    });
+
+                                                                },
+                                                                error: function (event, jqxhr, settings, exception) {
+                                                                    alert(exception);
+                                                                }
+                                                            });
+
+                                                        }
+                                                    },
+                                                    error: function (event, jqxhr, settings, exception) {
+                                                        alert(exception);
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        error: function (event, jqxhr, settings, exception) {
+                                            alert(exception);
+                                        }
+                                    });
+                                }
+
+                            }
+                            else {
+                                $(".popupposition").fadeIn();
+                                $('#trainingerrormessage').text('Please Enter Amount');
+                                $('#trainingerrormessage').show();
+                                $('.popupposition').delay(3000).fadeOut('slow');
+                                $('#txtOutAmount').focus();
+                            }
+                        }
+                        else {
+                            $(".popupposition").fadeIn();
+                            $('#trainingerrormessage').text('Please Enter To Location');
+                            $('#trainingerrormessage').show();
+                            $('.popupposition').delay(3000).fadeOut('slow');
+                            $('#txtOutToLocation').focus();
+                        }
+                    }
+                    else {
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text('Please Enter From Location');
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                        $('#txtOutFrom').focus();
+                    }
+                }
+            }
+        }
+    });
+
+    $('#txtKms,#txtAmount,#txtIAmount').keypress(function (e) {
+        if (this.value.length == 0 && e.which == 48) {
+            return false;
+        }
+    });
+
+
+
+
+
+</script>

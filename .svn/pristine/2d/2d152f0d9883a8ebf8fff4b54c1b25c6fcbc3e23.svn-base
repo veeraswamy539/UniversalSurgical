@@ -1,0 +1,548 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.TravelDesk>
+@Scripts.Render("~/bundles/jqueryval")
+<div id="travelDiv">
+    @if (@ViewBag.empgroup == null)
+    {
+<div class="col-lg-12 search-strip src-nn">
+@*
+             @if (Model.Count != 0)
+             {*@
+
+                @if (Session["Employee"] == null)
+                {
+
+         <div class="col-lg-8 col-md-8">   
+<div class="col-lg-6 col-md-4 search-fld no-padding">
+                @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter Employee ID", @required = "required", @class = "form-control", @maxlength = "20", @Title = "Employee ID" })</div>
+             
+           
+
+                     <div class="col-lg-4 col-md-4  ">
+                        <a href="#" id="btnTravelSearch" class="col-lg-12 col-md-12 frm-src-fld"> <i class="fa fa-search"></i> Search</a> 
+                     </div>
+                     </div>
+                    
+                }
+           @*  }*@
+
+          @if (Session["TravelManager"] != null)
+          {
+
+              <div class="col-lg-4" ><a href="@Url.Action("CreateTravel", "TravelDesk")" class="md-trigger update frm-src-fld" data-modal="modal-16"> <i class="fa fa-bus"></i><i class="fa fa-plus plus-border"></i>
+
+  Create Travel Expense</a>     
+</div>
+
+     @*       <div class="col-lg-2  pull-right">
+                <a href="@Url.Action("CreateTravel", "TravelDesk")" class="md-trigger update">Create New Travel Expense</a>
+            </div>*@
+          }
+          
+
+@*            <div class="col-lg-2 pull-right" style="display:;" id="travellistback"><a href="@Url.Action("TravelDesk", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16"><i class="fa fa-history"></i> Travel Desk List</a>     
+</div>*@
+
+          </div>  
+    }
+        
+   
+<div id="some_grid_container1">
+    <div class="content-cont col-lg-12 col-md-12 no-padding mrg-nn">
+        
+   
+    <div class="clearfix">
+    </div>
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20" >
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12  grid-headding">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 " id="travel"><i class="fa fa-bus"></i> Travel Desk List</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="table-responsive">
+        @if (Model.Count != 0)
+        {
+
+            <table class="table no-more-tables col-lg-12 table-color ">
+                <thead>
+                    <tr class="grid-headding-strips">
+                        <th class="col-lg-1 col-md-1">
+                            Emp Id
+                        </th>
+               <th class="col-lg-1 col-md-1">
+                            Name
+                        </th>
+                        <th class="col-lg-1 col-md-2">
+                            From
+                        </th>
+                        <th class="col-lg-1 col-md-2">
+                            To
+                        </th>
+                      @if (Session["AccountMgr"] != null || Session["TravelManager"] != null)
+                      { 
+                        <th class="col-lg-2 col-md-2">
+                            <div id="sortdiv">
+                                @Html.ActionLink("Booking", "TravelDesk", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                            </div>
+                        </th>
+                          <th class="col-lg-2 col-md-2">
+                           Start Date
+                        </th>
+                      }
+                      else
+                      {
+                         <th class="col-lg-2 col-md-2">
+                            Booking
+                        </th>
+                               <th class="col-lg-2 col-md-2">
+                            <div id="sortdiv">
+                                @Html.ActionLink("Start Date", "TravelDesk", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                            </div>
+                        </th>
+                      }
+
+                             <th class="col-lg-2 col-md-2">
+                           End Date
+                        </th>
+
+                  
+
+                        <th class="col-lg-2 col-md-2">  <i class="fa fa-inr"></i> Amount</th>
+                     
+                         <th class="col-lg-2 col-md-2">
+                            @*<i class="fa fa-inr"></i>*@ Advance
+                        </th>
+                          @if (Session["TravelManager"] != null || Session["AccountMgr"] != null || Session["Employee"] != null)
+                          {
+                           <th class="col-lg-2 col-md-2">
+                            <i class=""></i> View/Download
+                        </th>
+                          }
+                          
+                         @if (Session["TravelManager"] != null)
+                         {
+                             
+                           <th class="col-lg-2 col-md-2">
+                            @if (@ViewBag.empgroup == null)
+                            { 
+                           @: Actions
+                           }
+                          </th>
+                         }
+                         else
+                         {
+                           <th>
+                           @if (Session["Manager"] != null)
+                           {
+                            @: View
+                           }
+                           else
+                           {
+
+                           }
+                            </th>
+                         }
+                      
+                           @if (Session["TravelManager"] != null)
+                           {
+                        <th class="col-lg-1 col-md-1">
+                            
+                        </th>
+                           }
+                           
+                                <th class="col-lg-1 col-md-1">
+                            
+                        </th>
+         
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="v-align-middle">@item.EmployeeId
+                            </td>
+                       <td class="v-align-middle">@item.EmployeeName
+                            </td>
+                            <td class="v-align-middle">@item.FromLocation
+                            </td>
+                            <td class="v-align-middle">@item.ToLocation 
+                              </td>
+                             
+                              <td class="v-align-middle">@item.CreatedDate.Value.ToShortDateString()
+                            </td>
+                             <td class="v-align-middle">@item.TraveledFromDate.Value.ToShortDateString()
+                            </td>
+                            @if (@item.TraveledToDate != null)
+                            {
+<td class="v-align-middle">@item.TraveledToDate.Value.ToShortDateString()
+                            </td>
+                            }
+                            else
+                            {
+                                <td class="v-align-middle"> Not Given</td>
+
+                            }
+                            
+
+
+                            @if (item.HotelBookingAmount != null)
+                            {
+                            <td class="v-align-middle">
+                            
+                            @Convert.ToDouble(item.TotalTicketAmount + item.HotelBookingAmount)
+
+                            </td>
+                            }
+                            else
+                            {
+                              <td class="v-align-middle">@item.TotalTicketAmount 
+                            </td>
+
+                            }
+                           @if (item.AdvanceAmount != null)
+                           {
+                            <td class="v-align-middle">@item.AdvanceAmount </td>
+                           }
+                           else
+                           {
+                              <td class="v-align-middle">No</td>
+
+                           }
+                           @if (Session["TravelManager"] != null || Session["AccountMgr"] != null || Session["Employee"] != null)
+                           { 
+                           <td class="v-align-middle">
+                           <a href="@Url.Action("ViewTravelTicketInformation", "Shared", new { id = (int?)item.Id })" class="viewTravel" data-toggle="tooltip" data-placement="top" title="Download Ticket"><i class="fa fa-eye eyesize" aria-hidden="true"></i>
+</a>
+
+                           </td>
+                           }
+                              @if (Session["TravelManager"] != null)
+                              {
+                            <td class="v-align-middle">
+                            
+                          @*  @Html.ActionLink("Update", "UpdateTavelDesk", "TravelDesk", new { id = (int?)item.Id }, new { @class = "update" })*@
+
+
+                            <a href="@Url.Action("UpdateTavelDesk", "Shared", new { id = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="top" title="Update"><i class="fa fa-pencil-square-o"></i></a>
+
+                            </td>
+                              }
+                              
+                              @if (Session["Manager"] != null)
+                              {
+
+                                  <td class="v-align-middle">
+                              @*@Html.ActionLink("View", "UpdateTavelDesk", "Shared", new { id = (int?)item.Id }, new { @class = "updateTravel" })*@
+
+                                <a href="@Url.Action("UpdateTavelDesk", "Shared", new { id = (int?)item.Id })" class="updateTravel update-icon" data-toggle="tooltip" data-placement="top" title="View">
+                                            <i class="fa fa-eye eyesize"></i></a>
+
+                                    </td>
+                              }
+             
+                         
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-lg-12 col-md-12">
+                <div id="myPager1" class="pull-right">
+                    @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                         "TravelDesk", "Shared",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        )
+    )
+                </div>
+                @* @Html.PagedListPager((IPagedList)Model, page => Url.Action("ZonesList", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "test" }))*@
+                @*   @Html.PagedListPager(Model, page => Url.Action("ZonesList", new{page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing( new AjaxOptions(){  HttpMethod = "GET", UpdateTargetId = "test"}))*@
+                @* @Ajax.ActionLink("First Name", "AdminSearchResult", new { sortOrder = ViewBag.FirstNameSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions { UpdateTargetId = "searchResult" }, null)*@
+            </div>
+        }
+        else
+        {
+            
+            <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+                <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+                
+                </div>
+        }
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+
+<div class="md-modal1 md-effect-16" id="modal-161" style="background-color: #fff;">
+    <div class="md-content">
+        <h3>
+            <div style="float: left">
+               Travel Desk Information
+            </div>
+            <div style="float: right">
+                <a href="#" id="viewTraveldeskclse">X</a></div>
+        </h3>
+        <div style="background-color: #fff;" id="divPartialTravel"></div>
+    </div>
+</div>
+
+ 
+
+<div class="md-overlay">
+</div>
+
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<!-- the overlay element -->
+
+
+<script type="text/javascript">
+    $('.update,.updateTravel,#travel,#myPager1,#sortdiv').bind('contextmenu', function (e) {
+        alert("Mouse right click disabled");
+        return false;
+    }); 
+        </script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+
+       
+        $("#viewTraveldeskclse").click(function () {
+            $("#modal-161").fadeOut();
+            $(".md-overlay").fadeOut();
+
+        });
+
+        $(".md-overlay").click(function (e) {
+            $('#modal-161').removeClass('md-show');
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#btnTravelSearch').click(function (e) {
+            e.preventDefault();
+//              alert('hi');
+            if ($('#SearchString').val() != "") {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: "/Shared/TravelDesk",
+                    type: 'GET',
+                    cache: false,
+                    data: { searchString: $('#SearchString').val() },
+
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#travelDiv').html('');
+                        $('#travelDiv').empty();
+                        $('#travelDiv').html(result);
+                        $("#travellistback").show();
+                    }
+                });
+            }
+            else {
+                return;
+            }
+            return false;
+        });
+
+
+        $(function () {
+            $('#sortdiv').on('click', 'a', function (e) {
+                e.preventDefault();
+//                alert('hi');
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#travelDiv').empty();
+                        $('#travelDiv').html('');
+                        $('#travelDiv').html(result);
+                    }
+                });
+                return false;
+            });
+        })
+
+   
+
+        $(function () {
+            $('#myPager1').on('click', 'a', function () {
+               
+
+                if (this.href != "") {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#travelDiv').html('');
+                        $('#travelDiv').html(result);
+                    }
+                });
+                return false;
+           
+            }
+        });
+
+    });
+
+        $(".update").click(function (e) {
+            e.preventDefault();
+
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+            var redirecturl = $(this).attr('href');
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+
+            $.ajax({
+                url: this.href,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#modal-161').show();
+           $('#modal-161').addClass('md-modal md-effect-16 md-show');
+           // $('#divPartial').empty();
+           //  $('#divPartial').val("");
+           $('#divPartial').show();
+           //  alert(result);
+           $('#divPartial').html('');
+           $('#divPartial').html(result);
+
+       })
+       .error(function (xhr, status) {
+           // alert("2");
+       });
+        });
+
+   $(".viewTravel").click(function (e) {
+            e.preventDefault();
+             var redirecturl = $(this).attr('href');
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+
+            $.ajax({
+                url: this.href,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           //  alert(result);
+           $('#divPartial').html('');
+           $('#divPartial').html(result);
+
+       })
+       .error(function (xhr, status) {
+           // alert("2");
+       });
+   });
+        $(".updateTravel").click(function (e) {
+            e.preventDefault();
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+            var redirecturl = $(this).attr('href');
+
+            $.ajax({
+                url: this.href,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+
+           if (result.indexOf("Session") != -1) {
+               $("#modal-161").fadeOut();
+               $(".md-overlay").fadeOut();
+
+               $('#divPartial').html('');
+               $('#divPartial').html(result);
+           }
+           else {
+               $('#modal-161').show();
+               $('#modal-161').addClass('md-modal md-effect-16 md-show');
+
+               $('#divPartialTravel').html('');
+               $('#divPartialTravel').html(result);
+
+               $('#frmUpdateTravelDesk').find('input, textarea, button, select').attr('disabled', 'disabled');
+           }
+         
+
+       })
+       .error(function (xhr, status) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           // alert("2");
+       });
+        });
+
+
+
+    });
+</script>
+
+
+<script src="../../Scripts/classie.js"></script>
+<script src="../../Scripts/modalEffects.js"></script>
+<!-- for the blur effect -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+</script>
+<script src="../../Scripts/cssParser.js"></script>
+<script src="../../Scripts/css-filters-polyfill.js"></script>

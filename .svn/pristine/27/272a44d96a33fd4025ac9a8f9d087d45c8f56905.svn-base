@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repositories>
+  <repository path="..\Universal.BusinessEntities\packages.config" />
+  <repository path="..\Universal.BusinessLogicLayer\packages.config" />
+  <repository path="..\Universal.Common\packages.config" />
+  <repository path="..\Universal.CrossLayer\packages.config" />
+  <repository path="..\Universal.DataAccessLayer\packages.config" />
+  <repository path="..\Universal.ServiceLayer\packages.config" />
+  <repository path="..\UniversalSurgicals.Tests\packages.config" />
+  <repository path="..\UniversalSurgicals\packages.config" />
+</repositories>

@@ -1,0 +1,20 @@
+﻿
+<link href="../../Scripts/dropzone/basic.css" rel="stylesheet" type="text/css" />
+<link href="../../Scripts/dropzone/dropzone.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/dropzone/dropzone.js" type="text/javascript"></script>
+<form action="~/Home/SaveUploadedFile" method="post" 
+    enctype="multipart/form-data" class="dropzone" 
+    id="dropzoneForm">
+</form>
+
+
+<script type="text/javascript">
+    Dropzone.options.dropzoneForm = {
+        init: function () {
+            this.on("complete", function (data) {
+                var res = eval('(' + data.xhr.responseText + ')');
+                alert(res.Message);
+            });
+        }
+    };
+</script>

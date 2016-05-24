@@ -1,0 +1,244 @@
+﻿@using Universal.BusinessEntities;
+@model News
+@Scripts.Render("~/bundles/jqueryval")
+<style>
+    body
+    {
+        background-color: #e5e9ec;
+    }
+    .page-content
+    {
+        position: relative !important;
+        width: auto !important;
+    }
+    .datepicker-dropdown.datepicker-orient-left::before
+    {
+        left: 179px;
+    }
+    .datepicker-dropdown.datepicker-orient-left::after
+    {
+        left: 180px;
+    }
+</style>
+<form id="frmNewsUpdate">
+<div id="some_grid_container1">
+    <div class="col-lg-12 search-strip">
+        <div class="col-lg-3 pull-right">
+            <a href="@Url.Action("NewsList", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16">
+                <i class="fa fa-arrow-left"></i>  News List</a>
+        </div>
+    </div>
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <i class="fa fa-newspaper-o"></i>  Update News</div>
+        </div>
+   @*     <div class="clearfix">
+        </div>
+        <div class="col-lg-12 ">
+            <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6 m-t-10 m-b-10">
+                <i class="fa fa-info-circle m-r-5"></i>News Details</div>
+        </div>*@
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12 m-t-20">
+            <div class="col-lg-4  col-md-4  m-b-10">
+                <div class="controls">
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @id = "txtTitle", @placeholder = "News Title", @Title = "News Title" })
+                    @Html.ValidationMessageFor(model => model.Title)
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4  m-b-10 ">
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.Status, new List<SelectListItem>{ 
+                     new SelectListItem { Text = "Active", Value = "true"},
+                      new SelectListItem { Text = "Deactive", Value = "false" },  
+                      }, "Select News Status", new { @class = "form-control", @id = "ddlIsActive", @placeholder = "Select News Status", @Title = "News Status" })
+                    @Html.ValidationMessageFor(model => model.Status)
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12">
+            <div class="col-lg-12 col-md-12  m-b-10 ">
+                <div class="controls">
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @id = "txtDescription", @placeholder = "News Description", @Title = "News Description", @style = "height:200px;" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 pull-right text-right m-b-20">
+        <div class="dfl-buttom col-lg-6 col-md-4 col-sm-12 col-xs-12">
+            <input type="submit" value="Update News" name="btnUpdateNews" id="btnUpdateNews" /></div>
+        <div class="dfl-buttom  col-lg-6 col-md-4 col-sm-12 col-xs-12">
+            <input type="reset" value="Cancel" name="Cancel" id="btnCancel" />
+        </div>
+    </div>
+</div>
+<div class="popuppositionsucess">
+    <div class="alert alert-success" id="JobPostingSucess" runat="server">
+        <strong>Success !</strong><br />
+        <label id="JobPostingSucessspan">
+        </label>
+    </div>
+</div>
+<div class="popupposition">
+    <div class="alert alert-warning" id="JobPostingwarning" runat="server">
+        <strong>Warning !</strong><br />
+        <label id="JobPostingerrormessage">
+        </label>
+    </div>
+</div>
+<div id="JobPostingLoadimg" runat="server" style="text-align: center; padding: 50px;
+    display: none; height: 100%; width: 100%; z-index: 10000; position: fixed; top: 40%;
+    left: 5%;">
+    <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+</form>
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+
+        $('.popupposition').hide();
+        $('.popuppositionsucess').hide();
+
+        $('.update').bind('contextmenu', function (e) {
+            alert("Mouse right click disabled");
+            return false;
+        });
+
+
+        $(".update").click(function (e) {
+            e.preventDefault();
+
+            var redirecturl = $(this).attr('href');
+            //        alert(redirecturl);
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+       });
+        });
+
+        // button submit event
+
+   $("#btnUpdateNews").click(function (e) {
+            e.preventDefault();
+            var valid = $("#frmNewsUpdate").valid();
+
+
+            if (valid) {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Admin/UpdateNews',
+                    data: $("#frmNewsUpdate").serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('.popuppositionsucess').show();
+                        $('.popuppositionsucess').fadeIn();
+                        $('#JobPostingSucessspan').text('News has been updated successfully');
+                        $('.popuppositionsucess').show();
+                        $('.popuppositionsucess').delay(3000).fadeOut('slow');
+                        $('#result').text(data.Text);
+                        if (data.Available === true) {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                            $(':input', $("#frmNewsUpdate"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                            setTimeout(function () {
+                                $('#modelbg').hide();
+                                $('#modelbg').hide();
+
+                                $.ajax({
+                                    url: "/Shared/NewsList",
+                                    contentType: 'application/html; charset=utf-8',
+                                    type: 'GET',
+                                    cache: false,
+                                    dataType: 'html'
+                                })
+                     .success(function (result) {
+                         $('#divPartial').html('');
+                         $('#divPartial').html(result);
+                     })
+                      .error(function (xhr, status) {
+                      });
+                            }, 3000);
+                        }
+                        else {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                        }
+                    },
+                    failure: function () {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        alert("fail");
+                    }
+                });
+            }
+            else {
+                return;
+            }
+        });
+        $("#btnCancel").click(function (e) {
+            e.preventDefault();
+            var id = $("#Id").val();
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: "/Admin/UpdateNews/" + id,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+                     .success(function (result) {
+                         $("#AdminLoadingBg").fadeOut();
+                         $("#AdminLoadimg").hide();
+                         $('#divPartial').html('');
+                         $('#divPartial').html(result);
+
+                     })
+                      .error(function (xhr, status) {
+                          $("#AdminLoadingBg").fadeOut();
+                          $("#AdminLoadimg").hide();
+                      });
+        });
+    });
+</script>

@@ -1,0 +1,1339 @@
+﻿@model Universal.BusinessEntities.TravelDesk
+@Scripts.Render("~/bundles/jqueryval")
+<script src="../../Scripts/dropzone/dropzone.min.js" type="text/javascript"></script>
+
+
+@if (Session["TravelManager"] != null)
+{
+    <style>
+.dropzone .dz-default.dz-message {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -moz-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  -ms-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+  background-image: url("../../Content/Images/AddTicket.png");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  position: absolute;
+  width: 100%;
+  height: 123px;
+  margin-left: -349px;
+  margin-top: -61.5px;
+  top: 50%;
+  left: 50%;
+}
+  
+    </style>
+}
+
+
+<style>
+    body
+    {
+        background-color: #e5e9ec;
+    }
+    .page-content
+    {
+        position: relative !important;
+        width: auto !important;
+    }
+    .datepicker-dropdown.datepicker-orient-left::before
+    {
+        left: 179px;
+    }
+    .datepicker-dropdown.datepicker-orient-left::after
+    {
+        left: 180px;
+    }
+  @*  .selectcat catedis_title
+    {
+        padding: 0px;
+        margin: 0px;
+        font-size: 13px;
+        color: #000;
+    }
+    
+    .catedis_titlePhoto
+    {
+        padding: 10px 10px 10px 0px;
+        margin: 0 0 0 8px;
+        font-size: 13px;
+        color: #000;
+        border: 1px solid #E6E6E6;
+        width: 708px;
+        float: left;
+    }*@
+    </style>
+<form id="frmUpdateTravelDesk">
+@if (Session["TravelManager"] != null)
+{
+    <div id="some_grid_container1">
+        <div class="col-lg-12 search-strip">
+            <div class="col-lg-3 pull-right">
+                <a href="@Url.Action("TravelDesk", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16">
+                    <i class="fa fa-arrow-left"></i>Travel Desk List</a>
+            </div>
+        </div>
+    </div>
+}
+@if (Session["TravelManager"] != null)
+{         
+         
+    <div class="content-cont col-lg-12 col-md-12 no-padding" id="test">
+        <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+            @if (Session["TravelManager"] != null)
+            {
+                <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                        Update Travel</div>
+                    <div class="popupposition">
+                        <div class="alert alert-success" id="sucessalertdiv" runat="server">
+                            @*<a href="#" class="close" data-dismiss="alert" >&times;</a>*@ <strong>Success!</strong><br />
+                            <span id="result"></span>
+                        </div>
+                        @* <div class="alert alert-success" id="result" style="display: none;"> </div>*@
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                </div>
+                <div class="clearfix">
+                </div>
+            }
+            <div class="col-lg-12 m-t-20">
+                @*employee id*@
+                <div class="col-lg-3 col-md-6  m-b-10">
+                    <div class="controls">
+                        @Html.HiddenFor(model => model.Id)
+                        @if (ViewBag.empList != null)
+                        {
+                      
+                            @Html.DropDownListFor(model => model.FK_EmployeeId, ViewBag.empList as List<SelectListItem>, "Select Employee", new { @class = "form-control", @id = "ddlEmployeeID", @placeholder = "Select Employee ID", @Title = "Employee ID", @disabled = "disabled" })
+                            @Html.ValidationMessageFor(model => model.FK_EmployeeId)
+                            @Html.HiddenFor(model => model.FK_EmployeeId)
+                      
+                        }
+                    </div>
+                </div>
+                @*From Location*@
+                <div class="col-lg-3 col-md-4  m-b-10 ">
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.FromLocation, new { @class = "form-control", @id = "txtfromlocation", @placeholder = "From Location", @Title = "From Location" })
+                        @Html.ValidationMessageFor(model => model.FromLocation)
+                    </div>
+                </div>
+                @*To Location*@
+                <div class="col-lg-3  col-md-6  m-b-10">
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.ToLocation, new { @class = "form-control", @id = "txttolocation", @placeholder = "To Location", @Title = "To Location" })
+                        @Html.ValidationMessageFor(model => model.ToLocation)
+                    </div>
+                </div>
+                @*Ticket Booked Date *@
+                <div class="col-lg-3 col-md-6  m-b-10">
+                    <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                        @Html.TextBoxFor(model => model.TraveledFromDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtticketbookeddate", @placeholder = "Travel From Date", @Title = "Ticket Booked Date", @type = "date-local" })
+                        @Html.ValidationMessageFor(model => model.TraveledFromDate)
+                        <span class="add-on"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            <div class="col-lg-12">
+                @*Mode of Transport*@
+                <div class="col-lg-3 col-md-6  m-b-10">
+                    <div class="controls">
+                        @Html.DropDownListFor(model => model.ModeofTransportFrom, new List<SelectListItem>
+
+{ 
+   new SelectListItem { Text = "Bus", Value = "Bus"},
+   new SelectListItem { Text = "Train", Value = "Train"},
+   new SelectListItem { Text = "Flight", Value = "Flight"},
+  
+}, "Select Mode Of Transport", new { @title = "Mode Of Transport", @placeholder = "Mode Of Transport", @id = "ddlModeTransportk" })
+                        @Html.ValidationMessageFor(model => model.ModeofTransportFrom)
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6  m-b-10">
+                    <div class="checkbox check-info">
+                        @if (Model.TraveledToDate != null)
+                        {
+                            <input id="returnjourney" type="checkbox" checked />
+                            <label for="returnjourney">
+                                Return Journey</label>
+                          
+                        }
+                        else
+                        {
+                            <input id="returnjourney" type="checkbox" />
+                            <label for="returnjourney">
+                                Return Journey</label>
+                           
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            <div class="col-lg-12">
+                @*Date of Journey*@
+                @if (Model.TraveledToDate != null)
+                {
+                    <div class="col-lg-3 col-md-4  m-b-10 " id="tojourney" style="display: ">
+                        <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                            @Html.TextBoxFor(model => model.TraveledToDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtToJourney", @placeholder = "Travel To Date", @Title = "Date of Journey" })
+                            @Html.ValidationMessageFor(model => model.TraveledToDate)
+                            <span class="add-on"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    
+
+                    
+                }
+                else
+                {
+                    <div class="col-lg-3 col-md-4  m-b-10 " id="tojourney" style="display: none">
+                        <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                            @Html.TextBoxFor(model => model.TraveledToDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "txtToJourney", @placeholder = "Travel To Date", @Title = "Date of Journey" })
+                            @Html.ValidationMessageFor(model => model.TraveledToDate)
+                            <span class="add-on"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    
+
+                }
+                @*Mode of Transport*@
+                @if (Model.ModeofTransport != null)
+                {
+                    <div class="col-lg-3 col-md-6  m-b-10" id="toModeofTransport" style="display: ">
+                        <div class="controls">
+                            @Html.DropDownListFor(model => model.ModeofTransport, new List<SelectListItem>
+
+{ 
+   new SelectListItem { Text = "Bus", Value = "Bus"},
+   new SelectListItem { Text = "Train", Value = "Train"},
+   new SelectListItem { Text = "Flight", Value = "Flight"},
+  
+}, "Select Mode Of Transport", new { @title = "Mode Of Transport", @placeholder = "Mode Of Transport", @id = "ddlModeTransport" })
+                            @Html.ValidationMessageFor(model => model.ModeofTransport)
+                        </div>
+                    </div>                 
+   
+                }
+                else
+                {
+    
+                    <div class="col-lg-3 col-md-6  m-b-10" id="toModeofTransport" style="display: none">
+                        <div class="controls">
+                            @Html.DropDownListFor(model => model.ModeofTransport, new List<SelectListItem>
+
+{ 
+   new SelectListItem { Text = "Bus", Value = "Bus"},
+   new SelectListItem { Text = "Train", Value = "Train"},
+   new SelectListItem { Text = "Flight", Value = "Flight"},
+  
+}, "Select Mode Of Transport", new { @title = "Mode Of Transport", @placeholder = "Mode Of Transport", @id = "ddlModeTransport" })
+                            @Html.ValidationMessageFor(model => model.ModeofTransport)
+                        </div>
+                    </div> 
+
+            
+                }
+            </div>
+            <div class="clearfix">
+            </div>
+            <div class="col-lg-12" style="padding: 0 0 10px 35px;">
+                <label style="font-weight: bold; font-family: Open Sans">
+                    Travel Purpose</label>
+                @if (Model.Purpose == "TrainingExpenditure")
+                {
+                    <div class="check-info" style="float: left; padding-right: 50px;">
+                        <input id="traveltraining" type="radio" name="travel" value="Training" checked />
+                        Training
+                    </div>
+            
+            
+                    <div class="check-info" style="float: left; padding-right: 50px;">
+                        <input id="travelother" type="radio" name="travel" />
+                        Other
+                    </div>
+
+@*Travel Purpose*@
+                    <div class="col-lg-3 col-md-4  m-b-10 " id="othertravelpurpose" style="display: none;
+                        float: left;">
+                        <div class="controls">
+                            @Html.TextBoxFor(model => Model.Purpose, new { @class = "form-control", @id = "txttravelpurpose", @placeholder = "Enter Purpose", @Title = "Travel Purpose" })
+                            @Html.ValidationMessageFor(model => Model.Purpose)
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="check-info" style="float: left; padding-right: 50px;">
+                        <input id="traveltraining" type="radio" name="travel" value="Training" />
+                        Training
+                    </div>
+
+                    <div class="check-info" style="float: left; padding-right: 50px;">
+                        <input id="travelother" type="radio" name="travel" checked />
+                        Other
+                    </div>
+
+@*Travel Purpose*@
+                    <div class="col-lg-3 col-md-4  m-b-10 " id="othertravelpurpose" style="display: ;
+                        float: left;">
+                        <div class="controls">
+                            @Html.TextBoxFor(model => Model.Purpose, new { @class = "form-control", @id = "txttravelpurpose", @placeholder = "Enter Purpose", @Title = "Travel Purpose" })
+                            @Html.ValidationMessageFor(model => Model.Purpose)
+                        </div>
+                    </div>
+
+ 
+                }
+                <div class="clearfix">
+                </div>
+            </div>
+            <div id="hideaccommodation">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  m-l-20">
+                    <div class="checkbox check-info">
+                        @if (Model.HotelDetails != null && Model.HotelDetails != " ")
+                        {
+                            <input id="hotelbooking" type="checkbox" checked />
+                            <label for="hotelbooking">
+                                Accommodation</label>
+                          
+                        }
+                        else
+                        {
+                            <input id="hotelbooking" type="checkbox" />
+                            <label for="hotelbooking">
+                                Accommodation</label>
+                           
+                        }
+                    </div>
+                </div>
+                <div class="clearfix">
+                </div>
+                <div class="col-lg-12">
+                    @if (Model.HotelDetails != null && Model.HotelDetails != " ")
+                    {
+                        <div id="hotelbokingdiv" style="display: ;">
+                            @*Hotel Details*@
+                            <div class="col-lg-3 col-md-3  m-b-10 ">
+                                <div class="controls">
+                                    @Html.TextAreaFor(model => model.HotelDetails, new { @class = "form-control", @id = "txtHotelDetails", @placeholder = "Hotel Details", @Title = "Hotel Details" })
+                                    @Html.ValidationMessageFor(model => model.HotelDetails)
+                                </div>
+                            </div>
+                            @*Hotel Booking Amount*@
+                            <div class="col-lg-3 col-md-3  m-b-10 ">
+                                <div class="controls">
+                                    @Html.TextBoxFor(model => model.HotelBookingAmount, new { @class = "form-control numericOnly", @id = "txtHotelamount", @placeholder = "Hotel Booking Amount", @Title = "Hotel Booking Amount", @maxlength = "6" })
+                                    @Html.ValidationMessageFor(model => model.HotelBookingAmount)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3  m-b-10 ">
+                                <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                                    @Html.TextBoxFor(model => model.CheckedIndate, "{0:dd/MM/yyyy}", new { @class = "form-control ", @id = "checkedIndate", @placeholder = "Checked In Date", @Title = "Checked In Date" })
+                                    @Html.ValidationMessageFor(model => model.CheckedIndate)
+                                    <span class="add-on"><i class="fa fa-calendar "></i></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4  m-b-10">
+                                <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                                    @Html.TextBoxFor(model => model.CheckedOutdate, "{0:dd/MM/yyyy}", new { @class = "form-control", @id = "checkedOutdate", @placeholder = "Checked Out Date", @Title = "Checked Out Date" })
+                                    @Html.ValidationMessageFor(model => model.CheckedOutdate)
+                                    <span class="add-on"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="hotelbokingdiv" style="display: none;">
+                            @*Hotel Details*@
+                            <div class="col-lg-3 col-md-4  m-b-10 ">
+                                <div class="controls">
+                                    @Html.TextAreaFor(model => model.HotelDetails, new { @class = "form-control", @id = "txtHotelDetails", @placeholder = "Hotel Details", @Title = "Hotel Details" })
+                                    @Html.ValidationMessageFor(model => model.HotelDetails)
+                                </div>
+                            </div>
+                            @*Hotel Booking Amount*@
+                            <div class="col-lg-3 col-md-4  m-b-10 ">
+                                <div class="controls">
+                                    @Html.TextBoxFor(model => model.HotelBookingAmount, new { @class = "form-control numericOnly", @id = "txtHotelamount", @placeholder = "Hotel Booking Amount", @Title = "Hotel Booking Amount", @maxlength = "6" })
+                                    @Html.ValidationMessageFor(model => model.HotelBookingAmount)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3  m-b-10 ">
+                                <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                                    @Html.TextBoxFor(model => model.CheckedIndate, new { @class = "form-control ", @id = "checkedIndate", @placeholder = "Checked In Date", @Title = "Checked In Date" })
+                                    @Html.ValidationMessageFor(model => model.CheckedIndate)
+                                    <span class="add-on"><i class="fa fa-calendar "></i></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4  m-b-10">
+                                <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                                    @Html.TextBoxFor(model => model.CheckedOutdate, new { @class = "form-control", @id = "checkedOutdate", @placeholder = "Checked Out Date", @Title = "Checked Out Date" })
+                                    @Html.ValidationMessageFor(model => model.CheckedOutdate)
+                                    <span class="add-on"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+            @* <div class="col-lg-12">
+                <div class="col-lg-3 col-md-4  m-b-10 ">
+                    <div class="controls">
+                        @if (Model.AdvanceAmount != null && Model.AdvanceAmount != 0)
+                        {
+                       
+                            <input type="checkbox" id="advanceamt" checked /> <span>Advance Amount</span>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="advanceamt" /> <span>Advance Amount</span>
+                        }
+                    </div>
+                </div>
+            </div>*@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  m-l-20">
+                <div class="checkbox check-info">
+                    @if (Model.AdvanceAmount != null && Model.AdvanceAmount != 0)
+                    {
+                       
+                        <input id="advanceamt" type="checkbox" checked />
+                        <label for="advanceamt">
+                            Advance Amount</label>
+                          
+                    }
+                    else
+                    {
+                        <input id="advanceamt" type="checkbox" />
+                        <label for="advanceamt">
+                            Advance Amount</label>
+                           
+                    }
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            @if (Model.AdvanceAmount != null && Model.AdvanceAmount != 0)
+            {
+
+                <div id="advnAmount" style="display: ;">
+                    <div class="col-lg-12">
+                        <div class="col-lg-3 col-md-4  m-b-10 ">
+                            <div class="controls">
+                                @Html.TextBoxFor(model => model.AdvanceAmount, new { @class = "form-control numericOnly", @id = "txtAdvanceamount", @placeholder = "Adavnce Amount", @Title = "Advance Amount", @maxlength = "6" })
+                                @Html.ValidationMessageFor(model => model.AdvanceAmount)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+
+                <div id="advnAmount" style="display: none;">
+                    <div class="col-lg-12">
+                        <div class="col-lg-3 col-md-4  m-b-10 ">
+                            <div class="controls">
+                                @Html.TextBoxFor(model => model.AdvanceAmount, new { @class = "form-control", @id = "txtAdvanceamount", @placeholder = "Advance Amount", @Title = "Advance Amount", @maxlength = "6" })
+                                @Html.ValidationMessageFor(model => model.AdvanceAmount)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            <div class="clearfix">
+            </div>
+            <div class="col-lg-12">
+                @*Ticket Amount*@
+                <div class="col-lg-3 col-md-4  m-b-10 ">
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.TotalTicketAmount, new { @class = "form-control numericOnly", @id = "txttotalticketamount", @placeholder = "Total Ticket Amount", @Title = "Total Ticket Amount", @maxlength = "6" })
+                        @Html.ValidationMessageFor(model => model.TotalTicketAmount)
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            @* OverallComments*@
+            <div class="col-lg-10 col-md-10  m-b-10 m-l-20 ">
+                <div class="controls">
+                    @Html.TextAreaFor(model => model.OverallComments, new { @class = "form-control", @id = "txtComments", @placeholder = "Over all Comments", @Title = "Comments" })
+                    @Html.ValidationMessageFor(model => model.OverallComments)
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            <div class="selectcat" id="TravelUpload" style="display: ;">
+                <div class="catedis_titlePhoto" id="NotIePhoto">
+                    <input type="file" multiple="true" name="File1" id="IePhoto" class="multi max-6" />
+                    <div class='dzq-success-msg-panel hide'>
+                        Only 10 Tickets are allowed!</div>
+                    <div class="dropzone-previews">
+                    </div>
+                    <div class="dropzone" id="dropzoneForm">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12  col-md-6  m-b-10 m-t-20">
+                @if (Model.travelTicketsCollection.Count > 0)
+                {
+
+                    foreach (var i in Model.travelTicketsCollection)
+                    {
+              
+                         <input type="hidden" value="@i.TicketImage" class="hider "/>
+                    
+              
+                @*    <a class="fancybox-button" rel="fancybox-button" href="~/Content/EventImages/@i.TicketImage" title='@i.TicketImage' >
+                        <img   src="~/Content/TravelImages/@i.TicketImage" alt="@i.TicketImage" width="150px" height="100px"/>
+                    </a>*@
+                    }
+                }
+            </div>
+            @if (Session["TravelManager"] != null)
+            {
+            
+@*submit and reset buttons*@
+                
+                
+                <div class="col-lg-3" style="text-align: right; width: 100%">
+                    <div>
+                        <button type="submit" class="md-trigger" id="btnUpdateTravel" name="btnUpdateTravel"
+                            value="Send">
+                            Update</button>
+                    </div>
+                </div>
+                
+                    
+            }
+            <div class="clearfix">
+            </div>
+            <div class="col-lg-12">
+                <label id="lblfrmtovalidate" class="alert alert-danger errorwidth">
+                </label>
+                <label id="lblcheckinoutvaliddate" class="alert alert-danger errorwidth">
+                </label>
+            </div>
+        </div>
+    </div>
+  
+    
+    <div id="UpdateTravelLoadimg" runat="server" style="text-align: center; padding: 50px;
+        display: none; height: 100%; width: 100%; z-index: 10000; position: fixed; top: 40%;
+        left: 5%;">
+        <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+  
+
+}
+
+else
+{
+
+
+    <div class="col-lg-12 pop-txt-lab" style="min-height: 250px; padding-top: 30px;">
+        <div class="col-lg-4 col-md-4  m-b-10 ">
+            <div class="controls">
+                <span>Employee ID : </span>@Html.DisplayFor(model => model.EmployeeId) - @Html.DisplayFor(model => model.EmployeeName)
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Travel From : </span>@Html.DisplayFor(model => model.FromLocation)
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Travel To : </span>@Html.DisplayFor(model => model.ToLocation)
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Traveling Date : </span>@Html.DisplayFor(model => model.TraveledFromDate)
+            </div>
+        </div>
+        <div class="col-lg-6  col-md-6  m-b-10">
+            <div class="controls">
+                <span>Mode Of Transport for To Journey : </span>@Html.DisplayFor(model => model.ModeofTransportFrom)
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Return Journey Date : </span>@Html.DisplayFor(model => model.TraveledToDate)
+            </div>
+        </div>
+        <div class="col-lg-6  col-md-6  m-b-10">
+            <div class="controls">
+                <span>Mode Of Transport for Return Journey : </span>@Html.DisplayFor(model => model.ModeofTransport)
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Traveling Purpose : </span>@Html.DisplayFor(model => model.Purpose)
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Ticket Amount : </span>@Html.DisplayFor(model => model.TotalTicketAmount)
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-10  col-md-10  m-b-10">
+            <div class="controls">
+                <span>Hotel Details : </span>@Html.DisplayFor(model => model.HotelDetails)
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Hotel Booked Amount : </span>@Html.DisplayFor(model => model.HotelBookingAmount)
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Checked In Date : </span>@Html.DisplayFor(model => model.CheckedIndate)
+            </div>
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Checked Out Date : </span>@Html.DisplayFor(model => model.CheckedOutdate)
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-4  col-md-4  m-b-10">
+            <div class="controls">
+                <span>Advance Amount : </span>@Html.DisplayFor(model => model.AdvanceAmount)
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+        <div class="col-lg-12  col-md-12  m-b-10">
+            <div class="controls">
+                <span>Comment : </span>@Html.DisplayFor(model => model.OverallComments)
+            </div>
+        </div>
+    </div>
+
+
+}
+</form>
+<script type="text/javascript">
+
+
+
+    var validatedt = false;
+
+    var validatecheckInoutdt = false;
+
+
+    function ValidateFromReturnDates() {
+
+
+
+
+
+        var fromdt = $("#txtticketbookeddate").val().split("/");
+
+        var fromdate = new Date(fromdt[2], fromdt[1] - 1, fromdt[0]);
+
+
+        var returndt = $("#txtToJourney").val().split("/");
+
+        var returndate = new Date(returndt[2], returndt[1] - 1, returndt[0]);
+
+
+
+
+
+        if (fromdt != '' && fromdate != 'Invalid Date' && $("#returnjourney").prop('checked') == true && returndt != '' && returndate != 'Invalid Date') {
+
+            if (fromdate <= returndate) {
+
+                if (fromdate < returndate) {
+
+                    $("#hideaccommodation").show();
+
+                    if ($("#hotelbooking").prop('checked') == true) {
+                        $("#hotelbokingdiv").show();
+                    }
+                    else {
+                        $("#hotelbokingdiv").hide();
+                    }
+                }
+                else {
+
+
+
+                    $('#hideaccommodation input').val('');
+                    $('#hideaccommodation textarea').val('');
+
+                    $('#hotelbooking').prop('checked', false);
+
+                    $("#hideaccommodation").hide();
+
+                }
+
+                $("#lblfrmtovalidate").hide();
+                $('#lblfrmtovalidate').text("");
+                $('.alert-danger').hide();
+
+                return true;
+
+            }
+            else {
+
+
+
+                $("#lblfrmtovalidate").show();
+                $('.alert-danger').show();
+                $('#lblfrmtovalidate').text("Todate Should be Greater than or equal to Fromdate");
+
+
+
+                return false;
+            }
+
+        }
+        else if ($("#returnjourney").prop('checked') == false && fromdt != '' && fromdate != 'Invalid Date') {
+
+            $("#lblfrmtovalidate").hide();
+            $('#lblfrmtovalidate').text("");
+
+            return true;
+        }
+
+        else {
+
+            if (fromdt == '' && fromdate == 'Invalid Date') {
+
+                $("#lblfrmtovalidate").show();
+                $('#lblfrmtovalidate').text("Please select Fromdate");
+
+            }
+            else if ($("#returnjourney").prop('checked') == true) {
+                if (returndate == '' && returndate == 'Invalid Date') {
+                    $("#lblfrmtovalidate").show();
+                    $('#lblfrmtovalidate').text("Please select Todate");
+                }
+            }
+            else {
+
+
+            }
+
+
+            return false;
+        }
+
+
+
+
+    }
+
+
+    function ValidateCheckInOutDates(returnjrstatus) {
+
+        var fromdt = $("#txtticketbookeddate").val().split("/");
+
+        var fromdate = new Date(fromdt[2], fromdt[1] - 1, fromdt[0]);
+
+        var returndt = $("#txtToJourney").val().split("/");
+
+        var returndate = new Date(returndt[2], returndt[1] - 1, returndt[0]);
+
+        var checkindt = $("#checkedIndate").val().split("/");
+
+        var checkindate = new Date(checkindt[2], checkindt[1] - 1, checkindt[0]);
+
+        var checkoutdt = $("#checkedOutdate").val().split("/");
+
+        var checkoutdate = new Date(checkoutdt[2], checkoutdt[1] - 1, checkoutdt[0]);
+
+
+        if (returnjrstatus == true) {
+
+            if (fromdt != '' && fromdate != 'Invalid Date' && returndt != '' && returndate != 'Invalid Date' && checkindt != '' && checkindate != 'Invalid Date' && checkoutdt != '' && checkoutdate != 'Invalid Date') {
+
+
+                if (checkoutdate >= checkindate && fromdate <= checkindate && checkoutdate <= returndate) {
+
+                    $("#lblcheckinoutvaliddate").hide();
+                    $('#lblcheckinoutvaliddate').text("");
+
+                    return true;
+                }
+                else {
+
+                    $("#lblcheckinoutvaliddate").show();
+                    $('#lblcheckinoutvaliddate').text("Checkin, Checkout dates must be with in from and todates ");
+
+                    return false;
+                }
+
+
+            }
+            else {
+
+                if (checkindate != 'Invalid Date' && checkoutdt != '' && checkoutdate != 'Invalid Date') {
+
+                }
+                else {
+                    $("#lblcheckinoutvaliddate").show();
+
+                    $('#lblcheckinoutvaliddate').text("Please enter the Checkin, Checkout dates");
+
+                }
+
+
+                return false;
+            }
+
+        }
+        else {
+
+
+
+            if (fromdt != '' && fromdate != 'Invalid Date' && checkindt != '' && checkindate != 'Invalid Date' && checkoutdt != '' && checkoutdate != 'Invalid Date') {
+
+                if (checkindate >= fromdate && checkindate <= checkoutdate) {
+
+                    $("#lblcheckinoutvaliddate").hide();
+                    $('#lblcheckinoutvaliddate').text("");
+
+                    return true;
+                }
+                else {
+
+                    $("#lblcheckinoutvaliddate").show();
+                    $('#lblcheckinoutvaliddate').text("Checkin, Checkout dates must be within from and todates and check in should be greater than check out");
+
+                    return false;
+                }
+
+            }
+            else {
+
+                $("#lblcheckinoutvaliddate").show();
+                $('#lblcheckinoutvaliddate').text("Enter valid Check in and Check out dates");
+
+                return false;
+
+            }
+
+        }
+
+
+
+
+    }
+
+
+
+    function validateDateEE() {
+
+
+
+
+        $.ajax({
+            cache: false,
+            url: '/Shared/ValidateTravelDeskDate',
+            type: 'POST',
+            data: { id: $('#ddlZone').val(), fromdate: $('#txtticketbookeddate').val(), todate: $('#txtToJourney').val() },
+            dataType: 'json',
+            success: function (data) {
+                // alert("success");
+                // $('#result').removeAttr('class').attr('class', ((data.Available) ? 'username-available-status' : 'username-not-available-status'));
+
+
+
+
+                if (!data) {
+
+                    $('#lblvalidation').text("You have already applied for this dates");
+
+                    alert("Please check the assigned Dates")
+
+                    validatedt = false;
+
+                } else {
+
+                    validatedt = true;
+
+                    $('#lblvalidation').text("");
+
+                }
+
+
+
+            },
+            failure: function () {
+                alert("fail");
+            }
+
+
+
+        });
+
+
+
+
+
+
+    }
+
+
+    $(document).ready(function () {
+
+
+        $("#lblcheckinoutvaliddate").hide();
+
+        $("#lblfrmtovalidate").hide();
+
+        $(".popupposition").hide();
+
+        $('#hotelbooking').change(function () {
+
+            if ($(this).is(":checked")) {
+
+            }
+            else {
+
+                $("#lblcheckinoutvaliddate").hide();
+                $('#lblcheckinoutvaliddate').text('');
+
+                validatecheckInoutdt = true;
+            }
+
+        });
+
+
+        if ($("#txtticketbookeddate").val() != undefined) {
+
+            if ($("#txtticketbookeddate").val().length > 0) {
+
+                var DOB = $("#txtticketbookeddate").val().split("-");
+
+                $("#txtticketbookeddate").val(DOB[0] + '/' + DOB[1] + '/' + DOB[2]);
+
+
+            }
+
+        }
+
+        if ($("#txtToJourney").val() != undefined) {
+            if ($("#txtToJourney").val().length > 0) {
+                var PassportValidate = $("#txtToJourney").val().split("-");
+
+                $("#txtToJourney").val(PassportValidate[0] + '/' + PassportValidate[1] + '/' + PassportValidate[2]);
+
+            }
+
+            var fromdt = $("#txtticketbookeddate").val().split("/");
+
+            var fromdate = new Date(fromdt[2], fromdt[1] - 1, fromdt[0]);
+
+            var returndt = $("#txtToJourney").val().split("/");
+
+            var returndate = new Date(returndt[2], returndt[1] - 1, returndt[0]);
+
+            if (fromdate.getTime() === returndate.getTime()) {
+
+                $("#hideaccommodation").hide();
+            }
+
+        }
+
+
+
+
+        //        alert(fromdate);
+
+        //        alert(returndate)
+
+        //        alert(fromdate.getTime() === returndate.getTime())
+
+
+
+        if ($("#checkedIndate").val() != undefined) {
+            if ($("#checkedIndate").val().length > 0) {
+                var checkedIndate = $("#checkedIndate").val().split("-");
+
+                $("#checkedIndate").val(checkedIndate[0] + '/' + checkedIndate[1] + '/' + checkedIndate[2]);
+
+            }
+        }
+
+
+        if ($("#checkedOutdate").val() != undefined) {
+            if ($("#checkedOutdate").val().length > 0) {
+                var checkedOutdate = $("#checkedOutdate").val().split("-");
+
+                $("#checkedOutdate").val(checkedOutdate[0] + '/' + checkedOutdate[1] + '/' + checkedOutdate[2]);
+
+            }
+        }
+
+
+
+
+
+        $.validator.addMethod("date", function (value, element) {
+
+            return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+        }, "Please enter a date in the format dd/mm/yyyy.");
+
+
+        $("#txtComments,#ddlEmployeeID,#txtfromlocation,#txttolocation,#txtticketbookeddate,#returnjourney,#txtToJourney,#txttravelpurpose,#txttotalticketamount,#hotelbooking,#txtHotelDetails,#txtHotelamount,#checkedIndate,#checkedOutdate,#advanceamt,#txtAdvanceamount,#idmodeoftransport,#ddlModeTransport").tooltip({ track: true });
+
+
+        $(function () {
+            $(document).tooltip();
+        });
+        //        $('#checkedIndate').datepicker();
+        //        $('#checkedOutdate').datepicker();
+        //        $('#txtToJourney').datepicker();
+        //        $('#txtticketbookeddate').datepicker();
+        $('#returnjourney').click(function () {
+            $("#tojourney").toggle(this.checked);
+            $("#toModeofTransport").toggle(this.checked);
+            $("#txtToJourney").val('');
+            $("#txtToJourney-error").empty();
+            $("#ddlModeTransport").val('');
+            $("#ddlModeTransport-error").empty();
+            $("#txtToJourney").show();
+
+            $("#ddlModeTransport").show();
+            $("#hideaccommodation").show();
+        });
+
+        $('#advanceamt').click(function () {
+            $("#advnAmount").toggle(this.checked);
+            $("#txtAdvanceamount").val('');
+            $("#txtAdvanceamount-error").empty();
+
+        });
+
+
+        $("#travelother").click(function () {
+
+            $("#othertravelpurpose").toggle(this.checked);
+            $("#txttravelpurpose").val('');
+        });
+
+        $("#traveltraining").click(function () {
+
+            $("#othertravelpurpose").hide();
+            $("#txttravelpurpose").val('');
+        });
+
+
+        $('#hotelbooking').click(function () {
+            $("#hotelbokingdiv").toggle(this.checked);
+            $("#txtHotelDetails").val('');
+            $("#txtHotelamount").val('');
+            $("#checkedIndate").val('');
+            $("#checkedOutdate").val('');
+            $("#txtHotelDetails-error,#txtHotelamount-error,#checkedIndate-error,#checkedOutdate-error").empty();
+
+
+        });
+
+
+        $('.date').datepicker().on('changeDate', function (ev) {
+            ev.preventDefault();
+            $(this).datepicker('hide');
+
+        });
+
+
+        $('#txtticketbookeddate,#txtToJourney,#checkedIndate,#checkedOutdate').datepicker({ format: 'dd/mm/yyyy' }).on('changeDate', function (ev) {
+
+            ev.preventDefault();
+
+            $(this).datepicker('hide');
+
+
+
+            validatedt = ValidateFromReturnDates();
+
+
+
+
+
+            if ($("#hotelbooking").prop('checked') == true && $("#hideaccommodation").is(":visible")) {
+
+                var returnjrstatus = $("#returnjourney").prop('checked');
+
+                validatecheckInoutdt = ValidateCheckInOutDates(returnjrstatus);
+
+
+            }
+            else {
+
+                //alert("Alert for else");
+
+                validatecheckInoutdt = true;
+
+
+
+            }
+
+            if ($("#hotelbokingdiv").is(":visible") == false) {
+
+                $('#lblcheckinoutvaliddate').text("");
+
+                $('#lblcheckinoutvaliddate').hide();
+            }
+        });
+
+
+        $('#TravelUpload').show();
+        $('#IePhoto').hide();
+        $('#NotIePhoto').show();
+        $('.catedis_titlePhoto').show();
+        var _this;
+        var filename;
+
+        $("#dropzoneForm").dropzone({
+            maxFiles: 10,
+            previewsContainer: ".dropzone-previews",
+            maxfilesexceeded: function (file) {
+                this.removeFile(file);
+                var h = this.getAcceptedFiles().length;
+                if (h == 10 && jQuery(".dzq-success-msg-panel").hasClass("hide")) {
+                    jQuery(".dzq-success-msg-panel").removeClass("hide")
+                }
+            },
+            accept: function (file, done) {
+                var re = /(?:\.([^.]+))?$/;
+                var ext = re.exec(file.name)[1];
+                ext = ext.toUpperCase();
+
+                if (ext == "PNG" || ext == "PDF" || ext == "DOCX" || ext == "DOC" || ext == "JPEG" || ext == "JPG") {
+                                     done();
+                }
+                else {
+                    alert("just select png or pdf or docx or doc or jpeg or jpg files.");
+                    this.removeFile(file);
+                }
+            },
+            autoProcessQueue: false,
+            url: '/TravelDesk/UploadTickets',
+            uploadMultiple: false,
+            parallelUploads: 100,
+            init: function () {
+                var myDropzone = this;
+                $(".hider").each(function () {
+                    var id = $(this).val();
+                    var mockFile = { name: id, size: 12345, status: Dropzone.ADDED };
+                    myDropzone.options.addedfile.call(myDropzone, mockFile);
+
+                    var re = /(?:\.([^.]+))?$/;
+                    var ext = re.exec(id)[1];
+                    ext = ext.toUpperCase();
+
+
+                    if (ext == "PDF") {
+
+                        myDropzone.options.thumbnail.call(myDropzone, mockFile, "../../Content/Images/pdf1.png");
+                    }
+                    else if (ext == "DOCX" || ext == "DOC") {
+                        myDropzone.options.thumbnail.call(myDropzone, mockFile, "../../Content/Images/doc.png");
+                    }
+                    else {
+                      
+                        myDropzone.options.thumbnail.call(myDropzone, mockFile, "../../Content/TravelImages/" + id);
+                    }
+
+
+                });
+                var countfirst = $('.dz-preview').length;
+                this.on("removedfile", function (file) {
+                    $("<input type='hidden'>").attr({
+                        id: 'DeletedUrl',
+                        name: 'DeletedUrl'
+                    }).val(file.name).appendTo('#frmUpdateTravelDesk');
+
+                });
+                $('#frmUpdateTravelDesk').submit('submit', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    validatedt = ValidateFromReturnDates();
+                    if ($("#hotelbooking").prop('checked') == true && $("#hideaccommodation").is(":visible")) {
+
+                        var returnjrstatus = $("#returnjourney").prop('checked');
+
+                        validatecheckInoutdt = ValidateCheckInOutDates(returnjrstatus);
+
+
+                    }
+                    else {
+
+                        validatecheckInoutdt = true;
+
+
+
+                    }
+
+
+
+                    var isValid = $(this).valid();
+                    var valid = $("#frmUpdateTravelDesk").valid();
+
+                    if (isValid && valid && validatedt && validatecheckInoutdt) {
+
+                        $("#UpdateTravelLoadimg").show();
+                        $.ajax({
+                            cache: false,
+                            type: 'POST',
+                            url: '/Shared/UpdateTavelDesk',
+                            data: $("#frmUpdateTravelDesk").serialize(),
+                            dataType: 'json',
+                            success: function (data) {
+                                $("#UpdateTravelLoadimg").hide();
+                                $('.dzq-success-msg-panel').hide();
+                                if (data.Available === true) {
+                                    myDropzone.processQueue();
+                                    $('#result').text(data.Text);
+                                    $('#result').show();
+                                    $(".popupposition").show();
+                                    $(':input', $("#frmUpdateTravelDesk"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                                    $('#modelbg').hide();
+                                    $('#modelbg').hide();
+                                    $('.dropzone-previews').html('');
+
+                                    setTimeout(function () {
+                                        $.ajax({
+                                            url: "/Shared/TravelDesk",
+                                            contentType: 'application/html; charset=utf-8',
+                                            type: 'GET',
+                                            cache: false,
+                                            dataType: 'html'
+
+                                        })
+                     .success(function (result) {
+
+                         $('#divPartial').html(result);
+                     })
+                      .error(function (xhr, status) {
+                          // alert("2");
+                      });
+
+                                    }, 4000);
+
+                                }
+                            },
+
+                            error: function (event, jqxhr, settings, exception) {
+                                var responseTitle = $(event.responseText).filter('title').get(0);
+                                alert("error" + ($(responseTitle).text() + "\n" + formatErrorMessage(event, jqxhr)));
+                            }
+
+                        });
+                    }
+
+                    else {
+                        return false;
+                    }
+
+
+                });
+
+
+                function formatErrorMessage(jqXHR, exception) {
+                    if (jqXHR.status === 0) {
+                        return ('Not connected.\nPlease verify your network connection.');
+                    } else if (jqXHR.status == 404) {
+                        return ('The requested page not found. [404]');
+                    } else if (jqXHR.status == 500) {
+                        return ('Internal Server Error [500].');
+                    } else if (exception === 'parsererror') {
+                        return ('Requested JSON parse failed.');
+                    } else if (exception === 'timeout') {
+                        return ('Time out error.');
+                    } else if (exception === 'abort') {
+                        return ('Ajax request aborted.');
+                    } else {
+                        return ('Uncaught Error.\n' + jqXHR.responseText);
+                    }
+                }
+            }
+        });
+        $(".update").click(function (e) {
+            e.preventDefault();
+
+            var redirecturl = $(this).attr('href');
+            //        alert(redirecturl);
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+           $('#divPartial').show();
+           //alert(result);
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+           //alert("2");
+       });
+        });
+
+
+
+
+
+        //Allow users to enter numbers only
+        $(".numericOnly").bind('keypress', function (e) {
+
+            if ((e.which < 48 || e.which > 57)) {
+                if (e.which == 8 || e.which == 46 || e.which == 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        });
+
+
+
+
+    });
+</script>
+<script src="../../Scripts/classie.js"></script>
+<script src="../../Scripts/modalEffects.js"></script>
+<!-- for the blur effect -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+</script>
+<script src="../../Scripts/cssParser.js"></script>
+<script src="../../Scripts/css-filters-polyfill.js"></script>

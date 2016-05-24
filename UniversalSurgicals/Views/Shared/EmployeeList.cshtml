@@ -1,0 +1,359 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.Employees>
+@Scripts.Render("~/bundles/jqueryval")
+<div id="testemp">
+    @if (@ViewBag.empgroup == null)
+    {
+        <div class="col-lg-12 search-strip">
+            @* @if (Model.Count != 0)
+            {*@
+            <div class="col-lg-8 col-md-8">
+                <div class="col-lg-8 col-md-8 search-fld no-padding">
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter Employee name", @required = "required", @class = "form-control ", @maxlength = "150", @Title = "Employee Name" })</div>
+                <div class="col-lg-4 col-md-4  ">
+                    <a href="#" id="searchBtn" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa fa-search">
+                    </i> Search</a>
+                </div>
+            </div>
+            @* }*@
+            @if (Session["AccountMgr"] != null)
+            {
+                <div class="col-lg-3 col-md-3">
+                    <a href="@Url.Action("CreateEmployee", "Admin")" class="md-trigger update frm-src-fld" data-modal="modal-16">
+                        <i class="fa fa-user-plus"></i> Create New Employee</a>
+                </div>
+                
+            }
+        </div>
+        
+    }
+    <div class="content-cont col-lg-12 col-md-12 no-padding" id="testemp1">
+        <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+            @if (@ViewBag.empgroup == null)
+            {
+                <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 grid-headding">
+                        <i class="fa fa-user"></i> Employees</div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <div class="col-md-4 emp-exp-dt pull-right text-right">
+                            <div class="clearfix">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+            }
+            <div class="clearfix">
+            </div>
+            <div class="table-responsive">
+                @if (Model.Count != 0)
+                {
+                    <table class="table no-more-tables col-lg-12 table-color">
+                        <thead>
+                            <tr class="grid-headding-strips">
+                                <th>
+                                    Employee ID
+                                </th>
+                                @if (@ViewBag.empgroup == null)
+                                {
+                                    <th>
+                                        <div id="sortdivemplist">
+                                            @Html.ActionLink("Employee Name", "EmployeeList", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                                        </div>
+                                    </th>
+                                }
+                                else
+                                {
+                                    <th>
+                                        <div id="">
+                                            Employee Name
+                                        </div>
+                                    </th>
+                                }
+                                @*<th class="col-lg-2 col-md-2">Employee Name</th>*@
+                                <th>
+                                    Manager Name
+                                </th>
+                                <th>
+                                    Zone
+                                </th>
+                                <th>
+                                    No. Of Leaves
+                                </th>
+                                <th>
+                                    Role
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                @if (Session["AccountMgr"] != null)
+                                { <th>
+                                    @if (@ViewBag.empgroup == null) { 
+                                    @:    Actions
+                                    }
+                                </th>
+                                }
+                                <th>
+                                    View
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="v-align-middle">@item.Employee_ID
+                                    </td>
+                                    <td class="v-align-middle">@item.FullName
+                                    </td>
+                                    <td class="v-align-middle">@item.ManagerName
+                                    </td>
+                                    <td class="v-align-middle">@item.ZoneName
+                                    </td>
+                                    @if (item.NoOfLeaves != null)
+                                    {
+                                        <td class="v-align-middle">@item.NoOfLeaves
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="v-align-middle">
+                                            No Leaves
+                                        </td>
+
+                                    }
+                                    <td class="v-align-middle">@item.Role
+                                    </td>
+                                    <td class="v-align-middle">@item.Position
+                                    </td>
+                                    @if (Session["AccountMgr"] != null)
+                                    {
+
+                                        if (@ViewBag.empgroup == null)
+                                        {
+                                        <td class="v-align-middle">
+                                            @*   @Html.ActionLink("Update", "UpdateEmployee", "Admin", new { id = (int?)item.Id }, new { @class = "update" })*@
+                                            <a href="@Url.Action("UpdateEmployee", "Admin", new { id = (int?)item.Id })" class="update update-icon" id="usergroupempupdate" data-toggle="tooltip" data-placement="top" title="Update">
+                                                <i class="fa fa-pencil-square-o"></i></a>
+                                        </td>
+                                    
+                                        <td class="v-align-middle">
+                                            <a href="@Url.Action("ViewProfile", "Shared", new { id = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="left" title="View Complete Profile">
+                                                <i class="fa fa-eye eyesize"></i></a>
+                                        </td>
+                                        }
+                                        else
+                                        {
+                                    
+                                        <th>
+                                            <td class="v-align-middle">
+                                                <a href="@Url.Action("ViewProfile", "Shared", new { id = (int?)item.Id, profile = "ug" })" class="update update-icon" data-toggle="tooltip" data-placement="left" title="View Complete Profile">
+                                                    <i class="fa fa-eye eyesize"></i></a>
+                                            </td>
+                                        </th>
+                                        }
+
+                                    }
+                                    @if (Session["Manager"] != null)
+                                    {
+                                        <td class="v-align-middle">
+                                            @*@Html.ActionLink("View", "UpdateEmployee", "Manager", new { id = (int?)item.Id }, new { @class = "update" })*@
+                                            <a href="@Url.Action("ViewProfile", "Shared", new { id = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="left" title="View Complete Profile">
+                                                <i class="fa fa-eye eyesize"></i></a>
+                                        </td>
+                                    }
+                                    @if (Session["TravelManager"] != null)
+                                    {
+                                        <td class="v-align-middle">
+                                            @*@Html.ActionLink("View", "UpdateEmployee", "TravelManager", new { id = (int?)item.Id }, new { @class = "update" })*@
+                                            <a href="@Url.Action("ViewProfile", "Shared", new { id = (int?)item.Id })" class="update update-icon" data-toggle="tooltip" data-placement="left" title="View Complete Profile">
+                                                <i class="fa fa-eye eyesize"></i></a>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+        
+                    <div class="col-lg-12 col-md-12">
+                        <div id="myPager2" class="pull-right">
+                            @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                         "EmployeeList", "Shared",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        )
+    )
+                        </div>
+                    </div>
+       
+                }
+                else
+                {
+                    <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+                    <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+                        
+                        </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<script type="text/javascript">
+    $('.update,#myPager2,#sortdivemplist').bind('contextmenu', function (e) {
+        alert("Mouse right click disabled");
+        return false;
+    }); 
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+
+        //        var targetrouter = '@Session["url"]'
+
+
+        //        if (targetrouter == '/Admin/UserGroupsList') {
+        //            alert('usergrouplist');
+        //            $("#usergroupempupdate").hide();
+        //        }
+
+
+        //        $("#tab-01").click(function () {
+        //            alert('tab');
+        //            $("#usergroupempupdate").hide();
+
+        //        });
+
+
+
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#searchBtn').click(function (e) {
+            e.preventDefault();
+            // alert();
+            if ($('#SearchString').val() != "") {
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: "/Shared/EmployeeList",
+                    type: 'GET',
+                    cache: false,
+                    data: { searchString: $('#SearchString').val() },
+
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#testemp').html('');
+                        $('#testemp').empty();
+                        $('#testemp').html(result);
+                    }
+                });
+            }
+            else {
+                return;
+            }
+            return false;
+        });
+
+
+        $(function () {
+            $('#sortdivemplist').on('click', 'a', function (e) {
+                e.preventDefault();
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+
+                    cache: false,
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#testemp').html('');
+                        $('#testemp').empty();
+                        $('#testemp').html(result);
+                    }
+                });
+                return false;
+            });
+        })
+
+        $(function () {
+            $('#myPager2').on('click', 'a', function (e) {
+                e.preventDefault();
+                if (this.href != "") {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+
+                    $.ajax({
+                        url: this.href,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            $('#divPartial').html('');
+                            $('#divPartial').empty();
+                            $('#divPartial').html(result);
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+        $(".md-overlay").click(function (e) {
+            $('#modal-161').removeClass('md-show');
+        });
+        $(".update").click(function (e) {
+            e.preventDefault();
+
+            var redirecturl = $(this).attr('href');
+            //        alert(redirecturl);
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+
+            })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').show();
+           $('#divPartial').html('');
+           //alert(result);
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+           //alert("2");
+       });
+        });
+
+    });
+
+
+
+
+</script>

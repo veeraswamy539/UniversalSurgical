@@ -1,0 +1,165 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.Employees>
+@Scripts.Render("~/bundles/jqueryval")
+
+
+
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="testzonesemp"> 
+
+
+
+<div class=" container-fluid emp-exd-frm p-b-20">
+@if (@ViewBag.empgroup == null)
+{
+    <div class="grid-hd col-lg-12 col-md-12 col-sm-12" style="background-color:#333645; color:#fff;">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 " >Employees List</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+    </div>
+    
+}
+    <div class="clearfix"></div>
+    <br />
+    @if (Model.Count != 0)
+    {
+             <table class="table no-more-tables col-lg-12">
+                <thead>
+                    <tr>
+                      
+                        <th class="col-lg-2 col-md-2">Employee ID</th>
+                        <th class="col-lg-2 col-md-2">Employee Name</th>
+
+                       @* <div id="sortdiv">
+                          
+                             @Html.ActionLink("Employee Name", "ZoneEmployeeList", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                       </div> *@
+                        
+                        @*<th class="col-lg-2 col-md-2">Employee Name</th>*@
+                        <th class="col-lg-2 col-md-2">Manager Name</th>
+                        <th class="col-lg-2 col-md-2">Zone</th>
+                        <th class="col-lg-2 col-md-2">Status</th>
+                     
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                                                <tr>
+                                              
+                                                    <td class="v-align-middle">@item.Employee_ID</td>
+                                                    <td class="v-align-middle">@item.FirstName @item.LastName</td>
+                                                    <td class="v-align-middle">@item.ManagerName</td>
+                                                    <td class="v-align-middle">@item.ZoneName</td>
+                                                     <td class="v-align-middle">@item.Position</td>
+
+                                
+                                                </tr>
+                    }
+                </tbody>
+            </table>
+             <div class="col-lg-12 col-md-12">
+                <div id="myPager1">
+                    @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+                  "ZoneEmployeeList","Shared",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        )
+    )
+                </div>
+                </div>
+    }
+    else
+    {
+        <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound"> 
+        
+       <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+        
+        </div>
+    }
+    </div>
+</div>   
+       
+<script type="text/javascript">
+    $('#searchBtn').click(function (e) {
+        e.preventDefault();
+        // alert();
+        if ($('#SearchString').val() != "") {
+            $.ajax({
+                url: "/Shared/ZoneEmployeeList",
+                type: 'GET',
+                cache: false,
+                data: { searchString: $('#SearchString').val() },
+
+                success: function (result) {
+                    $('#testzonesemp').html('');
+                    $('#testzonesemp').empty();
+                    $('#testzonesemp').html(result);
+                }
+            });
+        }
+        else {
+            return;
+        }
+        return false;
+    });
+
+
+    $(function () {
+        $('#sortdiv').on('click', 'a', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+
+                cache: false,
+                success: function (result) {
+                    $('#testzonesemp').html('');
+                    $('#testzonesemp').empty();
+                    $('#testzonesemp').html(result);
+                }
+            });
+            return false;
+        });
+    })
+
+
+    $('#myPager1').on('click', 'a', function (e) {
+        e.preventDefault();
+        if (this.href != "") {
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+
+                cache: false,
+                success: function (result) {
+                    $("#AdminLoadingBg").fadeOut();
+                    $("#AdminLoadimg").hide();
+                    $('#testzonesemp').html('');
+                    $('#testzonesemp').empty();
+                    $('#testzonesemp').html(result);
+                }
+            });
+        }F
+    });
+    
+    $(".md-overlay").click(function (e) {
+        $('#modal-161').removeClass('md-show');
+    });
+   
+  
+
+</script>

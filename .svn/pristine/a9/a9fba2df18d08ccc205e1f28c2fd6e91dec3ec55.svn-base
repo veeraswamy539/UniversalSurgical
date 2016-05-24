@@ -1,0 +1,450 @@
+﻿@using Universal.BusinessEntities;
+@model EmployeeAssets
+@Scripts.Render("~/bundles/jqueryval")
+
+<form id="frmAssetsAssigned">
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 search-strip">
+    <div class="col-lg-3 pull-right">
+        <a href="@Url.Action("EmployeeAssetsList", "Shared")" class="md-trigger update frm-src-fld update" data-modal="modal-16">
+        <i class="fa fa-arrow-left"></i> Employee Assets List</a>
+    </div>
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding">
+    <div class=" container-fluid emp-exd-frm margin-20">
+
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 grid-headding">
+                <i class="fa fa-suitcase"></i> Employees Assets Assigned
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+
+         <div class="col-lg-12" style="margin-top:10px">
+                    <div class="col-lg-4">
+                <div class="controls">
+                @if (ViewBag.EmployeesList != null)
+                {   
+                    @Html.DropDownList("FK_EmployeeID", ViewBag.EmployeesList as List<SelectListItem>, "Select Employee", new { @class = "form-control", @id = "ddlEmployee", @placeholder = "Employee", @Title = "Employee" })
+                    @Html.ValidationMessageFor(Model=>Model.FK_EmployeeID)
+                }
+                </div>
+            </div>
+
+         </div>
+
+            <div class="clearfix"></div>
+        
+        <div class="col-lg-12" style="margin-top:10px">
+
+        
+            
+            
+        
+            
+    
+        <div class="clearfix"></div>
+        
+        <div class="col-lg-12" style="margin-top:15px">
+            
+            <div class="col-lg-4">
+                <div class="col-lg-1">@Html.CheckBoxFor(Model => Model.Datacard, new { @id="chkDatacard"})</div>
+                <div class="col-lg-2 no-padding">@Html.LabelFor(Model => Model.Datacard, new { @for = "chkDatacard" })</div>
+                <div class="col-lg-8"><div class="control" id="divDatacard" style="display:none; margin-top:-6px!important;">@Html.TextBoxFor(Model => Model.DatacardNo, new { @id = "txtDatacardNo", @class = "form-control", @placeholder="Enter Datacard Number", @title="Datacard Number" })</div></div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="col-lg-1">@Html.CheckBoxFor(Model => Model.Simcard, new { @id="chkSimcard"})</div>
+                <div class="col-lg-2 no-padding">@Html.LabelFor(Model => Model.Simcard, new { @for = "chkSimcard" })</div>
+                <div class="col-lg-8"><div class="control" id="divSimcard" style="display:none; margin-top:-6px!important;">@Html.TextBoxFor(Model => Model.SimcardNo, new {@class="form-control", @id="txtSimcardNo", @placeholder="Enter Simcard No", @title="Simcard Number"})</div></div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="col-lg-1">@Html.CheckBoxFor(Model => Model.Cellphone, new {@id="chkCellphone" })</div>
+                <div class="col-lg-2 no-padding">@Html.LabelFor(Model => Model.Cellphone, new { @for = "chkCellphone" })</div>
+                <div class="col-lg-8"><div class="control" id="divCellphone" style="display:none; margin-top:-6px!important;">@Html.TextBoxFor(Model => Model.CellphoneNo, new { @id="txtCellphoneNo", @class="form-control", @placeholder="Enter Cellphone Number", @title="Cellphone Number"})</div></div>
+            </div>
+
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-lg-12" style="margin-top:15px">
+
+            <div class="col-lg-4">
+                <div class="col-lg-1">@Html.CheckBoxFor(Model => Model.Multimeter, new {@id="chkMultimeter" })</div>
+                <div class="col-lg-2 no-padding">@Html.LabelFor(Model => Model.Multimeter, new { @for = "chkMultimeter" })</div>
+                <div class="col-lg-8"><div class="control" id="divMultimeter" style="display:none; margin-top:-6px!important;">@Html.TextBoxFor(Model => Model.MultimeterNo, new { @id="txtMultimeterNo", @class="form-control", @placeholder="Enter Multimeter Number", @title="Multimeter Number"})</div></div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="col-lg-1">@Html.CheckBoxFor(Model => Model.Toolkit, new { @id="chkToolkit"})</div>
+                <div class="col-lg-2 no-padding">@Html.LabelFor(Model => Model.Toolkit, new { @for = "chkToolkit" })</div>
+                <div class="col-lg-8"><div class="control" id="divToolkit" style="display:none; margin-top:-6px!important;">@Html.TextBoxFor(Model => Model.ToolkitNo, new { @id="txtToolkitNo", @class="form-control", @placeholder="Enter Toolkit Number", @title="Toolkit"})</div></div>
+            </div>
+
+
+            <div class="col-lg-4">
+                <div class="col-lg-1">@Html.CheckBoxFor(Model => Model.LaptopBag, new {@id="chkLaptopBag" })</div>
+                <div class="col-lg-2 no-padding">@Html.LabelFor(Model => Model.LaptopBag, new { @for = "chkLaptopBag" })</div>
+                <div class="col-lg-8"><div class="control" id="divLaptopBag" style="display:none; margin-top:-6px!important;">@Html.TextBoxFor(Model => Model.LaptopBagName, new { @id = "txtLaptop", @class = "form-control", @placeholder = "Laptop Bag", @title = "Laptop Bag" })</div></div>
+            </div>
+
+        </div>
+    
+        <div class="clearfix"></div>
+
+        <div class="col-lg-12" style="margin-top:15px">
+        <div class="col-lg-4">
+                <div class="col-lg-1">@Html.CheckBoxFor(Model => Model.Laptop, new { @id="chkLaptop"})</div>
+                <div class="col-lg-2 no-padding">@Html.LabelFor(Model => Model.Laptop, new { @for="chkLaptop"})</div>
+                <div class="col-lg-8"><div class="control" id="divlaptop" style="display:none; margin-top:-6px!important;">@Html.TextBoxFor(Model => Model.LaptopNo, new { @id = "txtLaptopNo", @class = "form-control", @placeholder = "Enter Laptop Number", @title = "Laptop Number" })</div></div>
+            </div>
+
+        </div>
+
+         <div class="clearfix"></div>
+        
+        <div class="col-lg-12" style="display:none">
+            <div class="col-lg-12  col-md-4 m-b-10">
+                <div class="controls">
+                    @Html.TextAreaFor(m=>m.Others, new {@class="form-control", @title="Other", @placeholder="Other"})
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 pull-right text-right m-b-20" style="margin-top:10px">
+        <div class="dfl-buttom col-lg-6 col-md-4 col-sm-12 col-xs-12">
+            <input type="submit" value="Submit" name="Submit" id="btnSubmit" />
+        </div>
+        <div class="dfl-buttom  col-lg-6 col-md-4 col-sm-12 col-xs-12">    
+            <input type="reset" value="Cancel" name="Cancel" id="btnCancel" />
+        </div>
+    </div>
+        @Html.HiddenFor(Model => Model.flag, new { @id="txtFlag"})
+        @Html.HiddenFor(Model => Model.Id, new {@id="txtID" })
+    </div>
+    </div>
+</div>
+</form>
+<div class="popupposition" style="display:none;">
+ <div class="alert alert-success" id="Expenditurewarning" runat="server">
+<strong>Success !</strong><br /><label id="trainingerrormessage"></label>
+
+
+</div>
+
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+        var Id = $('#txtID').val();
+        var laptopValue = $('#chkLaptop').is(":checked");
+        var laptopBagValue = $('#chkLaptopBag').is(":checked");
+        var DatacardValue = $('#chkDatacard').is(":checked");
+        var SimcardValue = $('#chkSimcard').is(":checked");
+        var CellphoneValue = $('#chkCellphone').is(":checked");
+        var MultimeterValue = $('#chkMultimeter').is(":checked");
+        var ToolkitValue = $('#chkToolkit').is(":checked");
+
+        if (laptopValue == true)
+            $('#divlaptop').show();
+        else
+            $('#divlaptop').hide();
+
+        if (laptopBagValue == true)
+            $('#divLaptopBag').show();
+        else
+            $('#divLaptopBag').hide();
+
+        if (DatacardValue == true)
+            $('#divDatacard').show();
+        else
+            $('#divDatacard').hide();
+
+        if (SimcardValue == true)
+            $('#divSimcard').show();
+        else
+            $('#divSimcard').hide();
+
+        if (CellphoneValue == true)
+            $('#divCellphone').show();
+        else
+            $('#divCellphone').hide();
+
+        if (MultimeterValue == true)
+            $('#divMultimeter').show();
+        else
+            $('#divMultimeter').hide();
+
+        if (ToolkitValue == true)
+            $('#divToolkit').show();
+        else
+            $('#divToolkit').hide();
+
+
+        if (Id > 0) {
+            $('#ddlEmployee').attr('disabled', true);
+            $('#txtFlag').val('5');
+        }
+
+        $('#chkLaptop').change(function (e) {
+            var chkstatus = $('#chkLaptop').is(":checked");
+            if (chkstatus == true) {
+                $('#divlaptop').show();
+                $('#txtLaptopNo').val('');
+            }
+            else {
+                $('#divlaptop').hide();
+                $('#txtLaptopNo').val('');
+            }
+        });
+
+        $('#chkLaptopBag').change(function (e) {
+            var chkstatus = $('#chkLaptopBag').is(":checked");
+            if (chkstatus == true) {
+                $('#divLaptopBag').show();
+                $('#txtLaptop').val('');
+            }
+            else {
+                $('#divLaptopBag').hide();
+                $('#txtLaptop').val('');
+            }
+        });
+
+        $('#chkDatacard').change(function (e) {
+            var chkstatus = $('#chkDatacard').is(":checked");
+            if (chkstatus == true) {
+                $('#divDatacard').show();
+                $('#txtDatacardNo').val('');
+            }
+            else {
+                $('#divDatacard').hide();
+                $('#txtDatacardNo').val('');
+            }
+        });
+
+        $('#chkSimcard').change(function (e) {
+            var chkstatus = $('#chkSimcard').is(":checked");
+            if (chkstatus == true) {
+                $('#divSimcard').show();
+                $('#txtSimcardNo').val('');
+            }
+            else {
+                $('#divSimcard').hide();
+                $('#txtSimcardNo').val('');
+            }
+        });
+
+        $('#chkCellphone').change(function (e) {
+            var chkstatus = $('#chkCellphone').is(":checked");
+            if (chkstatus == true) {
+                $('#divCellphone').show();
+                $('#txtCellphoneNo').val('');
+            }
+            else {
+                $('#divCellphone').hide();
+                $('#txtCellphoneNo').val('');
+            }
+        });
+
+        $('#chkMultimeter').change(function (e) {
+            var chkstatus = $('#chkMultimeter').is(":checked");
+            if (chkstatus == true) {
+                $('#divMultimeter').show();
+                $('#txtMultimeterNo').val('');
+            }
+            else {
+                $('#divMultimeter').hide();
+                $('#txtMultimeterNo').val('');
+            }
+        });
+
+        $('#chkToolkit').change(function (e) {
+            var chkstatus = $('#chkToolkit').is(":checked");
+            if (chkstatus == true) {
+                $('#txtToolkitNo').val('');
+                $('#divToolkit').show();
+            }
+            else {
+                $('#divToolkit').hide();
+                $('#txtToolkitNo').val('');
+            }
+        });
+
+        $('#btnSubmit').click(function (e) {
+            e.preventDefault();
+            $('#ddlEmployee').removeAttr('disabled')
+            var valid = $("#frmAssetsAssigned").valid();
+            var Id = $('#txtID').val();
+            var flag = $('#txtFlag').val();
+            if (valid) {
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Shared/AssetAssigned',
+                    data: $("#frmAssetsAssigned").serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $('#chkToolkit').attr('checked', false);
+                        $('#chkMultimeter').attr('checked', false);
+                        $('#chkCellphone').attr('checked', false);
+                        $('#chkSimcard').attr('checked', false);
+                        $('#chkDatacard').attr('checked', false);
+                        $('#chkLaptopBag').attr('checked', false);
+                        $('#chkLaptop').attr('checked', false);
+
+                        $('#divToolkit').hide();
+                        $('#divMultimeter').hide();
+                        $('#divCellphone').hide();
+                        $('#divSimcard').hide();
+                        $('#divDatacard').hide();
+                        $('#divLaptopBag').hide();
+                        $('#divlaptop').hide();
+
+                        $('#txtLaptopNo').val('');
+                        $('#txtLaptop').val('');
+                        $('#txtDatacardNo').val('');
+                        $('#txtSimcardNo').val('');
+                        $('#txtCellphoneNo').val('');
+                        $('#txtMultimeterNo').val('');
+                        $('#txtToolkitNo').val('');
+
+                        $('#ddlEmployee').val(0);
+
+                        $('#btnSubmit').val('Submit');
+                        $('#btnCancel').val('Cancel');
+                        $('#ddlEmployee').attr('readonly', false);
+                        $('#txtFlag').val('1');
+                        $(".popupposition").fadeIn();
+                        $('#trainingerrormessage').text(data.Text);
+                        $('#trainingerrormessage').show();
+                        $('.popupposition').delay(3000).fadeOut('slow');
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+                });
+            }
+            else {
+                return;
+            }
+        });
+
+        $('#btnCancel').click(function (e) {
+            e.preventDefault();
+            var Id = $('#txtID').val();
+            var flag = $('#txtFlag').val();
+            if (Id > 0) {
+                $('#frmAssetsAssigned')[0].reset();
+
+                var laptopValue = $('#chkLaptop').is(":checked");
+                var laptopBagValue = $('#chkLaptopBag').is(":checked");
+                var DatacardValue = $('#chkDatacard').is(":checked");
+                var SimcardValue = $('#chkSimcard').is(":checked");
+                var CellphoneValue = $('#chkCellphone').is(":checked");
+                var MultimeterValue = $('#chkMultimeter').is(":checked");
+                var ToolkitValue = $('#chkToolkit').is(":checked");
+
+                if (laptopValue == true)
+                    $('#divlaptop').show();
+                else
+                    $('#divlaptop').hide();
+
+                if (laptopBagValue == true)
+                    $('#divLaptopBag').show();
+                else
+                    $('#divLaptopBag').hide();
+
+                if (DatacardValue == true)
+                    $('#divDatacard').show();
+                else
+                    $('#divDatacard').hide();
+
+                if (SimcardValue == true)
+                    $('#divSimcard').show();
+                else
+                    $('#divSimcard').hide();
+
+                if (CellphoneValue == true)
+                    $('#divCellphone').show();
+                else
+                    $('#divCellphone').hide();
+
+                if (MultimeterValue == true)
+                    $('#divMultimeter').show();
+                else
+                    $('#divMultimeter').hide();
+
+                if (ToolkitValue == true)
+                    $('#divToolkit').show();
+                else
+                    $('#divToolkit').hide();
+
+            }
+            else {
+                $('#chkToolkit').attr('checked', false);
+                $('#chkMultimeter').attr('checked', false);
+                $('#chkCellphone').attr('checked', false);
+                $('#chkSimcard').attr('checked', false);
+                $('#chkDatacard').attr('checked', false);
+                $('#chkLaptopBag').attr('checked', false);
+                $('#chkLaptop').attr('checked', false);
+
+                $('#txtLaptopNo').val('');
+                $('#txtLaptop').val('');
+                $('#txtDatacardNo').val('');
+                $('#txtSimcardNo').val('');
+                $('#txtCellphoneNo').val('');
+                $('#txtMultimeterNo').val('');
+                $('#txtToolkitNo').val('');
+
+                $('#divToolkit').hide();
+                $('#divMultimeter').hide();
+                $('#divCellphone').hide();
+                $('#divSimcard').hide();
+                $('#divDatacard').hide();
+                $('#divLaptopBag').hide();
+                $('#divlaptop').hide();
+
+                $('#ddlEmployee').val(0);
+
+                $('#ddlEmployee').attr('readonly', false);
+            }
+            $('#btnSubmit').val('Submit');
+            $('#btnCancel').val('Cancel');
+            $('#txtFlag').val(flag);
+        });
+
+
+        $(".update").click(function (e) {
+            e.preventDefault();
+            var redirecturl = $(this).attr('href');
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $("#AdminLoadingBg").fadeOut();
+                $("#AdminLoadimg").hide();
+                $('#divPartial').show();
+                $('#divPartial').html(result);
+            })
+            .error(function (xhr, status) {
+            });
+        });
+
+    });
+
+</script>

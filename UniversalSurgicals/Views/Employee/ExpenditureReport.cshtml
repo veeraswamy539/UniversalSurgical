@@ -1,0 +1,375 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.UserExpenses_Header>
+@Scripts.Render("~/bundles/jqueryval")
+@{
+    ViewBag.Title = "Update Order Confirmation";
+}
+
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 search-strip">
+    <div class="col-lg-12 col-md-12">
+        <div class="col-lg-3 dt-pik">
+            <div class="input-append success date">
+               @* @Html.TextBox("FromDate", "", new { @placeholder = "From Date", @required = "required", @Title = "From Date" })
+                <span class="add-on"><i class="fa fa-calendar"></i></span>*@
+                <select name="yearpicker" id="yearpicker" class="form-control"></select>
+            </div>
+        </div>
+        <div class="col-lg-3 dt-pik ">
+            <div class="input-append success date">
+            <select name="month" id="month" onchange="" size="1" class="form-control">
+    <option value="01">January</option>
+    <option value="02">February</option>
+    <option value="03">March</option>
+    <option value="04">April</option>
+    <option value="05">May</option>
+    <option value="06">June</option>
+    <option value="07">July</option>
+    <option value="08">August</option>
+    <option value="09">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+</select>
+
+
+    @*            @Html.TextBox("ToDate", "", new { @placeholder = "To Date", @required = "required", @Title = "To Date" })
+                <span class="add-on"><i class="fa fa-calendar"></i></span>*@
+            </div>
+        </div>
+
+
+
+       <div class="col-lg-3 dt-pik ">
+       
+        <div class="input-append success date">
+         <select name="days" id="days" class="form-control"></select>
+        </div>
+       
+       </div>
+
+
+        <div class="col-lg-3 col-md-4  ">
+            <a href="#" id="btnSubmit" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa">
+            </i> Submit</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="test">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+
+              <div id="ExcelLogo" style="text-align:left; display:none;">
+
+      <img src= "@Url.Content("~/Content/Images/login-logo.png")" alt="IMAGES" />
+
+      </div>
+
+      <div class="clearfix"></div>
+        <div id="Heading1" style="text-align:center; color:#333645; display:none; padding-bottom:20px; font-weight:bold;">Expense Report</div>
+         <div class="clearfix"></div>
+        <div id="Heading" style="display:none; float:left; color:#333645; width:50%;">
+        <label>Universal Surgicals</label>
+        <div class="clearfix"></div>
+        <label>15-15-57/3, 3/2, Prince Appartments</label>
+        <div class="clearfix"></div>
+         <label>Beach Road, Visakhapantam</label>
+      </div>
+        <div class="clearfix"></div>
+      <div id="divF" style="display:none; color:#333645; float:right;">
+        <label>Employee Name: @ViewBag.Fullname</label>
+       <div class="clearfix"></div>
+        <label>Zone: @ViewBag.Zone</label> 
+       <div class="clearfix"></div>
+       <label>From Date: @ViewBag.FromDate</label> 
+        <div class="clearfix"></div>
+        <label>To Date: @ViewBag.ToDate</label>  
+
+       </div>
+
+
+
+       <div class="clearfix"></div>
+
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <i class="fa fa-bar-chart"></i> Expense Report</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+ @if (Model.Count != 0)
+ {
+    <div class="dfl-buttom"><input type="button" id="btnExport" name="Export" value="Print" class="btn"/> </div>
+ }
+                     
+              
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+       
+        </div>
+        <div class="clearfix">
+        </div>
+       
+
+@if (Model != null)
+{
+       <table class="table no-more-tables col-lg-12  table-color">
+                <thead>
+                    <tr class="grid-headding-strips">
+
+                        <th class="col-lg-1 col-md-1 text-center">
+                                Sl.No
+                            </th>
+                        <th class="col-lg-1 col-md-1 text-center">
+                               Date
+                            </th>
+                        <th class="col-lg-2 col-md-2 text-center">
+                            Expense Type
+                        </th>
+                        <th class="col-lg-2 col-md-2 text-center">
+                From Location
+                        </th>
+                        <th class="col-lg-2 col-md-2 text-center">
+                           To Location
+                        </th>
+                        <th class="col-lg-2 col-md-2 text-center">
+                           Other Expense Details
+                        </th>
+                        <th class="col-lg-2 col-md-2 text-center">
+                           Invoice No/Distance
+                        </th>
+                        <th class="col-lg-1 col-md-1 text-center">
+                            Amount
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+ @{int j = 1;}
+                @foreach (var item in Model)
+                {
+
+
+                    foreach (var item1 in item.UserExpenseDetailsList)
+                    { <tr>
+                        <td class="v-align-middle text-center">@j</td>
+                        <td class="v-align-middle text-center">@item.FromDate.Value.ToString("dd-MM-yyyy").Replace("-", "/") </td>
+                        <td class="v-align-middle text-center">@item1.ExpenseTypeDetails</td>
+                        <td class="v-align-middle text-center">@item1.FromLocation</td>
+                        <td class="v-align-middle text-center">@item1.ToLocation</td>
+                        <td class="v-align-middle text-center">@item1.ReasonForOther</td>
+                        <td class="v-align-middle text-center">
+                        
+                        @if (item1.ExpenseTypeDetails.Contains("Bike") || item1.ExpenseTypeDetails.Contains("Car"))
+                        {
+                            @item1.TraveledKms @:Kms
+                        }
+                        else
+                        {
+                            @item1.InvoiceNo
+                        }
+                        </td>
+                        <td class="v-align-middle text-center">@item1.Amount</td>
+                      </tr>
+                     
+                    
+                        j++;
+                    }
+
+                }
+                
+                <tr>
+                    <td colspan="8" class=" text-right">
+                        @if (@ViewBag.TotalReportAmount != null)
+                        {
+                            <span style=" font-weight:bold; color:#ccc; text-transform:uppercase; text-align:right;  ">Total Amount : @ViewBag.TotalReportAmount</span>  
+                        }
+                    </td>
+                </tr>
+                
+                @if (@ViewBag.LumpsumAmount != null)
+                {
+                    <tr>
+                        <td colspan="8" class=" text-right">
+                            <span style=" font-weight:bold; color:#ccc; text-transform:uppercase; text-align:right;  ">Lumpsum Amount : @ViewBag.LumpsumAmount</span>  
+                        </td>
+                    </tr>
+                }
+                
+                @if (@ViewBag.AdvanceAmount != null)
+                {
+                    <tr>
+                        <td colspan="8" class=" text-right">
+                            <span style=" font-weight:bold; color:#ccc; text-transform:uppercase; text-align:right;  ">Advance Amount : @ViewBag.AdvanceAmount</span>  
+                        </td>
+                    </tr>
+                }
+
+                @if (@ViewBag.CloseBalance != null)
+                {
+                    <tr>
+                        <td colspan="8" class=" text-right">
+                            <span style=" font-weight:bold; color:#ccc; text-transform:uppercase; text-align:right;  ">Balance Amount : @ViewBag.CloseBalance</span>  
+                        </td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+    
+
+       
+    
+}
+
+
+    </div>
+</div>
+
+<!--[if lt IE 10]>
+    <script type="text/javascript">
+        $(function () {
+            // Invoke the plugin
+            $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+        });
+    </script>
+<![endif]-->
+
+
+<script type="text/javascript">
+
+
+    function FillDates() {
+
+        var year = $('#yearpicker').val();
+        var month = $('#month').val();
+        var days = Math.round(((new Date(year, month)) - (new Date(year, month - 1))) / 86400000);
+
+        $('#days').empty()
+
+        var newOption = "<option value='" + "10" + "'>01 to 10 Days</option>";
+        $("#days").append(newOption);
+        newOption = "<option value='" + "20" + "'>11 to 20 Days</option>";
+        $("#days").append(newOption);
+        newOption = "<option value='" + days + "'>21 to " + days + " Days</option>";
+        $("#days").append(newOption);
+
+    }
+
+    $(document).ready(function () {
+
+
+        for (i = new Date().getFullYear(); i > new Date().getFullYear() - 2; i--) {
+            $('#yearpicker').append($('<option />').val(i).html(i));
+        }
+
+        FillDates();
+
+        $("#month,#yearpicker").change(function () {
+
+            FillDates();
+
+        });
+
+        $('#FromDate,#ToDate').datepicker().on('changeDate', function (ev) {
+            ev.preventDefault();
+            $(this).datepicker('hide');
+        });
+
+
+
+        $("#btnExport").click(function (e) {
+            $('#Heading').show();
+            $('#Heading1').show();
+            $('#divF').show();
+            $('#ExcelLogo').show();
+            $('#btnExport').hide();
+            //            window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('div[id$=test]').html()));
+            //            e.preventDefault();
+            //            $('#Heading').hide();
+            //            $('#divF').hide();
+            //            $('#ExcelLogo').hide();
+            //            $('#Heading1').hide();
+
+            var contents = $("#test").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="~/Content/CSS/style.css" rel="stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+
+            $('#Heading').hide();
+            $('#divF').hide();
+            $('#ExcelLogo').hide();
+            $('#Heading1').hide();
+            $('#btnExport').show();
+
+        });
+
+        $('#btnSubmit').click(function (e) {
+
+            e.preventDefault();
+
+            var SDate;
+            var EDate;
+
+            if ($('#days').val() == "10") {
+
+                SDate = 1 + "/" + $('#month').val() + "/" + $('#yearpicker').val();
+                EDate = 10 + "/" + $('#month').val() + "/" + $('#yearpicker').val();
+
+
+            }
+            else if ($('#days').val() == "20") {
+
+                SDate = 11 + "/" + $('#month').val() + "/" + $('#yearpicker').val();
+                EDate = 20 + "/" + $('#month').val() + "/" + $('#yearpicker').val();
+
+            }
+            else {
+
+                SDate = 21 + "/" + $('#month').val() + "/" + $('#yearpicker').val();
+
+                EDate = $("#days").val() + "/" + $('#month').val() + "/" + $('#yearpicker').val();
+
+            }
+
+
+            if (SDate.length > 0 && EDate.length > 0) {
+                $.ajax({
+                    url: '/Employee/ExpenditureReport',
+                    type: "GET",
+                    cache: false,
+                    data: { SDate: SDate, EDate: EDate },
+                    success: function (data) {
+                        $("#divPartial").html('');
+                        $("#divPartial").html(data);
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(ex);
+                    }
+                });
+            }
+
+        });
+
+    });
+
+</script>

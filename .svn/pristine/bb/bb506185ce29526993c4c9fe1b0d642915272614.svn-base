@@ -1,0 +1,493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ED55FA48-A53B-4278-BEFF-9DF357E8106A}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UniversalSurgicals</RootNamespace>
+    <AssemblyName>UniversalSurgicals</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging">
+      <HintPath>..\packages\EnterpriseLibrary.Logging.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.Interception.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Interception.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.40804.0\lib\net40\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.1\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.2.0.20710.0\lib\net40\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.2.0.30506.0\lib\net40\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminSessionCheckingController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\EmpSessionCheckingController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\ManagerSessionCheckingController.cs" />
+    <Compile Include="Controllers\SessionCheckingController.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Controllers\TravelDeskController.cs" />
+    <Compile Include="Controllers\TravelDeskSessionCheckingController.cs" />
+    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\CSS\animate.min.css" />
+    <Content Include="Content\CSS\bootstrap-table-responsive.css" />
+    <Content Include="Content\CSS\component.css" />
+    <Content Include="Content\CSS\custom-icon-set.css" />
+    <Content Include="Content\CSS\custom-icons.css" />
+    <Content Include="Content\CSS\default.css" />
+    <Content Include="Content\CSS\large_screen_tweak.css" />
+    <Content Include="Content\CSS\magic_space.css" />
+    <Content Include="Content\CSS\print.css" />
+    <Content Include="Content\CSS\responsive.css" />
+    <Content Include="Content\CSS\style.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\awfonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\bpicons\bpicons.svg" />
+    <Content Include="Content\fonts\bpicons\license.txt" />
+    <Content Include="Content\fonts\custom-set.dev.svg" />
+    <Content Include="Content\fonts\custom-set.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Images\cover_pic.png" />
+    <Content Include="Content\Images\icon\noti-cross-2x.png" />
+    <Content Include="Content\Images\icon\noti-cross.png" />
+    <Content Include="Content\Images\icon\online-2x.png" />
+    <Content Include="Content\Images\icon\online.png" />
+    <Content Include="Content\Images\icon\portlet-tray-2x.png" />
+    <Content Include="Content\Images\icon\portlet-tray.png" />
+    <Content Include="Content\Images\icon\status.png" />
+    <Content Include="Content\Images\icon\status2x.png" />
+    <Content Include="Content\Images\icon\Tick-2x.png" />
+    <Content Include="Content\Images\icon\Tick.png" />
+    <Content Include="Content\Images\icon\top-tray.png" />
+    <Content Include="Content\Images\icon\top-trayx2.png" />
+    <Content Include="Content\Images\invoicelogo.png" />
+    <Content Include="Content\Images\invoicelogo2x.png" />
+    <Content Include="Content\Images\loading.gif" />
+    <Content Include="Content\Images\login-logo.png" />
+    <Content Include="Content\Images\login_bg.jpg" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\logo2x.png" />
+    <Content Include="Content\Images\notification-alert.png" />
+    <Content Include="Content\Images\others\acadia.jpg" />
+    <Content Include="Content\Images\others\arches.jpg" />
+    <Content Include="Content\Images\others\crater.jpg" />
+    <Content Include="Content\Images\others\denali.jpg" />
+    <Content Include="Content\Images\others\glacier.jpg" />
+    <Content Include="Content\Images\others\grand.jpg" />
+    <Content Include="Content\Images\others\great.jpg" />
+    <Content Include="Content\Images\others\haleakala.jpg" />
+    <Content Include="Content\Images\others\yellowstone.jpg" />
+    <Content Include="Content\Images\others\zion.jpg" />
+    <Content Include="Content\Images\prf-no-img.png" />
+    <Content Include="Content\Images\profile-pic-big.png" />
+    <Content Include="Content\Images\profile-pic.png" />
+    <Content Include="Content\Images\profiles\1.png" />
+    <Content Include="Content\Images\profiles\2.png" />
+    <Content Include="Content\Images\profiles\3.png" />
+    <Content Include="Content\Images\profiles\a.jpg" />
+    <Content Include="Content\Images\profiles\a2x.jpg" />
+    <Content Include="Content\Images\profiles\avatar.jpg" />
+    <Content Include="Content\Images\profiles\avatar2x.jpg" />
+    <Content Include="Content\Images\profiles\avatar_small.jpg" />
+    <Content Include="Content\Images\profiles\avatar_small2x.jpg" />
+    <Content Include="Content\Images\profiles\b.jpg" />
+    <Content Include="Content\Images\profiles\b2x.jpg" />
+    <Content Include="Content\Images\profiles\ba.jpg" />
+    <Content Include="Content\Images\profiles\ba2x.jpg" />
+    <Content Include="Content\Images\profiles\bb.jpg" />
+    <Content Include="Content\Images\profiles\bb2x.jpg" />
+    <Content Include="Content\Images\profiles\bc.jpg" />
+    <Content Include="Content\Images\profiles\bc2x.jpg" />
+    <Content Include="Content\Images\profiles\bd.jpg" />
+    <Content Include="Content\Images\profiles\bd2x.jpg" />
+    <Content Include="Content\Images\profiles\be.jpg" />
+    <Content Include="Content\Images\profiles\be2x.jpg" />
+    <Content Include="Content\Images\profiles\c.jpg" />
+    <Content Include="Content\Images\profiles\c2x.jpg" />
+    <Content Include="Content\Images\profiles\d.jpg" />
+    <Content Include="Content\Images\profiles\d2x.jpg" />
+    <Content Include="Content\Images\profiles\e.jpg" />
+    <Content Include="Content\Images\profiles\e2x.jpg" />
+    <Content Include="Content\Images\profiles\f.jpg" />
+    <Content Include="Content\Images\profiles\f2x.jpg" />
+    <Content Include="Content\Images\profiles\h.jpg" />
+    <Content Include="Content\Images\profiles\h2x.jpg" />
+    <Content Include="Content\Images\profiles\userImage.png" />
+    <Content Include="Content\Images\pullup.png" />
+    <Content Include="Content\Images\pullup2x.png" />
+    <Content Include="Content\Images\sidebar-menu-arrow.png" />
+    <Content Include="Content\Images\small-profile-pic.png" />
+    <Content Include="Content\Images\Universal Surgical_Logo.jpg" />
+    <Content Include="Content\Images\wea.jpg" />
+    <Content Include="Content\Images\widget-arrow-blue.png" />
+    <Content Include="Content\Images\widget-arrow-green.png" />
+    <Content Include="Content\Images\widget-arrow-orange.png" />
+    <Content Include="Content\Images\work.jpg" />
+    <Content Include="Content\Images\zones-map.png" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Resources\Microsoft.Practices.EnterpriseLibrary.Caching.Database.dll" />
+    <Content Include="Resources\Microsoft.Practices.EnterpriseLibrary.Caching.dll" />
+    <Content Include="Resources\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
+    <Content Include="Resources\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
+    <Content Include="Resources\Microsoft.Practices.EnterpriseLibrary.Logging.Database.dll" />
+    <Content Include="Resources\Microsoft.Practices.ServiceLocation.dll" />
+    <Content Include="Resources\Microsoft.Practices.ServiceLocation.pdb" />
+    <Content Include="Resources\Microsoft.Practices.Unity.dll" />
+    <Content Include="Resources\Microsoft.Practices.Unity.Interception.dll" />
+    <Content Include="Resources\Microsoft.Practices.Unity.Interception.pdb" />
+    <Content Include="Resources\Microsoft.Practices.Unity.pdb" />
+    <Content Include="Scripts\classie.js" />
+    <Content Include="Scripts\css-filters-polyfill.js" />
+    <Content Include="Scripts\cssParser.js" />
+    <Content Include="Scripts\jquery-2.1.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-2.1.4.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery-migrate.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\loadajax.js" />
+    <Content Include="Scripts\modalEffects.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\modernizr.custom.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Signin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <None Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <None Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <None Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <None Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <None Include="Content\font-awesome\less\animated.less" />
+    <None Include="Content\font-awesome\less\bordered-pulled.less" />
+    <None Include="Content\font-awesome\less\core.less" />
+    <None Include="Content\font-awesome\less\fixed-width.less" />
+    <None Include="Content\font-awesome\less\font-awesome.less" />
+    <None Include="Content\font-awesome\less\icons.less" />
+    <None Include="Content\font-awesome\less\larger.less" />
+    <None Include="Content\font-awesome\less\list.less" />
+    <None Include="Content\font-awesome\less\mixins.less" />
+    <None Include="Content\font-awesome\less\path.less" />
+    <None Include="Content\font-awesome\less\rotated-flipped.less" />
+    <None Include="Content\font-awesome\less\stacked.less" />
+    <None Include="Content\font-awesome\less\variables.less" />
+    <None Include="Content\font-awesome\scss\font-awesome.scss" />
+    <None Include="Content\font-awesome\scss\_animated.scss" />
+    <None Include="Content\font-awesome\scss\_bordered-pulled.scss" />
+    <None Include="Content\font-awesome\scss\_core.scss" />
+    <None Include="Content\font-awesome\scss\_fixed-width.scss" />
+    <None Include="Content\font-awesome\scss\_icons.scss" />
+    <None Include="Content\font-awesome\scss\_larger.scss" />
+    <None Include="Content\font-awesome\scss\_list.scss" />
+    <None Include="Content\font-awesome\scss\_mixins.scss" />
+    <None Include="Content\font-awesome\scss\_path.scss" />
+    <None Include="Content\font-awesome\scss\_rotated-flipped.scss" />
+    <None Include="Content\font-awesome\scss\_stacked.scss" />
+    <None Include="Content\font-awesome\scss\_variables.scss" />
+    <None Include="Content\fonts\awfonts\fontawesome-webfont.eot" />
+    <None Include="Content\fonts\awfonts\fontawesome-webfont.ttf" />
+    <None Include="Content\fonts\awfonts\fontawesome-webfont.woff" />
+    <None Include="Content\fonts\awfonts\fontawesome-webfont.woff2" />
+    <None Include="Content\fonts\awfonts\FontAwesome.otf" />
+    <None Include="Content\fonts\custom-set.eot" />
+    <None Include="Content\fonts\custom-set.ttf" />
+    <None Include="Content\fonts\custom-set.woff" />
+    <None Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Content\Images\icon\Thumbs.db" />
+    <None Include="Content\Images\others\Thumbs.db" />
+    <None Include="Content\Images\profiles\Thumbs.db" />
+    <None Include="Scripts\jquery-2.1.4.min.map" />
+    <Content Include="Views\Admin\AdminDashBoard.cshtml" />
+    <Content Include="Views\Admin\CreateEmployee.cshtml" />
+    <Content Include="Views\Admin\CreateNewZone.cshtml" />
+    <Content Include="Views\Admin\CreateUserGroup.cshtml" />
+    <Content Include="Views\Admin\EmployeeExpenditure.cshtml" />
+    <Content Include="Views\Admin\UpdateZone.cshtml" />
+    <Content Include="Views\Admin\UserGroupsList.cshtml" />
+    <Content Include="Views\Admin\ZonesList.cshtml" />
+    <Content Include="Views\Employee\DashBoard.cshtml" />
+    <Content Include="Views\Employee\Expenditure.cshtml" />
+    <Content Include="Views\Employee\Profile.cshtml" />
+    <Content Include="Views\Employee\Training.cshtml" />
+    <None Include="Stored Procedure.docx" />
+    <Content Include="Views\Manager\EmployeeExpenditure.cshtml" />
+    <Content Include="Views\Manager\EmployeeList.cshtml" />
+    <Content Include="Views\Manager\ManagerDashBoard.cshtml" />
+    <Content Include="Views\Manager\ManagerProfile.cshtml" />
+    <Content Include="Views\TravelDesk\EmployeeList.cshtml" />
+    <Content Include="Views\TravelDesk\TravelDesk.cshtml" />
+    <Content Include="Views\TravelDesk\TravelDeskManagerDashBoard.cshtml" />
+    <Content Include="Views\TravelDesk\TravelerProfile.cshtml" />
+    <Content Include="Views\Admin\_UpdateUserGroup.cshtml" />
+    <Content Include="Views\Admin\Profile.cshtml" />
+    <Content Include="Views\Admin\UpdateEmployee.cshtml" />
+    <Content Include="Views\TravelDesk\CreateTravel.cshtml" />
+    <Content Include="Views\TravelDesk\_UpdateTavelDesk.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Employee\ApprovedExpenditure.cshtml" />
+    <Content Include="Views\Employee\CreateLeave.cshtml" />
+    <Content Include="Views\Employee\DraftedExpenditure.cshtml" />
+    <Content Include="Views\Employee\ExpenseListByID.cshtml" />
+    <Content Include="Views\Employee\SubmittedExpenditure.cshtml" />
+    <Content Include="Views\Shared\EmployeeList.cshtml" />
+    <Content Include="Views\Shared\Leave.cshtml" />
+    <Content Include="Views\Shared\TravelDesk.cshtml" />
+    <Content Include="Views\Shared\ApprovedExpenditure.cshtml" />
+    <Content Include="Views\Shared\SubmittedExpenditure.cshtml" />
+    <Content Include="Views\Shared\ZoneEmployeeList.cshtml" />
+    <Content Include="Views\Shared\ExpenseListByID.cshtml" />
+    <Content Include="Views\Admin\CreateExpenseType.cshtml" />
+    <Content Include="Views\Admin\ExpenseType.cshtml" />
+    <Content Include="Views\Admin\UpdateExpenseType.cshtml" />
+    <Content Include="Views\Shared\_UpdateTavelDesk.cshtml" />
+    <Content Include="Views\Shared\LeaveStatuPopup.cshtml" />
+    <Content Include="Views\Shared\LeaveView.cshtml" />
+    <Content Include="Views\Shared\AdvanceAmount.cshtml" />
+    <Content Include="Views\Shared\_ViewProfile.cshtml" />
+    <Content Include="Views\Admin\PaymentConfirmation.cshtml" />
+    <Content Include="Views\Employee\UpdateOrderConfirm.cshtml" />
+    <Content Include="Views\Shared\EmployeeExpenditures.cshtml" />
+    <Content Include="Views\Shared\GroupExpenses.cshtml" />
+    <Content Include="Views\Shared\LeaveStatusPopup.cshtml" />
+    <Content Include="Views\TravelDesk\CreateAdvanceAmount.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Universal.BusinessEntities\Universal.BusinessEntities.csproj">
+      <Project>{DD281300-4190-4672-A4D3-DC3E0F88A9D3}</Project>
+      <Name>Universal.BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Universal.BusinessLogicLayer\Universal.BusinessLogicLayer.csproj">
+      <Project>{2A7E05EB-3265-45AB-B007-F6DD98ED490F}</Project>
+      <Name>Universal.BusinessLogicLayer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2073</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

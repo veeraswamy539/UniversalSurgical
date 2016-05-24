@@ -1,0 +1,206 @@
+﻿@model Universal.BusinessEntities.SkillsMetrics
+@Scripts.Render("~/bundles/jqueryval")
+
+<div class="col-lg-12 search-strip">
+
+    </div>
+
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="test" style=" margin-top:45px;">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12 grid-headding">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <i class="fa fa-calendar"></i> Skill Set</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+
+        @if (Model != null)
+        {
+           
+                
+                <div class="col-lg-12 m-t-20">
+                    <div class="col-lg-4">
+                        
+                        <div class="col-lg-6"><label><b>Empid:</b> </label> </div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.Empid</span></div>
+
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>GC:</b> </label> </div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.GC</span></div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>HSS:</b> </label> </div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.HSS</span></div>
+                    </div>
+                    
+                    </div>
+                    <div class="col-lg-12">
+                    <div class="col-lg-4">
+                     <div class="col-lg-6"><label><b>AAS: </b></label>
+                     </div>
+                     <div class="col-lg-6"><span class="controls">@Model.ASS</span>
+                     </div>
+                     </div>
+                     <div class="col-lg-4">
+                     <div class="col-lg-6"><label><b>ICPOES: </b></label>
+                     </div>
+                     <div class="col-lg-6"><span class="controls">@Model.ICPOES</span>
+                     </div>
+                     </div>
+                     <div class="col-lg-4">
+                     <div class="col-lg-6"><label><b>CTC:</b> </label></div>
+                     <div class="col-lg-6"> <span class="controls">@Model.CTC</span></div>
+                     </div>
+                     
+                    </div>
+                         <div class="col-lg-12">
+                    <div class="col-lg-4">
+                     <div class="col-lg-6"> <label><b> HPLC: </b></label>
+                     </div>
+                      <div class="col-lg-6"> <span class="controls">@Model.HPLC</span>
+                     </div>
+                     </div> 
+                       <div class="col-lg-4">
+                     <div class="col-lg-6"><label><b>1290 Infinity: </b></label>
+                     </div>
+                     <div class="col-lg-6"><span class="controls">@Model.Infinity</span>
+                     </div>
+                     </div>
+                     <div class="col-lg-4">
+                     <div class="col-lg-6"> <label><b>RRLC: </b></label>
+                     </div>
+                     <div class="col-lg-6"><span class="controls">@Model.RRLC</span>
+                     </div>
+                     </div>                 
+                     </div>
+                      
+                        <div class="col-lg-12">
+                    <div class="col-lg-4">
+                        
+                        <div class="col-lg-6"> <label><b>ACE: </b></label> </div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.ACE</span></div>
+
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>Ezchrom: </b></label> </div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.Ezchrom</span></div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>ELSD: </b></label> </div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.ELSD</span></div>
+                    </div>
+                    
+                    </div>
+                        
+                         <div class="col-lg-12">
+                    <div class="col-lg-4">
+                        
+                        <div class="col-lg-6"> <label><b>GCMSD: </b></label> </div>
+
+                        <div class="col-lg-6"> <span class="controls">@Model.GCMSD</span></div>
+
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>GCMSorMS:</b> </label> </div>
+
+                        <div class="col-lg-6"> <span class="controls">@Model.GCMSorMS</span></div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"> <label><b>ICPMS: </b></label> </div>
+
+                        <div class="col-lg-6"> <span class="controls">@Model.ICPMS</span></div>
+                    </div>
+                    
+                    </div>
+                            
+                          
+                         <div class="col-lg-12">
+                    <div class="col-lg-4">
+                        
+                        <div class="col-lg-6"> <label><b>LCMSSQ: </b></label> </div>
+
+                        <div class="col-lg-6"> <span class="controls">@Model.LCMSSQ</span></div>
+
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"> <label><b>LCMSQQQ: </b></label> </div>
+
+                        <div class="col-lg-6"> <span class="controls">@Model.LCMSQQQ</span></div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>LCMSTrap: </b></label></div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.LCMSTrap</span></div>
+                    </div>
+                    
+                    </div> 
+                         
+                          <div class="col-lg-12">
+                    <div class="col-lg-4">
+                        
+                        <div class="col-lg-6">  <label><b>CE: </b></label></div>
+
+                        <div class="col-lg-6"> <span class="controls">@Model.CE</span></div>
+
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"> <label><b>OpenLab:</b> </label> </div>
+
+                        <div class="col-lg-6"> <span class="controls">@Model.OpenLab</span></div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>GasSamplingValves: </b></label></div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.GasSamplingValves</span></div>
+                    </div>
+                    
+                    </div>
+                         
+                            
+                           <div class="col-lg-12">
+                    <div class="col-lg-4">
+                        
+                        <div class="col-lg-6">  <label><b>AnyOtherSkill: </b></label></div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.AnyOtherSkill</span></div>
+
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>Skill1: </b></label> </div>
+
+                        <div class="col-lg-6">  <span class="controls">@Model.Skill1</span></div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="col-lg-6"><label><b>Skill2: </b></label></div>
+
+                        <div class="col-lg-6"><span class="controls">@Model.Skill2</span></div>
+                    </div>
+                    
+                    </div>
+                            
+                            
+                     <div class="col-lg-12">
+                     <div class="col-lg-4">
+                      <div class="col-lg-6"> <label><b>Skill3: </b></label></div>
+                      <div class="col-lg-6"><span class="controls">@Model.Skill3</span></div>
+                     </div>
+                     </div>       
+                           
+            
+        }
+
+    </div>
+    </div>

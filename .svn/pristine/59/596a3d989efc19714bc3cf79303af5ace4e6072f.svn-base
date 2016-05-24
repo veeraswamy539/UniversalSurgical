@@ -1,0 +1,230 @@
+﻿@using Universal.BusinessEntities;
+@model Employees
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Signin</title>
+    @Styles.Render("~/bundles/CSS")
+    <link href="../../Content/CSS/component.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+        rel="Stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/bootstrap-theme.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../../Scripts/CSS/font-awesome.css" rel="stylesheet" type="text/css" />
+   
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <form id="frmLogin">
+    <div class="login-bg">
+
+@*    <div style="padding:10px; margin:0px; width:100%; background-color:#444; color:#fff; font:15px normal arial; font-style:italic;">
+<marquee  id='scroll_news' onMouseOver="document.getElementById('scroll_news').stop();" onMouseOut="document.getElementById('scroll_news').start();" behavior="alternate" scrolldelay="150">This site will be down for maintenance from 2:30 to 3:30 PM. Please avoid using within that time frame. Sorry for your inconvenience !</marquee>
+</div>*@
+
+
+        <!--[IF IE ]>
+<div style="padding:10px; margin:0px; width:100%; background-color:#444; color:#fff; font:15px normal arial; font-style:italic;">
+<marquee  id='scroll_news' onMouseOver="document.getElementById('scroll_news').stop();" onMouseOut="document.getElementById('scroll_news').start();" behavior="alternate" scrolldelay="150">This site is optimized for modern browsers. For the best experience, please install the latest version of <a href="http://www.google.com/chrome/" target="_blank" style="color:#FFF; font-style:italic;">Chrome</a> , <a href="https://www.mozilla.org/en-US/firefox/new/?utm_source=firefox-com&utm_medium=referral" target="_blank" style="color:#FFF; font-style:italic;"> Firefox</a> , <a href="http://www.apple.com/safari/" target="_blank" style="color:#FFF; font-style:italic;">Safari</a>  or <a href="http://internet-explorer-10.joydownload.com//?c=6&gclid=CNzw-tGLu8ICFUosjgod2LYAIw" target="_blank" style="color:#FFF; font-style:italic;">Internet Explorer 9+</a></marquee>
+</div>
+
+<![endif]-->
+
+
+        <div class="login-grid">
+            <div class="logo-cnt">
+                <img src="../../Content/Images/login-logo.png" data-toggle="tooltip" data-placement="right"
+                    title="Universal Surgicals" /></div>
+            <div class="login-box">
+                <h1>
+                    Login</h1>
+                @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+                @Html.TextBoxFor(Model => Model.Employee_ID, new { @class = "login-input", @id = "txtUserId", @placeholder = "Employee ID", @Title = "Employee ID" })
+                @Html.ValidationMessageFor(Model => Model.Employee_ID)
+                @Html.PasswordFor(Model => Model.Password, new { @class = "login-input", @id = "txtpassword", @placeholder = "Password", @Title = "The Password must have at least 6 characters" })
+                @Html.ValidationMessageFor(Model => Model.Password)
+                <input class="login-submit" type="submit" value="Login" id="btnLogin" />
+                <div class="col-lg-12" style="padding-top: 15px;">
+                    <span id="result" style="display: none; color: #ff6d93"></span>
+                </div>
+                <div class="col-lg-12" style="padding-top: 15px; padding-left: 0px;" id="lnkForgot">
+                    <a href="#" data-modal="modal-16"><i class="fa fa-question-circle"></i> Can't access
+                        your account</a>
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+        </div>
+        <div class="login-footer">
+            <label>
+                © <span id="lblyear"></span> Universal Surgicals. All rights reserved.</label>
+        </div>
+    </div>
+    </form>
+    <div class="md-modal md-effect-16" id="modal-16">
+        <div class="md-content">
+            <h3>
+                <div style="float: left">
+                    Forgot Password
+                </div>
+                <div style="float: right">
+                    <a href="#" id="forgotpopclse">X</a></div>
+            </h3>
+            <div style="background-color: #fff; padding-top: 40px; padding-bottom: 40px;" id="forgotDiv">
+                @* @Html.Action("ForgotPassword", "Home")*@
+            </div>
+        </div>
+    </div>
+    <div class="md-overlay">
+    </div>
+     <div id="forgotloading" runat="server" style="text-align: center; padding: 30px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:20%; left:5%;"> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+</body>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jquery-migrate")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqueryval")
+
+<script src="../../Scripts/classie.js"></script>
+<script src="../../Scripts/modalEffects.js"></script>
+<!-- for the blur effect -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+</script>
+<script src="../../Scripts/cssParser.js"></script>
+<script src="../../Scripts/css-filters-polyfill.js"></script>
+ <!--[if lt IE 10]>
+<script src="../../Scripts/jquery.placeholder.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            // Invoke the plugin
+           
+            $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+            // That’s it, really.
+
+          
+        });
+		</script>
+        <![endif]-->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        var d = new Date();
+
+        $('#lblyear').text(d.getFullYear())
+
+
+        $("#lnkForgot").click(function () {
+//             e.preventDefault();
+//            alert("forgotpwd");
+            $("#forgotloading").show();
+           
+            //            $('#modal-16').show();
+//            alert("pwd");
+            $.ajax({
+                url: "/Home/ForgotPassword",
+                type: 'GET',
+                cache: false,
+                data: null,
+
+                success: function (result) {
+
+                    $("#forgotloading").hide();
+                    
+                    $('#forgotDiv').html("");
+                    $("#modal-16").fadeIn();
+                    $(".md-overlay").fadeIn();
+                    $('#modal-16').addClass('md-show');
+                    $('#forgotDiv').html(result);
+                }
+            });
+
+
+        });
+        $(".md-overlay").click(function (e) {
+            $('#modal-16').removeClass('md-show');
+            $('#forgotDiv').html("");
+        });
+
+
+        $("#forgotpopclse").click(function () {
+            $('#modal-161').removeClass('md-show');
+            $('#forgotDiv').html("");
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+
+
+
+            $("#txtUserId1-error").empty();
+
+
+            $("#lblresult").empty();
+
+
+            $('#txtUserId1').val("");
+
+
+        });
+
+        //        $("#lnkForgot").click(function () {
+
+        //            $("#modal-16").fadeIn();
+        //            $(".md-overlay").fadeIn();
+        //        });
+
+        $("#btnLogin").click(function (e) {
+            e.preventDefault();
+            var valid = $("#frmLogin").valid();
+            if (valid) {
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Home/Signin',
+                    data: $("#frmLogin").serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        // alert("success");
+                        // $('#result').removeAttr('class').attr('class', ((data.Available) ? 'username-available-status' : 'username-not-available-status'));
+                        $('#result').text(data.Text);
+                        if (data.Text === "success") {
+                            window.location.href = data.redirectTo;
+                            //alert(data.redirectTo);
+                            //  $location.path(data.redirectTo);
+                            //alert("success");
+                            $('#result').empty();
+                            $('#result').hide();
+                            $(':input', $("#frmLogin"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                            $('#modelbg').hide();
+                            $('#modelbg').hide();
+                        }
+                        else {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                        }
+
+
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+
+                });
+            }
+            else {
+                return;
+
+            }
+
+        });
+    });
+</script>
+</html>

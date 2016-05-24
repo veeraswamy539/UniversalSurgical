@@ -1,0 +1,565 @@
+﻿@using Universal.BusinessEntities;
+@model Leave
+
+
+<style type="text/css">
+.ui-datepicker-div { z-index: 999; }
+
+</style>
+
+<form id="frmCreateLeave">
+
+<div class="col-lg-12" style="min-height: 250px; padding-top: 30px;">
+    <div class="col-lg-12 col-md-4  m-b-10   ">
+        <div class="col-lg-5 no-padding controls input-append success date" style="z-index:4000;  ">
+            @Html.TextBoxFor(Model => Model.LeaveFrom, new { @class = "form-control", @placeholder = "Leave From", @id = "dtLeaveForm",@readonly = "readonly", @type = "date-local",@Title = "Leave From"})
+            @Html.ValidationMessageFor(Model => Model.LeaveFrom)
+            <span class="add-on"><i class="fa fa-calendar"></i></span>
+        </div>
+   
+        <div class="col-lg-5 no-padding controls input-append success date pull-right " style="z-index:4000;  ">
+            @Html.TextBoxFor(Model => Model.LeaveTo, new { @class = "form-control", @placeholder = "Leave To", @id = "dtLeaveTo",@readonly = "readonly", @type = "date-local",@Title = "Leave To"})
+            @Html.ValidationMessageFor(Model => Model.LeaveTo)
+            <span class="add-on"><i class="fa fa-calendar"></i></span>
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+    <div class="col-lg-12  col-md-6  m-b-10">
+        <div class="controls">
+           @* @if (ViewB.LeaveType != null)
+            {*@
+                @Html.DropDownListFor(Model => Model.LeaveType,  new List<SelectListItem>{
+                      
+                           new SelectListItem { Text = "Casual Leave", Value = "Casual Leave" }, 
+                            new SelectListItem { Text = "Sick Leave", Value = "Sick Leave" },
+                           new SelectListItem { Text = "Hospitalized (Admit)", Value = "Hospitalized (Admit)" },
+                            new SelectListItem { Text = "Funeral Leave", Value = "Funeral Leave" },
+           }, "Select Leave Type",new { @class = "form-control", @id = "ddlLeaveType", @placeholder = "Select Leave Type", @Title = "Leave Type"})
+                @Html.ValidationMessageFor(Model => Model.LeaveType)
+            @*}*@
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+    <div class="col-lg-12  col-md-6  m-b-10">
+        <div class="controls">
+            @Html.TextAreaFor(Model => Model.LeaveComment, new { @class = "form-control", @placeholder = "Reason for Leave", @id = "txtleavereason", @Title = "Reason for Leave", @maxlength = "250" })
+            @Html.ValidationMessageFor(Model => Model.LeaveComment)
+        </div>
+    </div>
+  @*  <label id="lblnoofdays"></label>
+    <label id="lblvalidation"></label>*@
+    
+    <div class="clearfix">
+    </div>
+    <div class="col-lg-4 col-md-4  m-b-10 pull-right">
+        <div class="controls">
+            <button type="submit" class="md-trigger" id="btnCreateLeave" name="btnCreateLeave"
+                value="Create Leave">
+                Request Leave</button>
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+    <div class="alert alert-success" id="result" style="display: none; width:70%; text-align: center; margin-left:20px;">
+    </div>
+    @*     <span id="result" style="display: none;"></span>*@
+
+
+                         <div class="popuppositionleft">
+ <div class="alert alert-warning" id="createleave" runat="server">
+<strong>Alert!</strong><br /><label id="createleaveerrormessage"></label>
+
+
+</div>
+
+</div>
+
+
+     <div id="CreateLeaveLoadimg" runat="server" style="text-align: center; padding: 50px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:40%; left:5%;"> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+
+</div>
+
+
+</form>
+<script type="text/javascript">
+
+
+    if ($.browser.msie && (parseInt($.browser.version) == 9 || parseInt($.browser.version) == 8)) {
+
+        var d = new Date();
+
+        var getdt = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+
+
+        $('#dtLeaveForm').attr("value", getdt);
+
+
+        $('#dtLeaveTo').attr("value", getdt);
+
+        $('#txtleavereason').attr("value", "The LeaveComment field is required");
+
+    }
+
+ 
+    
+
+//    $('#dtLeaveForm,#dtLeaveTo').datepicker().on('changeDate', function (ev) {
+//        ev.preventDefault();
+
+
+//        $(this).datepicker('hide');
+
+    //    });
+    function Calculate() {
+
+      
+
+        var from = $("#dtLeaveForm").val().split("/");
+
+        var to = $("#dtLeaveTo").val().split("/");
+
+        var count = 0;
+
+
+        for (var d = new Date(from[2], from[1] - 1, from[0]); d <= new Date(to[2], to[1] - 1, to[0]); d.setDate(d.getDate() + 1)) {
+
+            if (d.getDay() != 0) {
+
+                count = ++count;
+
+               
+            }
+
+        }
+
+        if (count == 1) {
+
+
+            $(".popuppositionleft").fadeIn();
+            $('#createleaveerrormessage').text("You have selected \n" + count + "\nDay Leave");
+            $('#createleaveerrormessage').show();
+            $('.popuppositionleft').delay(2000).fadeOut('slow');
+
+            // $('#lblnoofdays').text("You Have Applied for\n" + count + "\nDay Leave");
+
+            validcount = true;
+        }
+        else if (count > 1) {
+
+
+            $(".popuppositionleft").fadeIn();
+            $('#createleaveerrormessage').text("You have selected \n" + count + "\nDays Leave");
+            $('#createleaveerrormessage').show();
+            $('.popuppositionleft').delay(2000).fadeOut('slow');
+
+            // $('#lblnoofdays').text("You Have Applied for\n" + count + "\nDay Leave");
+
+            validcount = true;
+        }
+        else {
+
+            $(".popuppositionleft").fadeIn();
+            $('#createleaveerrormessage').text("You have selected sunday as leave, Please select another day");
+            $('#createleaveerrormessage').show();
+            $('.popuppositionleft').delay(3000).fadeOut('slow');
+            // $('#lblnoofdays').text("You have selected sunday as leave, Please select another day");
+
+            validcount = false;
+        }
+
+
+    }
+
+
+
+    function ValidateFromDate() {
+
+
+   
+
+        var from = $("#dtLeaveForm").val().split("/");
+
+        var fromdate = new Date(from[2], from[1] - 1, from[0]);
+
+   
+        var d = new Date();
+
+        var getdt = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+
+    
+      
+        var currentdt = new Date(getdt);
+
+        
+
+        if (fromdate >= currentdt) {
+
+         //   $('#createleaveerrormessage').text("");
+
+            return true;
+
+        }
+
+
+        else {
+
+            $(".popuppositionleft").fadeIn();
+            $('#createleaveerrormessage').text("Entered Invalid Leave dates");
+            $('#createleaveerrormessage').show();
+            $('.popuppositionleft').delay(3000).fadeOut('slow');
+
+           // $('#lblvalidation').text("Entered Invalid Leave dates");
+
+            return false;
+
+        }
+
+
+    }
+
+    function ValidateToDate() {
+
+
+
+        if ($('#dtLeaveTo').val() != '' && $('#dtLeaveTo').val() != '') {
+
+            var from = $("#dtLeaveForm").val().split("/");
+
+
+
+            var to = $("#dtLeaveTo").val().split("/");
+
+
+
+
+            if (new Date(from[2], from[1] - 1, from[0]) <= new Date(to[2], to[1] - 1, to[0])) {
+
+              //  $('#createleaveerrormessage').text("");
+
+                return true;
+
+            }
+            else {
+                $(".popuppositionleft").fadeIn();
+                $('#createleaveerrormessage').text("Todate Greater than Fromdate");
+                $('#createleaveerrormessage').show();
+                $('.popuppositionleft').delay(3000).fadeOut('slow');
+
+               // $('#lblvalidation').text("Todate Greater than Fromdate");
+
+                return false;
+
+            }
+
+        }
+        else {
+
+            $(".popuppositionleft").fadeIn();
+            $('#createleaveerrormessage').text("Please valid dates");
+            $('#createleaveerrormessage').show();
+            $('.popuppositionleft').delay(3000).fadeOut('slow');
+
+            //$('#lblvalidation').text("Please valid dates");
+
+            return false;
+        
+        
+        }
+
+
+
+    }
+
+
+    var validatedt = false;
+    var validatefrmdate = false;
+    var validatetodate = false;
+    var validcount = false;
+
+
+
+    
+
+    function Validatedatepicker() {
+
+        validatefrmdate = ValidateFromDate();
+
+
+        if (validatefrmdate && $('#dtLeaveTo').val().length > 0) {
+            validatetodate = ValidateToDate();
+        }
+        if (validatefrmdate && validatetodate) {
+            validateDate();
+        }
+
+
+
+       
+
+        var from = $("#dtLeaveForm").val().split("/");
+
+        var to = $("#dtLeaveTo").val().split("/");
+
+
+        if ($('#dtLeaveTo').val().length > 0 && $('#dtLeaveForm').val().length > 0 && new Date(from[2], from[1] - 1, from[0]) <= new Date(to[2], to[1] - 1, to[0])) {
+
+            Calculate();
+        }
+    
+    }
+
+
+    function validateDate() {
+    
+           var from = $("#dtLeaveForm").val().split("/");
+
+            var to = $("#dtLeaveTo").val().split("/");
+
+    if (new Date(from[2], from[1] - 1, from[0]) <= new Date(to[2], to[1] - 1, to[0]))
+    {
+
+        $.ajax({
+            cache: false,
+            url: '/Shared/ValidateLeaveDates',
+            type: 'POST',
+            data: { sdate: $('#dtLeaveForm').val(), edate: $('#dtLeaveTo').val() },
+            dataType: 'json',
+            success: function (data) {
+                // alert("success");
+                // $('#result').removeAttr('class').attr('class', ((data.Available) ? 'username-available-status' : 'username-not-available-status'));
+
+
+
+                if (!data) {
+                    // success code here
+                    {
+                        $(".popuppositionleft").fadeIn();
+                        $('#createleaveerrormessage').text("Already you have applied leave for selected dates, Please check");
+                        $('#createleaveerrormessage').show();
+                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+
+                      //  $('#lblvalidation').text("Already you have applied leave for selected dates, Please check");
+
+                        validatedt = false;
+
+                    }
+
+                } else {
+                    // error code here
+
+                  //  $('#createleaveerrormessage').text("");
+
+                    validatedt = true;
+                }
+                
+
+
+            },
+            failure: function () {
+                alert("fail");
+            }
+
+        });
+
+        }
+
+    }
+
+    $(document).ready(function () {
+
+
+
+        $('#Leavepopclose').click(function () {
+
+            $('.alert-warning').hide();
+            $('#createleaveerrormessage').hide();
+            $('#createleaveerrormessage').val('');
+
+            //            $('#createleave').hide();
+
+            //            $('#dtLeaveForm,#dtLeaveTo').val('');
+            UpdateCalendar();
+
+
+
+
+            $('#dtLeaveForm').attr("value", this.value);
+        });
+
+
+        $('#dtLeaveForm,#dtLeaveForm').change(function () {
+
+
+
+
+
+
+
+        });
+
+        $(".popuppositionleft").hide();
+
+
+        //  $('#createleaveerrormessage').text("");
+
+
+        $.validator.addMethod("date", function (value, element) {
+
+            return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+        },
+    "Please enter a date in the format dd/mm/yyyy."
+);
+
+
+
+
+        var date = new Date();
+
+        //        date.setDate(date.getDate() - 1);
+
+
+
+        //        tdt.setDate(tdt.getDate());
+
+        //        $('#dtLeaveForm,#dtLeaveTo').datepicker({format:'dd/mm/yyyy'});
+
+        $('#dtLeaveForm').datepicker({ format: 'dd/mm/yyyy', startDate: date }).on('changeDate', function (ev) {
+
+
+
+            ev.preventDefault();
+
+            //                        $('#dtLeaveForm').attr("value", this.value);
+
+            $(this).datepicker('hide');
+
+
+
+
+
+            Validatedatepicker();
+
+
+        });
+
+
+
+
+        $('#dtLeaveTo').datepicker({ format: 'dd/mm/yyyy', startDate: date }).on('changeDate', function (ev) {
+
+            ev.preventDefault();
+
+            //                        $('#dtLeaveTo').attr("value", this.value);
+
+            $('.alert-warning').show();
+            $(this).datepicker('hide');
+
+            Validatedatepicker();
+
+
+
+        });
+
+
+
+
+        $("#btnCreateLeave").click(function (e) {
+
+            e.preventDefault();
+
+
+
+            var valid = $("#frmCreateLeave").valid();
+            //            alert($("#frmCreateZone").serialize());
+
+
+            //            alert(valid && validatedt && validatefrmdate && validatetodate)
+
+
+
+            if (valid && validatedt && validatefrmdate && validatetodate && validcount) {
+                $("#CreateLeaveLoadimg").show();
+
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Employee/CreateLeave',
+                    data: $("#frmCreateLeave").serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $("#CreateLeaveLoadimg").hide();
+                        $('#result').text(data.Text);
+                        if (data.Available === true) {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                            $(':input', $("#frmCreateLeave"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                            $('#modelbg').hide();
+
+
+                            setTimeout(function () {
+                                $('#modal-161').removeClass('md-show');
+                                $("#modal-16").fadeOut();
+                                $(".md-overlay").fadeOut();
+
+                                $.ajax({
+                                    url: "/Shared/Leave",
+                                    contentType: 'application/html; charset=utf-8',
+                                    type: 'GET',
+                                    cache: false,
+                                    dataType: 'html'
+
+                                })
+                     .success(function (result) {
+
+                         $('#divPartial').html(result);
+                     })
+                      .error(function (xhr, status) {
+                          // alert("2");
+                      });
+
+
+
+                            }, 2000);
+
+
+                        }
+                        else {
+                            $('#result').text(data.Text);
+                            $('#result').show();
+                        }
+
+
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+
+                });
+            }
+            else {
+                return;
+
+            }
+
+        });
+    });
+
+
+
+    function UpdateCalendar() {
+
+
+        $('#dtLeaveForm,#dtLeaveTo').datepicker('setDate', new Date());
+        $('#dtLeaveForm,#dtLeaveTo').datepicker('update');
+        $('#dtLeaveForm,#dtLeaveTo').val('');
+
+
+     }
+
+</script>

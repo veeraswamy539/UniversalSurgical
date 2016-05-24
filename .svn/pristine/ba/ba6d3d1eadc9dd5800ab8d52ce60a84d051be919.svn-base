@@ -1,0 +1,813 @@
+﻿@using Universal.BusinessEntities;
+@model UserExpenses_Header
+@Scripts.Render("~/bundles/jqueryval")
+
+<form id="frmExpensebyId">  
+  
+<div class="col-lg-12 user-info-strip no-padding">
+    <label id="txtresult" style="display:none;"></label>
+        @if (ViewBag.profilepath != null)
+        {
+            <div class=" col-lg-1 exp-emp-prpic">
+                <img src= "@Url.Content(ViewBag.profilepath)" alt="Image" width="50"/>
+            </div>
+        }
+
+        @if (ViewBag.Fullname != null)
+        {
+            <div class=" col-lg-8 exp-emp-topbar-name" style="padding-top:15px;">
+                <span id="txtfullname">@ViewBag.Fullname</span>
+            </div>
+        }
+</div> 
+
+@if (Model != null && Model.UserExpenseDetailsList.Count > 0)
+ {
+    <div class=" container-fluid emp-exd-frm margin-20">
+        <div class="clearfix"></div>
+        <div class="col-md-12 m-t-20">
+            <div class="grid simple">
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <strong> Client Name:</strong>
+                        @if (Model.UserExpenseDetailsList[0].ClientName != null && Model.UserExpenseDetailsList[0].ClientName.Length > 0)
+                        {
+                            @Model.UserExpenseDetailsList[0].ClientName 
+                        }
+                        else
+                        {
+                            @:Not Available
+                        }
+                        <br />
+                        <strong> SO Number: </strong>
+                        @if (Model.UserExpenseDetailsList[0].SON != null && Model.UserExpenseDetailsList[0].SON.Length > 0)
+                        {
+                            @Model.UserExpenseDetailsList[0].SON
+                        }
+                        else if (Model.objServiceOrderNosList != null && Model.objServiceOrderNosList.Count > 0)
+                        {
+                            foreach (var item in Model.objServiceOrderNosList)
+                            {
+                                if (item.ServiceOrderNo != null && item.ServiceOrderNo.Length > 0)
+                                {
+                                    @item.ServiceOrderNo @:,    
+                                }
+                            }
+                        }
+                        else
+                        {
+                            @:Not Available
+                        }
+                        <br />
+                        <strong>SO Confirmation:</strong>
+                        @if (Model.UserExpenseDetailsList[0].SOC != null && Model.UserExpenseDetailsList[0].SOC.Length > 0)
+                        {
+                            @Model.UserExpenseDetailsList[0].SOC
+                        }
+                        else if (Model.objServiceOrderNosList != null && Model.objServiceOrderNosList.Count > 0)
+                        {
+                            foreach (var item in Model.objServiceOrderNosList)
+                            {
+                                if (item.ServiceOrderConfirmationNo != null && item.ServiceOrderConfirmationNo.Length > 0)
+                                {
+                                    @item.ServiceOrderConfirmationNo @:,
+                                }
+                            }
+                        }
+                        else
+                        {
+                            @:Not Available
+                        }
+                        <br />
+                        <strong> Order Confirmation Date:</strong>
+                        @if (Model.UserExpenseDetailsList[0].SOC != null && Model.UserExpenseDetailsList[0].SOC.Length > 0)
+                        {
+                            @Model.UserExpenseDetailsList[0].SOCDate.Value.ToString("dd-MM-yyyy").Replace("-", "/")
+                        }
+                        else if (Model.objServiceOrderNosList != null && Model.objServiceOrderNosList.Count > 0)
+                        {
+                            foreach (var item in Model.objServiceOrderNosList)
+                            {
+                                if (item.ServiceOrderConfirmationNo != null && item.ServiceOrderConfirmationNo.Length > 0)
+                                {
+                                    @item.ServiceOrderConfirmationDate.Value.ToString("dd-MM-yyyy").Replace("-","/") @:,
+                                }
+                            }
+                        }
+                        else
+                        {
+                            @:Not Available
+                        }
+                        <br />
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <div>
+                            <div class="pull-right">  <b>DATE :</b>  @Model.UserExpenseDetailsList[0].ExpenseDate.ToString("MMM dd, yyyy").ToUpper() </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.UserExpenseDetailsList[0].ExpenseType == "Internet/Datacard" || Model.UserExpenseDetailsList[0].ExpenseType == "Mobile/Phone")
+                {
+                    <table class="table m-t-10">
+                        <thead>
+                            <tr>
+                                <th style="width:60px" class="unseen text-center">SNo</th>
+                                <th class="text-left">DESCRIPTION</th>
+                                <th style="width:140px" class="text-right"></th>
+                                <th style="width:90px" class="text-right">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @{int i = 1;}
+                        @foreach (var item in Model.UserExpenseDetailsList)
+                        {
+                            <tr>
+                                <td class="unseen text-center">@i</td>
+                                <td>
+                                    @item.ExpenseType - <b>@item.MobileNo</b>
+                                    @if (item.CommentsforExpenseType != null && item.CommentsforExpenseType.Length > 0)
+                                    {
+                                        <div class="m-t-5">
+                                            <b>Comment:</b> @item.CommentsforExpenseType
+                                        </div>
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @if (@item.ExpenseType == "Internet/Datacard")
+                                    {
+                                        <i class="fa fa-globe"></i>
+                                    }
+                                    else if (@item.ExpenseType == "Mobile/Phone")
+                                    {
+                                        <i class ="fa fa-mobile-phone"></i>
+                                    }
+                                </td>
+                                <td class="text-right"><i class="fa fa-inr"></i> @item.Amount</td>
+                            </tr>
+                            i++;
+                        }
+                            <tr> 
+                                <td colspan="2" rowspan="4" > </td>
+                                <td class="text-right">
+                                    <div class="" style="text-transform: uppercase; font-size:12px;"><strong>Total : </strong></div>
+                                </td>
+                                <td class="text-right"><i class="fa fa-inr"></i> <strong>@Model.UserExpenseDetailsList[0].TotalExpenseAmount</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <table class="table m-t-10">
+                        <thead>
+                            <tr>
+                                <th style="width:60px" class="unseen text-center">SNo</th>
+                                <th class="text-left">DESCRIPTION</th>
+                                <th style="width:140px" class="text-right">Km's</th>
+                                <th style="width:90px" class="text-right">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @{int j = 1;}
+                        @foreach (var item in Model.UserExpenseDetailsList)
+                        {
+                            <tr>
+                                <td class="unseen text-center">@j</td>
+                                <td>
+                                    @item.ExpenseType <b> @item.FromLocation 
+                                    @if (item.FromLocation != null)
+                                    {
+                                        <i class="fa fa-long-arrow-right"></i>  
+                                    }
+                                    @item.ToLocation
+                                    </b>
+                                    @if (item.ReasonForOther != null && item.ReasonForOther.Length > 0)
+                                    {
+                                        <div class="m-t-5">
+                                            <b>Details:</b> @item.ReasonForOther
+                                        </div>
+                                    }
+                                    @if (item.CommentsforExpenseType != null && item.CommentsforExpenseType.Length > 0)
+                                    {
+                                        <div class="m-t-5">
+                                            <b>Comment:</b> @item.CommentsforExpenseType
+                                        </div>
+                                    }
+                                </td>
+                                <td class="text-right">
+                                @if (@item.ExpenseTypeDetails == "Bike")
+                                {
+                                    <i class="fa fa-motorcycle"></i>
+                                }
+                                else if (@item.ExpenseTypeDetails == "Car")
+                                {
+                                    <i class ="fa fa-car"></i>
+                                }
+                                else if (@item.ExpenseTypeDetails == "Airfare")
+                                {
+                                    <i class ="fa fa-plane"></i>
+                                }
+                                else if (@item.ExpenseTypeDetails == "Bus")
+                                {
+                                    <i class ="fa fa-bus"></i>
+                                }
+                                else if (@item.ExpenseTypeDetails == "Train")
+                                {
+                                    <i class ="fa fa-train"></i>
+                                }
+                                else if (@item.ExpenseTypeDetails == "Taxi")
+                                {
+                                    <i class =" fa fa-cab"></i>
+                                }
+                                else if (@item.ExpenseTypeDetails == "Other")
+                                {
+                                    <i class="fa fa-file-text-o"></i>
+                                }
+                                
+                                @if (@item.TraveledKms != null)
+                                {
+                                    @item.TraveledKms @:KM
+                                }
+                                </td>
+                                <td class="text-right"><i class="fa fa-inr"></i> @item.Amount</td>
+                            </tr>
+                            j++;
+                        }
+                            <tr>
+                                <td colspan="2" rowspan="4" > </td>
+                                <td class="text-right">
+                                    <div class="" style="text-transform: uppercase; font-size:12px;"><strong>Total : </strong></div>
+                                </td>
+                                <td class="text-right"><i class="fa fa-inr"></i> <strong>@Model.UserExpenseDetailsList[0].TotalExpenseAmount</strong></td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                }
+
+                <div class="col-lg-12 col-md-12 upheald-buttonarea">
+
+                    <div class="comment-count m-t-10 m-l-20 comments">
+                        <a href="#" title="Comments" > <i class="fa fa-comment"></i>
+                        @if (@Model.UserExpenseDetailsList[0].ManagerComments != null && @Model.UserExpenseDetailsList[0].ManagerComments.Length > 0 && @Model.UserExpenseDetailsList[0].AccountManagerComment != null && @Model.UserExpenseDetailsList[0].AccountManagerComment.Length > 0)
+                        {
+                            <span>2</span>
+                        }
+                        else if (@Model.UserExpenseDetailsList[0].ManagerComments != null && @Model.UserExpenseDetailsList[0].ManagerComments.Length > 0)
+                        {
+                            <span>1</span> 
+                        }
+                        else if (@Model.UserExpenseDetailsList[0].AccountManagerComment != null && @Model.UserExpenseDetailsList[0].AccountManagerComment.Length > 0)
+                        {
+                            <span>1</span>
+                        }
+                        </a>
+                    </div>
+                    <div class="exp-cal-typ m-l-20  m-t-10">
+                        <i class="fa fa-map-marker"></i> @Model.UserExpenseDetailsList[0].Localization
+                    </div>
+
+                    @if (Model.UserExpenseDetailsList[0].AccountManagerStatus == "Upheld" && Session["AccountMgr"] != null)
+                    {
+                        <div class="pull-right upheld-btt approved">
+                            <a href="#"> @Html.HiddenFor(model => model.Id) <i class="fa"></i> APPROVED </a>
+                        </div>
+                        
+                        <div class="pull-right upheld-btt reject">
+                            <a href="#"> @Html.HiddenFor(model => model.Id) <i class="fa fa-lock"></i> REJECT</a>
+                        </div>
+                    }
+
+                    @if (Session["AccountMgr"] != null && Model.UserExpenseDetailsList[0].AccountManagerStatus == null && (Model.ROLE == "Employee" ? Model.UserExpenseDetailsList[0].ManagerStatus != null : Model.UserExpenseDetailsList[0].ManagerStatus == null) || (Session["AccountMgr"] != null && Model.UserExpenseDetailsList[0].ManagerStatus != null && Model.UserExpenseDetailsList[0].AccountManagerStatus == null))
+                    {
+                        <div class="pull-right upheld-btt SearchReject">
+                            <a href="#"> @Html.HiddenFor(model => model.Id) <i class="fa fa-times"></i> REJECT</a>
+                        </div>
+                        
+                        <div class="pull-right upheld-btt Searchupheld">
+                            <a href="#"> @Html.HiddenFor(model => model.Id) <i class="fa fa-lock"></i> UPHELD</a>
+                        </div>
+                       
+                        <div class="pull-right upheld-btt SearchApprove">
+                            <a href="#"> @Html.HiddenFor(model => model.Id) <i class="fa"></i> APPROVED</a>
+                        </div>
+                    }
+                    
+                    @if (Session["Manager"] != null && Model.UserExpenseDetailsList[0].AccountManagerStatus == null && Model.UserExpenseDetailsList[0].ManagerStatus == null)
+                    {
+                         <div class="pull-right upheld-btt Searchupheld">
+                            <a href="#"> @Html.HiddenFor(model => model.Id) <i class="fa fa-lock"></i> UPHELD</a>
+                        </div>
+                        
+                        <div class="pull-right upheld-btt SearchApprove">
+                            <a href="#"> @Html.HiddenFor(model => model.Id) <i class="fa"></i> APPROVED</a>
+                        </div>
+                    }
+
+                    <div class="md-modal md-effect-16" id="modal-161">
+                        <div class="md-content">
+                            <h3>
+                                <div style="float: left"> Reject Comment </div>
+                                <div style="float: right">
+                                    <a href="#" id="rejectClose">X</a>
+                                </div>
+                            </h3>
+                            <input type="hidden" id="HeaderExpenseID"/>
+                            <div class="col-lg-12 col-md-12" style="background-color:#fff;">
+                                <div class="col-lg-12 col-md-12">
+                                    <span>Reject Comment</span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-12 col-md-12">
+                                    <textarea id="RejectComment" name="textarea" maxlength="1000"  style="height:100px; width:95%"></textarea>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-4 col-md-4  m-b-20 pull-right m-t-10">
+                                    <div class="controls">
+                                        <button type="submit" id="btnCommentSubmit" name="btnUpdateComment"
+                                            value="Update Comment">Submit</button>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="md-modal md-effect-16" id="modal-162">
+                        <div class="md-content">
+                            <h3>
+                                <div style="float: left"> Upheld Comment </div>
+                                <div style="float: right">
+                                    <a href="#" id="Supheld">X</a>
+                                </div>
+                            </h3>
+                            <input type="hidden" id="SearchHeaderID"/>
+                            <div class="col-lg-12 col-md-12" style="background-color:#fff;">
+                                <div class="col-lg-12 col-md-12">
+                                    <span>Upheld Comment</span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-12 col-md-12">
+                                    <textarea id="txtUpheldSearch" name="textarea" style="height:100px; width:95%"></textarea>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-4 col-md-4  m-b-20 pull-right m-t-10">
+                                    <div class="controls">
+
+                                    @if (Session["Manager"] != null)
+                                    {
+                                    <button type="submit" id="btnManagerUpheld" name="btnManagerUpheld"
+                                            value="Upheld Comment">Submit</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" id="btnSearchUpheld" name="btnSearchUpheld"
+                                            value="Upheld Comment">Submit</button>
+                                    }
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md-modal md-effect-16" id="modal-163">
+                        <div class="md-content">
+                            <h3>
+                                <div style="float: left"> Reject Comment </div>
+                                <div style="float: right">
+                                    <a href="#" id="SrejectClose">X</a>
+                                </div>
+                            </h3>
+                            <input type="hidden" id="SearchHeaderID"/>
+                            <div class="col-lg-12 col-md-12" style="background-color:#fff;">
+                                <div class="col-lg-12 col-md-12">
+                                    <span>Reject Comment</span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-12 col-md-12">
+                                    <textarea id="txtSearchReject" name="textarea" style="height:100px; width:95%"></textarea>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-4 col-md-4  m-b-20 pull-right m-t-10">
+                                    <div class="controls">
+                                        <button type="submit" id="btnSearchReject" name="btnSearchReject"
+                                            value="Reject Comment">Submit</button>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 commentcontent" style="height:150px; overflow-y:scroll; display:none;">
+                        
+                        <h5><u><b>Comments</b></u></h5>
+                        
+                        @if (@Model.UserExpenseDetailsList[0].ManagerComments != null && @Model.UserExpenseDetailsList[0].ManagerComments.Length > 0)
+                        {
+                            <p><b>Manager Comment:</b></p> 
+                        }
+                        
+                        @if (@Model.UserExpenseDetailsList[0].ManagerComments != null && @Model.UserExpenseDetailsList[0].ManagerComments.Length > 0)
+                        {
+                            @Model.UserExpenseDetailsList[0].ManagerComments
+                        }
+                        
+                        @if (@Model.UserExpenseDetailsList[0].AccountManagerComment != null && @Model.UserExpenseDetailsList[0].AccountManagerComment.Length > 0)
+                        {
+                            <p><b>Account Manager Comment:</b> </p>
+                        }
+                        
+                        @if (@Model.UserExpenseDetailsList[0].AccountManagerComment != null && @Model.UserExpenseDetailsList[0].AccountManagerComment.Length > 0)
+                        {
+                            @Model.UserExpenseDetailsList[0].AccountManagerComment
+                        }
+
+                    </div>
+
+                    <div class="md-overlay"></div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @*<div class="col-lg-12 col-md-12">
+        No Records Found
+    </div>  *@
+}
+
+<div id="searchActionLoading" runat="server" style="text-align: center; padding: 50px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:25%; left:0%;"> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+
+</form>
+    
+
+<script type="text/javascript">
+
+    var status;
+    var fullname;
+
+    $(document).ready(function () {
+
+        $(".comments").click(function (e) {
+            e.preventDefault();
+            $(this).parent().find('.commentcontent').toggle("fold", "fast");
+        });
+
+        $('#SrejectClose').click(function (e) {
+            $('#modal-163').removeClass('md-show');
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#SearchHeaderID").val('');
+            $("#txtSearchReject").val('');
+        });
+
+        $('.SearchReject').click(function (e) {
+            e.preventDefault();
+            $("#modal-163").fadeIn();
+            $(".md-overlay").fadeIn();
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+            var redirecturl = $(this).attr('href');
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $('#modal-163').show();
+                $("#SearchHeaderID").val('');
+                $("#txtSearchReject").val('');
+                $("#SearchHeaderID").val(HeaderID);
+                $('#modal-163').addClass('md-modal md-effect-16 md-show');
+                $('#uploaddiv').html('');
+                $('#uploaddiv').html(result);
+            })
+            .error(function (xhr, status) {
+            });
+        });
+
+        $('#btnSearchReject').click(function (e) {
+            e.preventDefault();
+            var SearchExpenseID = $("#SearchHeaderID").val();
+            var Comment = $("#txtSearchReject").val();
+            var Status = "Rejected";
+            $('#searchActionLoading').show();
+            if (Comment.length > 0) {
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Shared/UpdateExpenseSheetStatus',
+                    data: { ExpenseHeaderID: SearchExpenseID, ExpenseComment: Comment, StatusType: Status },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        SearchResultUpdate();
+
+                        $('#modal-163').removeClass('md-show');
+                        $("#modal-16").fadeOut();
+                        $(".md-overlay").fadeOut();
+                        $("#SearchHeaderID").val('');
+                        $("#txtSearchReject").val('');
+                        $('#searchActionLoading').hide();
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+                });
+            }
+            else {
+                alert('Please Enter Comment');
+                $("#txtSearchReject").focus();
+                $('#searchActionLoading').hide();
+            }
+        });
+
+        function SearchResultUpdate() {
+
+            $.ajax({
+                url: '/Shared/EmployeeExpenditures',
+                type: "GET",
+                cache: false,
+                data: { SZoneID: SZoneValue, SManagerID: SManagerValue, SEmployeeID: SEmployeeValue, SStatus: '', SFromDate: SFromDate, SToDate: SToDate, Search: 'Search' },
+                success: function (data) {
+                    $("#divPartial").html('');
+                    $("#divPartial").html(data);
+                    $('#Search').show();
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    alert(exception);
+                }
+            });
+        }
+
+
+        $('#Supheld').click(function (e) {
+            $('#modal-162').removeClass('md-show');
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#SearchHeaderID").val('');
+            $("#txtUpheldSearch").val('');
+        });
+
+        $('.Searchupheld').click(function (e) {
+            e.preventDefault();
+            $("#modal-162").fadeIn();
+            $(".md-overlay").fadeIn();
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+            var redirecturl = $(this).attr('href');
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $('#modal-162').show();
+                $("#SearchHeaderID").val('');
+                $("#txtUpheldSearch").val('');
+                $("#SearchHeaderID").val(HeaderID);
+                $('#modal-162').addClass('md-modal md-effect-16 md-show');
+                $('#uploaddiv').html('');
+                $('#uploaddiv').html(result);
+            })
+            .error(function (xhr, status) {
+            });
+
+        });
+
+        $('#btnSearchUpheld').click(function (e) {
+            e.preventDefault();
+            var SearchExpenseID = $("#SearchHeaderID").val();
+            var Comment = $("#txtUpheldSearch").val();
+            var Status = "Upheld";
+            $('#searchActionLoading').show();
+            if (Comment.length > 0) {
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Shared/UpdateExpenseSheetStatus',
+                    data: { ExpenseHeaderID: SearchExpenseID, ExpenseComment: Comment, StatusType: Status },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        SearchResultUpdate();
+
+                        $('#modal-163').removeClass('md-show');
+                        $("#modal-16").fadeOut();
+                        $(".md-overlay").fadeOut();
+                        $("#SearchHeaderID").val('');
+                        $("#txtSearchReject").val('');
+                        $('#searchActionLoading').hide();
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+                });
+            }
+            else {
+                alert('Please Enter Comment');
+                $("#txtUpheldSearch").focus();
+                $('#searchActionLoading').hide();
+            }
+
+
+        });
+
+        $('#btnManagerUpheld').click(function (e) {
+            e.preventDefault();
+
+            var SearchExpenseID = $("#SearchHeaderID").val();
+            var Comment = $("#txtUpheldSearch").val();
+            var Status = "Upheld";
+            $('#searchActionLoading').show();
+            if (Comment.length > 0) {
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Shared/UpdateExpenseSheetStatus',
+                    data: { ExpenseHeaderID: SearchExpenseID, ExpenseComment: Comment, StatusType: Status },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        SearchResultUpdate();
+
+                        $('#modal-163').removeClass('md-show');
+                        $("#modal-16").fadeOut();
+                        $(".md-overlay").fadeOut();
+                        $("#SearchHeaderID").val('');
+                        $("#txtSearchReject").val('');
+                        $('#searchActionLoading').hide();
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+                });
+            }
+            else {
+                alert('Please Enter Comment');
+                $("#txtUpheldSearch").focus();
+            }
+
+        });
+
+        $('.SearchApprove').click(function (e) {
+            e.preventDefault();
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+            var Status = "Approved";
+            var Comment = "";
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '/Shared/UpdateExpenseSheetStatus',
+                data: { ExpenseHeaderID: HeaderID, ExpenseComment: Comment, StatusType: Status },
+                dataType: 'json',
+                success: function (data) {
+                    SearchResultUpdate();
+                },
+                failure: function () {
+                    alert("fail");
+                }
+            });
+
+        });
+
+
+        $('#btnCommentSubmit').click(function (e) {
+            e.preventDefault();
+            var ExpenseID = $("#HeaderExpenseID").val();
+            var Comment = $("#RejectComment").val();
+            var Status = "Rejected";
+            $('#searchActionLoading').show();
+            if (Comment.length > 0) {
+
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Shared/UpdateExpenseSheetStatus',
+                    data: { ExpenseHeaderID: ExpenseID, ExpenseComment: Comment, StatusType: Status },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        getUpdatdPage();
+
+                        $('#modal-161').removeClass('md-show');
+                        $("#modal-16").fadeOut();
+                        $(".md-overlay").fadeOut();
+                        $("#HeaderExpenseID").val('');
+                        $("#RejectComment").val('');
+                        $('#searchActionLoading').hide();
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+                });
+            }
+            else {
+                alert('Please Enter Comment');
+                $("#RejectComment").focus();
+                $('#searchActionLoading').hide();
+            }
+        });
+
+        function getUpdatdPage() {
+
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '/Shared/SubmittedExpenditure',
+                data: { ExpType: 'Upheld' },
+                dataType: 'html',
+                success: function (data) {
+                    $("#divPartial").html('');
+                    $("#divPartial").html(data);
+                },
+                failure: function () {
+                    alert("fail");
+                }
+            });
+
+        }
+
+        $(".md-overlay").click(function (e) {
+            $('#modal-161').removeClass('md-show');
+        });
+
+        $("#rejectClose").click(function () {
+            $('#modal-161').removeClass('md-show');
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#HeaderExpenseID").val('');
+            $("#RejectComment").val('');
+        });
+
+
+        $(".reject").click(function (e) {
+
+            e.preventDefault();
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+
+            var redirecturl = $(this).attr('href');
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $('#modal-161').show();
+                $("#HeaderExpenseID").val('');
+                $("#RejectComment").val('');
+                $("#HeaderExpenseID").val(HeaderID);
+                $('#modal-161').addClass('md-modal md-effect-16 md-show');
+                $('#uploaddiv').html('');
+                $('#uploaddiv').html(result);
+            })
+            .error(function (xhr, status) {
+            });
+        });
+
+        $(".approved").click(function (e) {
+            e.preventDefault();
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+            var Status = "Approved";
+            var Comment = "";
+
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '/Shared/UpdateExpenseSheetStatus',
+                data: { ExpenseHeaderID: HeaderID, ExpenseComment: Comment, StatusType: Status },
+                dataType: 'json',
+                success: function (data) {
+
+                    getUpdatdPage();
+
+                    $('#modal-161').removeClass('md-show');
+                    $("#modal-16").fadeOut();
+                    $(".md-overlay").fadeOut();
+                    $("#HeaderExpenseID").val('');
+                    $("#UpheldComment").val('');
+
+                },
+                failure: function () {
+                    alert("fail");
+                }
+            });
+
+        });
+
+    });
+
+</script>

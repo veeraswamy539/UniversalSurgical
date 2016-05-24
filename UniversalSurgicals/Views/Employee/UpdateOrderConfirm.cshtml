@@ -1,0 +1,423 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.UserExpenses_Header>
+
+@{
+    ViewBag.Title = "Update Order Confirmation";
+}
+<div id="some_grid1_container">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+        <div class="grid-hd col-lg-12 col-md-12 col-sm-12  grid-headding">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 "><i class="fa fa-pencil-square-o"></i> Update Order Confirmation No and Service Order No</div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right">
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="clearfix"></div>
+   
+            @if (Model.Count != null)
+            {
+                <div class="table-responsive">
+                    <table class="table no-more-tables col-lg-12 table-color ">
+                        <thead>
+                            <tr class="grid-headding-strips">
+                                <th class="col-lg-3 col-md-3"> Expenditure Date </th>
+                                <th class="col-lg-3 col-md-3"> SO No/Explanation </th>
+                                <th class="col-lg-3 col-md-3"> Instrument Number </th>
+                                <th class="col-lg-3 col-md-3"> Actions </th>
+ 
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="v-align-middle">@item.FromDate.Value.ToString("dd/MM/yyyy").Replace("-", "/")</td>
+                                @if (@item.ServiceOrderNo != null)
+                                {
+                                    <td class="v-align-middle">@item.ServiceOrderNo</td>
+                                }
+                                else
+                                {
+                                    <td class="v-align-middle">@item.ExplanationforSONo</td>
+                                }
+                                <td class="v-align-middle">@item.SerialNoforInstrument</td>
+                                <td class="v-align-middle">
+                                    <div class="pull-left update">
+                                        <a href="#"> 
+                                        <input type="hidden" value="@item.Id" />
+                                        <input type="hidden" value="@item.SerialNoforInstrument" />
+                                        <input type="hidden" value="@item.ServiceOrderNo" />
+                                        <input type="hidden" value="@item.FK_UserHeaderID" />
+                                        <input type="hidden" value="@item.FromDate.Value.ToString("dd/MM/yyyy").Replace("-", "/")" />
+                                        <i class="fa fa-pencil-square-o"></i> Update </a>
+                                    </div>
+                                </td>
+                             </tr>
+                        }
+                        </tbody>
+                    </table>
+                    <div class="col-lg-12 col-md-12">
+                    <div id="myPagerupdateorder" class="pull-right">
+                        @Html.PagedListPager(
+                        Model,
+                        page => Url.Action("UpdateOrderConfirm", "Employee",
+                            new
+                            {
+                                humanID = ViewBag.HumanID,
+                                page = page,
+                                sortOrder = ViewBag.CurrentSort,
+                                currentFilter = ViewBag.CurrentFilter
+                            }))
+                    </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div  class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+              <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+                 </div>
+            }
+    </div>
+
+    <div class="md-modal md-effect-16" id="modal-161">
+        <div class="md-content">
+            <h3>
+                <div style="float: left"> Update Order Confirmation No </div>
+                <div style="float: right">
+                    <a href="#" id="updateClose">X</a>
+                </div>
+            </h3>
+            <input type="hidden" id="HeaderExpenseID"/>
+            <div class="col-lg-12 col-md-12" style="background-color:#fff;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-b-10 m-t-10">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left">
+                        <div class="controls">
+                            <span id="InstrumentspanID">Instrument No : </span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pull-left">
+                        <div class="controls">
+                            <label id="ldlInstrumentNo"></label>
+                            <div class="controls"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  m-b-10 m-t-10">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left">
+                        <div class="controls">  <span>Service Order No : </span> </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pull-left">
+                        <div class="controls">
+                            <input type="text" id="txtServiceOrderNo" placeholder="Serivce Order No" class="numericOnly" maxlength="15" title="Serivce Order No""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  m-b-10 m-t-10">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left">
+                        <div class="controls">   <span>Order Confirmation No : </span> </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left">
+                        <div class="controls">
+                            <input type="text" id="txtOrderConfirmationNo" title="Order Confirmation No" class="numericOnly" maxlength="15" placeholder="Order Confirmation No" />
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  m-b-10 m-t-10">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left">
+                        <div class="controls">
+                            <span>Order Confirmation Date : </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left" style="z-index:4000;">
+                        <div class="controls">
+                     
+                            <input type="text" id="txtOrderConfirmationDate" class="form-control" title="Select Order Confirmation Date" />
+                        </div>
+                        
+
+                    </div>
+
+                    </div>
+                <div class="clearfix"></div>
+                <div class="col-lg-4 col-md-4  m-b-20 pull-right m-t-10">
+                        <div class="controls">
+                            <button type="submit" id="btnSubmit" name="btnSubmit" >Submit</button>
+                        </div>
+                    </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        
+        <div class="popuppositionleft">
+ <div class="alert alert-warning" id="updateocwarning" runat="server">
+<strong>Warning !</strong><br /><label id="updateocerrormessage"></label>
+
+
+</div>
+
+</div>
+
+    </div>
+
+    <div class="md-overlay"></div>
+</div>
+
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+
+<script type="text/javascript">
+              $('.update,#myPagerupdateorder').bind('contextmenu', function (e) {
+                  alert("Mouse right click disabled");
+                  return false;
+              }); 
+        </script>
+
+<script type="text/javascript">
+    var FK_HeaderID = "";
+    var expenseDate = "";
+    $(document).ready(function () {
+
+        $(".popuppositionleft").hide();
+
+        $('#txtOrderConfirmationDate').datepicker("setDate", new Date());
+
+        $(".numericOnly").bind('keypress', function (event) {
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57) && event.which != 8 && event.which != 0 && event.which != 118 && event.which != 99) {
+                event.preventDefault();
+            }
+            if (($(this).val().indexOf('.') != -1) && event.which != 8 && ($(this).val().substring($(this).val().indexOf('.'), $(this).val().indexOf('.').length).length > 2)) {
+                event.preventDefault();
+            }
+        });
+        var keyDown = false, ctrl1 = 17, vKey1 = 86, Vkey1 = 118;
+        $('.numericOnly').keydown(function (e) {
+            if (e.keyCode == ctrl1) keyDown = true;
+        }).keyup(function (e) {
+            if (e.keyCode == ctrl1) keyDown = false;
+        });
+        $('.numericOnly').on('keypress', function (e) {
+            if (!e) var e = window.event;
+            if (e.keyCode > 0 && e.which == 0) return true;
+            if (e.keyCode) code = e.keyCode;
+            else if (e.which) code = e.which;
+            var character = String.fromCharCode(code);
+            if (character == '\b' || character == ' ' || character == '\t') return true;
+            if (keyDown && (code == vKey || code == Vkey)) return (character);
+            else return (/[0-9]$/.test(character));
+        }).on('focusout', function (e) {
+            var $this = $(this);
+            $this.val($this.val().replace(/[^0-9]/g, ''));
+        }).on('paste', function (e) {
+            var $this = $(this);
+            setTimeout(function () {
+                $this.val($this.val().replace(/[^0-9]/g, ''));
+            }, 5);
+        });
+
+
+        $(".update").click(function (e) {
+            e.preventDefault();
+            $("#modal-161").fadeIn();
+            $(".md-overlay").fadeIn();
+
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+            var InstrumentNumber = $(this).find('a > input[type=hidden]').next().val();
+            var ServiceOrderNo = $(this).find('a > input[type=hidden]').next().next().val();
+            FK_HeaderID = $(this).find('a > input[type=hidden]').next().next().next().val();
+            expenseDate = $(this).find('a > input[type=hidden]').next().next().next().next().val();
+            var redirecturl = $(this).attr('href');
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $("#AdminLoadingBg").fadeOut();
+                $("#AdminLoadimg").hide();
+                $('#modal-161').show();
+                $("#HeaderExpenseID").val('');
+                $("#HeaderExpenseID").val(HeaderID);
+                $('#ldlInstrumentNo').val('');
+
+                if (InstrumentNumber.length > 0) {
+                    $('#InstrumentspanID').show();
+                }
+                else {
+                    $('#InstrumentspanID').hide();
+                }
+                $('#ldlInstrumentNo').text(InstrumentNumber);
+                $('#txtServiceOrderNo').val('');
+
+                $('#txtServiceOrderNo').val(ServiceOrderNo);
+
+                if (ServiceOrderNo.length > 0) {
+                    $('#txtServiceOrderNo').attr('disabled', true);
+                }
+                else {
+                    $('#txtServiceOrderNo').attr('disabled', false);
+                }
+
+
+                $('#modal-161').addClass('md-modal md-effect-16 md-show');
+                $('#uploaddiv').html('');
+                $('#uploaddiv').html(result);
+            })
+            .error(function (xhr, status) {
+            });
+        });
+
+        $("#updateClose").click(function () {
+            $('#modal-161').removeClass('md-show');
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#HeaderExpenseID").val('');
+            $('#txtOrderConfirmationNo').val('');
+            $('#txtServiceOrderNo').val('');
+        });
+
+
+        $(function () {
+            $('#myPagerupdateorder').on('click', 'a', function (e) {
+                e.preventDefault();
+                if (this.href != "") {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+                    $.ajax({
+                        url: this.href,
+                        type: 'GET',
+                        cache: false,
+                        success: function (result) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            $('#divPartial').html('');
+                            $('#divPartial').empty();
+                            $('#divPartial').html(result);
+                        }
+                    });
+                }
+            });
+        });
+
+        $('#btnSubmit').click(function (e) {
+
+            var ExpenseHeaderID = $("#HeaderExpenseID").val();
+            var ExpenseSONo = $('#txtServiceOrderNo').val();
+            var SOCNo = $('#txtOrderConfirmationNo').val();
+            var SOCDate = $('#txtOrderConfirmationDate').val();
+
+            if (ExpenseHeaderID > 0) {
+                if (ExpenseSONo.length > 0) {
+                    if (ExpenseSONo.length >= 10 && ExpenseSONo.length <= 15) {
+                        if (SOCNo.length > 0) {
+                            if (SOCNo.length >= 10 && SOCNo.length <= 15) {
+                                if (SOCDate.length > 0) {
+                                    if ($.datepicker.parseDate("dd/mm/yy", expenseDate) <= $.datepicker.parseDate("dd/mm/yy", SOCDate)) {
+                                        $("#AdminLoadingBg").fadeIn();
+                                        $("#AdminLoadimg").show();
+
+                                        $.ajax({
+                                            url: '/Employee/OrderConfirmationNo',
+                                            type: "POSt",
+                                            data: { ExpenseHeaderID: ExpenseHeaderID, ServiceOrderNo: ExpenseSONo, OrderConfirmationNo: SOCNo, OrderConfirmatoinDate: SOCDate, FK_HeaderID: FK_HeaderID },
+                                            dataType: 'html',
+                                            success: function (data) {
+                                                $("#AdminLoadingBg").fadeOut();
+                                                $("#AdminLoadimg").hide();
+                                                $('#modal-161').removeClass('md-show');
+                                                $("#modal-16").fadeOut();
+                                                $(".md-overlay").fadeOut();
+                                                $("#HeaderExpenseID").val('');
+                                                $('#txtServiceOrderNo').val('');
+                                                $('#txtOrderConfirmationNo').val('');
+                                                $('#txtOrderConfirmationDate').val('');
+                                                $('#txtOrderConfirmationDate').datepicker("setDate", new Date());
+
+                                                $.ajax({
+                                                    url: '/Employee/UpdateOrderConfirm',
+                                                    type: "GET",
+                                                    datatype: 'html',
+                                                    success: function (data) {
+                                                        $("#divPartial").html('');
+                                                        $("#divPartial").html(data);
+                                                    },
+                                                    error: function (event, jqxhr, settings, exceptions) {
+                                                        alert(exceptions);
+                                                    }
+                                                });
+                                            },
+                                            error: function (event, jqxhr, settings, exception) {
+                                                alert(exception);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        $(".popuppositionleft").fadeIn();
+                                        $('#updateocerrormessage').text('Confirmation date should be greater-than expenditure date');
+                                        $('#updateocerrormessage').show();
+                                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+                                        $('#txtOrderConfirmationDate').focus();
+                                    }
+                                }
+                                else {
+                                    $(".popuppositionleft").fadeIn();
+                                    $('#updateocerrormessage').text('Please Select Order Confirmation Date');
+                                    $('#updateocerrormessage').show();
+                                    $('.popuppositionleft').delay(3000).fadeOut('slow');
+                                    $('#txtOrderConfirmationDate').focus();
+                                }
+                            }
+                            else {
+                                $(".popuppositionleft").fadeIn();
+                                $('#updateocerrormessage').text('SO Confirmation No Must Be Minimum 10 Digits');
+                                $('#updateocerrormessage').show();
+                                $('.popuppositionleft').delay(3000).fadeOut('slow');
+                                $('#txtOrderConfirmationNo').focus();
+                            }
+                        }
+                        else {
+                            $(".popuppositionleft").fadeIn();
+                            $('#updateocerrormessage').text('Please Enter Service Order Confirmation No');
+                            $('#updateocerrormessage').show();
+                            $('.popuppositionleft').delay(3000).fadeOut('slow');
+                            $('#txtOrderConfirmationNo').focus();
+                        }
+                    }
+                    else {
+                        $(".popuppositionleft").fadeIn();
+                        $('#updateocerrormessage').text('SO NO Must be 10 Digits');
+                        $('#updateocerrormessage').show();
+                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+                        $('#txtServiceOrderNo').focus();
+                    }
+                }
+                else {
+                    $(".popuppositionleft").fadeIn();
+                    $('#updateocerrormessage').text('Please Enter Service Order No');
+                    $('#updateocerrormessage').show();
+                    $('.popuppositionleft').delay(3000).fadeOut('slow');
+                    $('#txtServiceOrderNo').focus();
+                }
+            }
+        });
+    });
+</script>

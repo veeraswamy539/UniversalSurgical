@@ -1,0 +1,104 @@
+﻿@using Universal.BusinessEntities;
+@model Employees
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Signin</title>
+    @Styles.Render("~/bundles/CSS")
+    @Scripts.Render("~/bundles/modernizr")
+  
+</head>
+
+<body>
+ <form id="frmLogin">
+<div class="login-bg">
+		<div class="login-grid">
+        
+        	<div class="logo-cnt"><img src="../../Content/Images/login-logo.png" /></div>
+        	<div class="login-box">
+    			<h1>Login</h1>
+
+                      @Html.TextBoxFor(Model => Model.Employee_ID, new { @class = "login-input", @id = "txtUserId", @placeholder = "Employee ID", @Title = "" })
+        @Html.ValidationMessageFor(Model => Model.Employee_ID)
+
+
+           @Html.PasswordFor(Model => Model.Password, new { @class = "login-input", @id = "txtpassword", @placeholder = "Password", @Title = "The Password must have at least 6 characters" })
+        @Html.ValidationMessageFor(Model => Model.Password)
+
+                 <input class="login-submit" type="submit" value="Login" id="btnLogin" />
+                  <span id="result" style="display: none;"></span>
+    		</div>
+        </div>
+
+	
+	<div class="login-footer">
+    © @DateTime.Now.Year Universal Surgicals. All rights reserved.
+    </div>
+    
+    
+</div>
+</form>
+
+</body>
+
+
+    
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-migrate")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#btnLogin").click(function (e) {
+                e.preventDefault();
+                var valid = $("#frmLogin").valid();
+                if (valid) {
+                    $.ajax({
+                        cache: false,
+                        type: 'POST',
+                        url: '/Home/Signin',
+                        data: $("#frmLogin").serialize(),
+                        dataType: 'json',
+                        success: function (data) {
+                           // alert("success");
+                            // $('#result').removeAttr('class').attr('class', ((data.Available) ? 'username-available-status' : 'username-not-available-status'));
+                            $('#result').text(data.Text);
+                            if (data.Text === "success") {
+                                window.location.href = data.redirectTo;
+                                $('#result').empty();
+                                $('#result').hide();
+                                $(':input', $("#frmLogin"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                                $('#modelbg').hide();
+                                $('#modelbg').hide();
+                            }
+                            else {
+                                $('#result').text(data.Text);
+                                $('#result').show();
+                            }
+
+
+                        },
+                        failure: function () {
+                            alert("fail");
+                        }
+
+                    });
+                }
+                else {
+                    return;
+
+                }
+
+            });
+        });
+    </script>
+
+</html>

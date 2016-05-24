@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Quartz;
+using Quartz.Impl;
+
+namespace UniversalSurgicals
+{   
+    public class BlockingDatesScheduler
+    {
+        public static void Start()
+        {
+
+            IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
+            scheduler.Start();
+            IJobDetail job = JobBuilder.Create<BlockingDatesJob>().Build();
+            ITrigger trigger = TriggerBuilder.Create()
+                .WithDailyTimeIntervalSchedule(s => s
+                    .OnEveryDay()
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(11, 30))
+                    .EndingDailyAfterCount(1))
+                    .Build();
+
+
+    //        ITrigger trigger = TriggerBuilder.Create()
+    //        .WithIdentity("trigger3", "group1")
+    //.WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(11, 30))
+    //.ForJob(job)
+    //.Build();
+
+
+    //        ITrigger trigger = TriggerBuilder.Create()
+    //.WithIdentity("trigger1", "group1")
+    //.StartNow()
+    //.WithSimpleSchedule(x => x
+    //    .WithIntervalInHours(24)
+    //    .RepeatForever())
+    //.Build();
+            scheduler.ScheduleJob(job, trigger);
+        }
+    }
+}

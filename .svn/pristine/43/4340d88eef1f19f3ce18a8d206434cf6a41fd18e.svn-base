@@ -1,0 +1,580 @@
+﻿@model Universal.BusinessEntities.Employees
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>Universal Surgicals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="../../Scripts/CSS/pace-theme-flash.css" rel="stylesheet" type="text/css"
+        media="screen" />
+    <link href="../../Scripts/CSS/jquery.sidr.light.css" rel="stylesheet" type="text/css"
+        media="screen" />
+    <!-- BEGIN CORE CSS FRAMEWORK -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+        rel="Stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/animate.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/ios7-switch.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="../../Scripts/CSS/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/datatables.responsive.css" rel="stylesheet" type="text/css"
+        media="screen" />
+    <!-- END CORE CSS FRAMEWORK -->
+    <!-- BEGIN CSS TEMPLATE -->
+    <link href="../../Content/CSS/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/custom-icon-set.css" rel="stylesheet" type="text/css" />
+    <!-- END CSS TEMPLATE -->
+    <link href="../../Content/CSS/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/component.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/modernizr.custom.js" type="text/javascript"></script>
+    <style>
+        body
+        {
+            background-color: #e5e9ec;
+        }
+        .page-content
+        {
+            position: relative !important;
+            width: auto !important;
+        }
+    </style>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="" ng-app="single-page-app">
+    <!-- BEGIN HEADER -->
+    <div ng-controller="cfgController">
+        <div class="header navbar navbar-inverse ">
+            <!-- BEGIN TOP NAVIGATION BAR -->
+            <div class="navbar-inner">
+                <div class="header-seperation">
+                    <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display: none">
+                        <li class="dropdown"><a id="main-menu-toggle" href="#main-menu" class="">
+                            <div class="iconset top-menu-toggle-white">
+                            </div>
+                        </a></li>
+                    </ul>
+                    <!-- BEGIN LOGO -->
+                    <a href="@Url.Action("EmployeeExpenditures", "Shared", new { ExpType = "SubExp" })" class="none" data-toggle="tooltip" data-placement="right" title="Universal Surgicals">
+                        <img src="../../Content/Images/logo.png" class="logo" alt="" data-src="../../Content/Images/logo.png"
+                            data-src-retina="../../Content/Images/logo2x.png" /></a>
+                    <!-- END LOGO -->
+                </div>
+                <!-- END RESPONSIVE MENU TOGGLER -->
+                <div class="header-quick-nav">
+                    <!-- BEGIN TOP NAVIGATION MENU -->
+                    <div class="pull-left">
+                        <ul class="nav quick-section">
+                            <li class="quicklinks"><a href="#" class="" id="layout-condensed-toggle">
+                                <div class="iconset top-menu-toggle-dark">
+                                </div>
+                            </a></li>
+                        </ul>
+                    </div>
+                    <!-- END TOP NAVIGATION MENU -->
+                    <!-- BEGIN CHAT TOGGLER -->
+                    <div class="pull-right">
+                        <div class="chat-toggler">
+                            @*		<a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
+					<div class="user-details"> 
+						<div class="username">
+							<span class="badge badge-important">3</span> 
+                             <i class="fa fa-bell-o"></i>
+															
+						</div>						
+					</div> 
+				
+				</a>	
+				<div id="notification-list" style="display:none">
+					<div style="width:300px">
+						  <div class="notification-messages info">
+									<div class="user-profile">
+										<img src="../../Content/Images/profiles/d.jpg"  alt="" data-src="../../Content/Images/profiles/d.jpg" data-src-retina="../../Content/Images/profiles/d2x.jpg" width="35" height="35">
+									</div>
+									<div class="message-wrapper">
+										<div class="heading">
+											David Nester - Commented on your wall
+										</div>
+										<div class="description">
+											Meeting postponed to tomorrow
+										</div>
+										<div class="date pull-left">
+										A min ago
+										</div>										
+									</div>
+									<div class="clearfix"></div>									
+								</div>	
+							<div class="notification-messages danger">
+								<div class="iconholder">
+									<i class="icon-warning-sign"></i>
+								</div>
+								<div class="message-wrapper">
+									<div class="heading">
+										Server load limited
+									</div>
+									<div class="description">
+										Database server has reached its daily capicity
+									</div>
+									<div class="date pull-left">
+									2 mins ago
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>	
+							<div class="notification-messages success">
+								<div class="user-profile">
+									<img src="../../Content/Images/profiles/h.jpg"  alt="" data-src="../../Content/Images/profiles/h.jpg" data-src-retina="../../Content/Images/profiles/h2x.jpg" width="35" height="35">
+								</div>
+								<div class="message-wrapper">
+									<div class="heading">
+										You haveve got 150 messages
+									</div>
+									<div class="description">
+										150 newly unread messages in your inbox
+									</div>
+									<div class="date pull-left">
+									An hour ago
+									</div>									
+								</div>
+								<div class="clearfix"></div>
+							</div>							
+						</div>				
+				</div>
+*@
+                            <div class="profile-pic">
+                                @if (Model.ProfilePicturePath != null && Model.ProfilePicturePath != "")
+                                {
+                                    <img src="~/Content/ProfileImg/@Model.ProfilePicturePath" height="35" width="35" alt="image"/>
+                                }
+                                else
+                                {
+                                    <img src="../../Content/Images/prf-no-img.png" height="35" width="35" alt="image" />
+                                }
+                            </div>
+                            <div class="emp-diplay-name">
+                                Hello @Model.FirstName</div>
+                        </div>
+                        <ul class="nav quick-section ">
+                            <li class="quicklinks"><a data-toggle="dropdown" class="dropdown-toggle  pull-right "
+                                href="#" id="user-options"><i class="fa fa-caret-down"></i></a>
+                                <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                    <li><a href="@Url.Action("ViewProfile", "Shared", new { id = (int?)Model.Id, profile = "yes" })"  class="none">
+                                        <i class="fa fa-user"></i>&nbsp;&nbsp;Profile</a> </li>
+                                    <li class="divider"></li>
+                                    <li><a ID="changePassword" href="@Url.Action("ChangePassword", "Shared")"><i class="fa fa-key">
+                                    </i>&nbsp;&nbsp;Change Password</a> </li>
+                                    <li class="divider"></li>
+                                    <li><a ID="change" href="@Url.Action("RoleChange", "Shared")" ><i class="fa fa-user"></i>&nbsp;&nbsp;As
+                                        Employee</a> </li>
+                                    <li class="divider"></li>
+                                    <li><a href="@Url.Action("Logout", "Home")"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log
+                                        Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END CHAT TOGGLER -->
+                </div>
+                <!-- END TOP NAVIGATION MENU -->
+            </div>
+            <!-- END TOP NAVIGATION BAR -->
+        </div>
+        <!-- END HEADER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container row-fluid">
+            <!-- BEGIN SIDEBAR -->
+            <div class="page-sidebar" id="main-menu">
+                <!-- BEGIN SIDEBAR MENU -->
+                <ul>
+                    <li class="active "><a href="@Url.Action("EmployeeExpenditures", "Shared", new { ExpType = "SubExp" })" class="none" title="Expenditures">
+                        <i class="fa fa-inr"></i><span class="title">Expenditures</span> <span class="arrow selected">
+                        </span></a>
+                        <ul class="sub-menu">
+                            <li><a href="@Url.Action("EmployeeExpenditures", "Shared", new { ExpType = "SubExp" })" class="none" title="Employee Expenditures">
+                                <i class="fa fa-inr"></i>Employee Expenditures</a> </li>
+                            @* <li > <a href=@Url.Action("Training") class="none"><i class="fa fa-dropbox"></i>Training</a> </li>*@
+                            <li><a href="@Url.Action("SubmittedExpenditure", "Shared", new { ExpType = "Approved" })" class="none" title="Approved Expenditures">
+                                <i class="fa fa-check"></i>Approved Expenditures</a> </li>
+                            <li><a href="@Url.Action("SubmittedExpenditure", "Shared", new { ExpType = "Upheld" })" class="none" title="Upheld Expenditures">
+                                <i class="fa fa-pause"></i>Upheld Expenditures</a> </li>
+                            @*<li > <a href="form_validations.html"><i class="fa fa-dropbox"></i>Drafted Expen</a> </li>*@
+                        </ul>
+                    </li>
+                    <li class=""><a href="@Url.Action("EmployeeList", "Shared")" class="none" title="Employees List">
+                        <i class="fa fa-user"></i><span class="title">Employees List</span></a> </li>
+                    <li class=""><a href="@Url.Action("Leave", "Shared")" class="none" title="Leaves"><i
+                        class="fa fa-calendar"></i><span class="title">Leaves</span></a> </li>
+                    <li><a href="@Url.Action("TravelDesk", "Shared")" class="none" title="TravelDesk"><i class="fa fa-plane"></i><span class="title">TravelDesk</span></a> </li>
+                  <li class=""><a href="@Url.Action("NewsList", "Shared")" class="none" title="News"><i class="fa fa-newspaper-o"></i><span class="title">News </span> </a></li>
+
+                </ul>
+                <a href="#" class="scrollup">Scroll</a>
+                <div class="clearfix">
+                </div>
+                <!-- END SIDEBAR MENU -->
+            </div>
+            <!-- END SIDEBAR -->
+            <!-- BEGIN PAGE CONTAINER-->
+            <div class="page-content">
+                <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+                <div id="portlet-config" class="modal hide">
+                    <div class="modal-header">
+                        <button data-dismiss="modal" class="close" type="button">
+                        </button>
+                        <h3>
+                            Widget Settings</h3>
+                    </div>
+                    <div class="modal-body">
+                        Widget settings form goes here
+                    </div>
+                </div>
+                <div class="clearfix">
+                </div>
+                <div class="content">
+                    <div class="clearfix">
+                    </div>
+                    <div id="divPartial">
+                    </div>
+                </div>
+                <div class="md-modal md-effect-16" id="modal-16cPassword">
+                    <div class="md-content">
+                        <h3 style="padding-bottom: 40px;">
+                            <div style="float: left;">
+                                Change Password</div>
+                            <div style="float: right">
+                                <a href="#" id="Passwordpopclose">X</a></div>
+                        </h3>
+                        <div style="background-color: #fff;" id="divload">
+                            <input type="hidden" id="hdnId" value="@Model.Id" />
+                        </div>
+                    </div>
+                </div>
+                <div class="md-overlay">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END CONTAINER -->
+    <!-- END CONTAINER -->
+    <!-- BEGIN CORE JS FRAMEWORK-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="../../Scripts/Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/breakpoints.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.unveil.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jqueryblockui.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
+    <!-- END CORE JS FRAMEWORK -->
+    <!-- BEGIN PAGE LEVEL JS -->
+    <script src="../../Scripts/Scripts/jquery.sidr.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/pace.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.animateNumbers.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/ios7-switch.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.dataTables.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/TableTools.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/Scripts/datatables.responsive.js"></script>
+    <script type="text/javascript" src="../../Scripts/Scripts/lodash.min.js"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- END PAGE LEVEL PLUGINS  -->
+    <script src="../../Scripts/Scripts/form_elements.js" type="text/javascript"></script>
+    <!-- BEGIN CORE TEMPLATE JS -->
+    <script src="../../Scripts/Scripts/core.js" type="text/javascript"></script>
+    @*<script src="../../Scripts/js/chat.js" type="text/javascript"></script> *@
+    <script src="../../Scripts/Scripts/demo.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.idle-timer.js" type="text/javascript"></script>
+    <!--[if lt IE 10]>
+    <script src="../../Scripts/jquery.placeholder.js" type="text/javascript"></script>
+     <![endif]-->
+
+      <script type="text/javascript">
+          $('.none,#change,#changePassword,#layout-condensed-toggle').bind('contextmenu', function (e) {
+              alert("Mouse right click disabled");
+              return false;
+          }); 
+        </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            var timeout = 10;
+            timeout = (parseInt(timeout) * 60000);
+            $(document).bind("idle.idleTimer", function () {
+
+
+                $.ajax({
+                    url: '/home/Relogin',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+
+                })
+                   .success(function (result) {
+                       $('#divPartial').show();
+                       //  alert(result);
+                       $('#divPartial').html('');
+                       $('#divPartial').html(result);
+                   })
+                   .error(function (xhr, status) {
+                       // alert("2");
+                   });
+                //                $("#divPartial").html('');
+                //                $("#divPartial").html("User is idle :(").css("backgroundColor", "silver");
+                //                alert("user idle for more than " + (timeout / 1000) + " secs")
+            });
+            //            $(document).bind("active.idleTimer", function () {
+            //                $("#divPartial").html("User is active :D").css("backgroundColor", "yellow");
+            //            });
+            $.idleTimer(timeout);
+        }); 
+
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+            $('#exp-list').slimScroll({
+                color: '#08a9c6',
+                opacity: 1,
+                size: '7px',
+                height: '600px',
+                position: 'left',
+                railVisible: true,
+                alwaysVisible: true,
+                disableFadeOut: true,
+                overflow: scroll
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.popuppositionleft').hide();
+            $(this).scrollTop(0);
+            $("#Passwordpopclose").click(function () {
+                $('#modal-16cPassword').removeClass('md-show');
+                $(".md-overlay").fadeOut();
+                $("#txtOldPassword-error").empty();
+                $("#txtNewPassword-error").empty();
+                $("#txtConfirmPassword-error").empty();
+
+                $('#txtOldPassword,#txtNewPassword,#txtConfirmPassword').val("");
+
+
+
+            });
+            $(".md-overlay").click(function (e) {
+                $('#modal-16cPassword').removeClass('md-show');
+                $("#txtOldPassword-error").empty();
+                $("#txtNewPassword-error").empty();
+                $("#txtConfirmPassword-error").empty();
+
+                $('#txtOldPassword,#txtNewPassword,#txtConfirmPassword').val("");
+            });
+            $("#changePassword").click(function (e) {
+                e.preventDefault();
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $("#modal-16cPassword").fadeIn();
+                $(".md-overlay").fadeIn();
+                $('#modal-16cPassword').addClass('md-show');
+                $('#notvalidmessage').empty();
+                $('#result').hide();
+                $('#result').empty();
+
+                $.ajax({
+                    url: this.href,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { id: $("#hdnId").val() },
+                    dataType: 'html'
+
+                })
+                   .success(function (result) {
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                       $('#divload').show();
+                       //  alert(result);
+                       $('#divload').html('');
+                       $('#divload').html(result);
+                   });
+            });
+
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            var targetrouter = '@Session["url"]'
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+
+            if (targetrouter == "") {
+                $.ajax({
+                    url: "/Shared/EmployeeExpenditures",
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { Page: 0, id: 2 },
+                    dataType: 'html'
+
+                })
+                   .success(function (result) {
+                       $('#divPartial').show();
+                       //  alert(result);
+                       $('#divPartial').html(result);
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                   })
+                   .error(function (xhr, status) {
+                       // alert("2");
+                   });
+            }
+            else {
+
+
+                if (targetrouter == '/Manager/EmployeeExpenditure') {
+                    document.title = 'Universal Surgical | Employee Expenditure';
+
+                }
+                else if (targetrouter == '/Shared/EmployeeList') {
+                    document.title = 'Universal Surgical | Employee List';
+
+                }
+
+                else if (targetrouter == '/Manager/ManagerProfile') {
+
+                    document.title = 'Universal Surgical | Profile';
+
+                }
+
+                else if (targetrouter == '/Manager/Training') {
+                    document.title = 'Universal Surgical | Training';
+
+                }
+
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+
+                //alert(targetrouter);
+
+                $.ajax({
+                    url: targetrouter,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+
+                })
+                   .success(function (result) {
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                       $('#divPartial').show();
+
+                       $('#divPartial').html(result);
+                   })
+                   .error(function (xhr, status) {
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                       // alert("2");
+                   });
+            }
+            $(".none").click(function (e) {
+                e.preventDefault();
+
+
+                var redirecturl = $(this).attr('href');
+
+                $('li').removeClass('active');
+                var ulornot = jQuery(this).parents('li').has("ul").length;
+                if (ulornot == 0) {
+                    jQuery(this).parent().addClass('active')
+                }
+                else {
+                    jQuery(this).parents('li[class^="open"]').addClass('active');
+                }
+
+                // alert(redirecturl);
+                //  $("#pageval").val(redirecturl);
+                //alert($("#pageval").val());
+                if (redirecturl.indexOf('/Shared/EmployeeExpenditures') != -1) {
+                    $(".sub-menu").css('display', 'block');
+                }
+                else {
+                    $(".sub-menu").css('display', 'none');
+                }
+
+                if (redirecturl == '/Manager/EmployeeExpenditure') {
+                    document.title = 'Universal Surgical | Employee Expenditure';
+
+                }
+                else if (redirecturl == '/shared/EmployeeList') {
+                    document.title = 'Universal Surgical | Employee List';
+
+                }
+
+                else if (redirecturl == '/Manager/ManagerProfile') {
+
+                    document.title = 'Universal Surgical | Profile';
+
+                }
+
+                else if (redirecturl == '/Manager/Training') {
+                    document.title = 'Universal Surgical | Training';
+
+                }
+
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Home/SessionOut',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if (data.Text === "session") {
+                            $.ajax({
+                                url: redirecturl,
+                                contentType: 'application/html; charset=utf-8',
+                                type: 'GET',
+                                dataType: 'html'
+
+                            })
+                     .success(function (result) {
+                         $("#AdminLoadingBg").fadeOut();
+                         $("#AdminLoadimg").hide();
+                         $('#divPartial').empty();
+                         $('#divPartial').val("");
+                         $('#divPartial').show();
+                         //  alert(result);
+                         $('#divPartial').html(result);
+                     })
+                 .error(function (xhr, status) {
+                     $("#AdminLoadingBg").fadeOut();
+                     $("#AdminLoadimg").hide();
+                     // alert("2");
+                 });
+                        }
+                        else {
+                            window.location.href = "/Home/Logout";
+                        }
+                    },
+                    failure: function () {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        alert("fail");
+                    }
+
+
+                });
+            });
+        });
+    </script>
+     <div id="AdminLoadingBg" runat="server" style="position: fixed; height: 100%; display: none; width: 100%;  background-color: #F3F3F3; z-index:8888; opacity: 0.5; top: 0; left: 0;"></div>
+
+<div id="AdminLoadimg" runat="server" style="text-align: center; padding: 50px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:100px; "> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+</body>
+</html>

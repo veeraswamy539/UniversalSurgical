@@ -1,0 +1,164 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.UserExpenses_Header>
+
+
+<div class="col-lg-12 search-strip">
+    <div class="col-lg-12">
+    </div>
+    </div>
+
+<div id="some_grid1_containerrtrt">
+    <div class="content-cont container-fluid">
+    <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12  emp-exd-frm ">
+
+
+
+                    <div class="grid-hd col-lg-12 col-md-12 col-sm-12  grid-headding">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 "><i class="fa fa-check"></i> Payment Confirmation Expenditure</div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right">
+                <div class="col-md-4 emp-exp-dt pull-right text-right">
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="clearfix"></div>
+  
+    
+    @if (Model.Count != 0)
+    {
+       
+        
+           <div class="table-responsive">
+   
+        
+        <table class="table no-more-tables col-lg-12 table-color ">
+                <thead>
+                    
+                              <tr class="grid-headding-strips">
+                  
+                    <th class="col-lg-2 col-md-2">Employee ID</th>
+                    <th class="col-lg-2 col-md-2">Employee Name</th>
+                    <th class="col-lg-2 col-md-2">SO/Explanation</th>
+                      <th class="col-lg-2 col-md-2">Expense Date</th>
+                    <th class="col-lg-2 col-md-2">Amount</th>
+
+                    <th class="col-lg-2 col-md-2">Paid Date</th>
+            
+                </tr>
+
+                </thead>
+                
+
+                <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    
+                    <td class="col-lg-2 col-md-2">@item.Employee_ID</td>
+                    <td class="col-lg-2 col-md-2">@item.EmployeeName</td>
+                    @if (@item.ServiceOrderNo == null)
+                    {
+                        <td class="col-lg-2 col-md-2">@item.ExplanationforSONo</td>
+                    }
+                    else
+                    {
+                        <td class="col-lg-2 col-md-2">@item.ServiceOrderNo</td>
+                    }
+
+                    <td class="col-lg-2 col-md-2">@item.FromDate.Value.ToString("dd/MM/yyyy").Replace("-", "/")</td>
+
+                    <td class="col-lg-2 col-md-2">@item.TotalAmount</td>
+
+                    @if (@item.PaidAmountDate != null && @item.PaidAmountDate.ToString().Length > 0)
+                    {
+                    <td class="col-lg-2 col-md-2">@item.PaidAmountDate.Value.ToString("dd/MM/yyyy").Replace("-", "/")</td>
+                    }
+                    else
+                    {
+                     <td class="col-lg-2 col-md-2"></td>
+                    }
+                </tr>
+            }
+            </tbody>
+
+            </table>
+
+
+
+             <div class="col-lg-12 col-md-12">
+                <div id="myPagerpaymentconfirm" class="pull-right">
+                    @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+               "PaymentConfirmation", "Admin",
+            new
+            {
+                humanID = ViewBag.HumanID,
+                page = page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter
+            }
+        )
+    )
+                </div>
+            </div>
+
+            </div>
+        
+        
+    }
+    else
+    {
+            <div  class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+<img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+    }
+
+
+        </div>
+
+
+    </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $('#myPagerpaymentconfirm').bind('contextmenu', function (e) {
+            alert("Mouse right click disabled");
+            return false;
+        }); 
+        </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(function () {
+                $('#myPagerpaymentconfirm').on('click', 'a', function (e) {
+                    e.preventDefault();
+                    if (this.href != "") {
+                        $("#AdminLoadingBg").fadeIn();
+                        $("#AdminLoadimg").show();
+                        $.ajax({
+                            url: this.href,
+                            type: 'GET',
+                            cache: false,
+                            success: function (result) {
+                                $("#AdminLoadingBg").fadeOut();
+                                $("#AdminLoadimg").hide();
+                                $('#divPartial').html('');
+                                $('#divPartial').empty();
+                                $('#divPartial').html(result);
+                            }
+                        });
+                    }
+                });
+            });
+
+        });
+
+        </script>

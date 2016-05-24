@@ -1,0 +1,121 @@
+﻿@using Universal.BusinessEntities;
+@model UserGroups
+@Scripts.Render("~/bundles/jqueryval")
+<form id="frmUpdateGroup">
+<div class="col-lg-12" style="min-height: 250px; padding-top: 30px;">
+    <div class="col-lg-12 col-md-4  m-b-10 ">
+        <div class="controls">
+            @Html.HiddenFor(Model => Model.Id)
+            @Html.TextBoxFor(Model => Model.UserGroup_ID, new { @class = "form-control", @placeholder = "User Group Name", @id = "txtGroupName", @Title = "", @disabled = "disabled" })
+            @Html.ValidationMessageFor(Model => Model.UserGroup_ID)
+                        @Html.HiddenFor(Model => Model.UserGroup_ID)
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+    <div class="col-lg-12  col-md-6  m-b-10">
+        <div class="controls">
+            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control", @placeholder = "Description", @id = "txtDesc", @Title = "" })
+            @Html.ValidationMessageFor(Model => Model.Description)
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+    <div class="col-lg-4 col-md-4  m-b-10 pull-right">
+        <div class="controls">
+            <button type="submit" class="md-trigger" id="btnUpdateGroup" name="btnUpdateGroup"
+                value="Update User Group">
+                Update</button>
+        </div>
+    </div>
+
+                 <div class="clearfix"></div>
+
+         <div class="alert alert-success" id="result1" style="display: none; width:80%; text-align:center; margin-left:30px;"></div>
+
+
+         <div id="UpdateusergroupLoadimg" runat="server" style="text-align: center; padding: 50px; display:none; height:100%; width:100%; z-index:10000; position:fixed; top:0%; left:0%;"> <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+</div>
+</form>
+
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#btnUpdateGroup").click(function (e) {
+            e.preventDefault();
+        
+            var valid = $("#frmUpdateGroup").valid();
+            //            alert($("#frmCreateZone").serialize());
+            if (valid) {
+                $("#UpdateusergroupLoadimg").show();
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Admin/UpdateUserGroup',
+                    data: $("#frmUpdateGroup").serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#UpdateusergroupLoadimg").hide();
+                        if (data.Available === true) {
+
+                            $('#result1').show();
+                            $(':input', $("#frmUpdateGroup"))
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('selected');
+                            $('#result1').show();
+                            $('#result1').text(data.Text);
+                            setTimeout(function () {
+
+                                $('#modal-161').removeClass('md-show');
+                                $.ajax({
+                                    url: "/Admin/UserGroupsList",
+                                    contentType: 'application/html; charset=utf-8',
+                                    type: 'GET',
+                                    cache: false,
+                                    dataType: 'html'
+
+                                })
+                     .success(function (result) {
+
+                         $('#divPartial').html(result);
+                     })
+                      .error(function (xhr, status) {
+                          // alert("2");
+                      });
+
+
+                            }, 3000);
+
+
+                        }
+                        else {
+                            $('#result1').text(data.Text);
+                            $('#result1').show();
+                        }
+
+
+                    },
+                    failure: function () {
+                        alert("fail");
+                    }
+
+                });
+            }
+            else {
+                return;
+
+            }
+
+        });
+    });
+</script>

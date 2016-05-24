@@ -1,0 +1,1210 @@
+﻿@model Universal.BusinessEntities.PayStub
+@Scripts.Render("~/bundles/jqueryval")
+<div class="col-lg-12 search-strippayroll">
+    <div class="col-lg-3 col-md-3 payroll">
+    <img src="~/Content/Images/payslipicon.png" alt="Print Payslip" title="Print Payslip" height="20" width="20">
+  Payslip
+    </div>
+    <div class="col-lg-3 col-md-3 selectmonth">
+
+
+    <span >Select Month</span>
+    </div>
+
+    <div class="col-lg-3 col-md-3">
+        @Html.DropDownList("Month", new List<SelectListItem>
+                    { 
+                new SelectListItem { Text = "January", Value = "1"},
+                new SelectListItem { Text = "February", Value = "2" },
+                new SelectListItem { Text = "March", Value = "3"},
+                new SelectListItem { Text = "April", Value = "4" },
+                new SelectListItem { Text = "May", Value = "5"},
+                new SelectListItem { Text = "June", Value = "6" },
+                new SelectListItem { Text = "July", Value = "7"},
+                new SelectListItem { Text = "August", Value = "8" },
+                new SelectListItem { Text = "September", Value = "9"},
+                new SelectListItem { Text = "October", Value = "10" },
+                new SelectListItem { Text = "November", Value = "11"},
+                new SelectListItem { Text = "December", Value = "12" },
+                      }, "Select Month ", new { @class = "form-control", @id = "ddlMonth", @placeholder = "Select Month", @Title = "Month" })
+    </div>
+
+  <div class="col-lg-3 col-md-3" style="text-align:right;">
+
+
+   <a href="#" id="btnPrint"><img src="~/Content/Images/print.ico" alt="Print Payslip" title="Print Payslip" height="42" width="42"></a>
+
+@*
+    <div class="dfl-buttom">
+   <input type="button" id="btnPrint" name="Download" value="Download" class="btn" style="margin-top: 5px" />
+   </div>*@
+  </div>
+
+</div>
+<div class="content-cont col-lg-12 col-md-12 no-padding" id="sal" style="margin-top: 80px">
+    <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+
+        <html>
+        <head>
+            <title></title>
+        </head>
+        <body>
+
+
+            <style>
+                .payroll { padding:0px; margin:0px; color:#fff; font-size:23px;  }
+             .selectmonth { padding:0px; margin:0px; font-size:16px; color:#fff; text-align:right; }
+                
+	.payslip {
+		width:100%;
+		border:1px solid #C0C0C0;
+		border-collapse:collapse;
+		padding:5px;
+
+	}
+	.payslip th {
+		border:1px solid #C0C0C0;
+		padding:5px;
+		background-color:#3DBEBA!important;
+		text-align: left;
+		padding-left: 20px;
+		color:#fff;
+	}
+	.payslip td {
+		border:1px solid #C0C0C0;
+		padding:5px;
+		padding-left: 20px;
+       
+	}
+	
+	.paysliptitle { padding:0px; margin:0px; text-align:right; font-size:31px; font-weight:bold; font-family:'Open Sans'; color:#3DBEBA;}
+	
+
+	.headleft {width:78%; text-align:right;  }
+	
+	.headsub { width:78%; padding-right:39px; }
+	
+	.headright {width:20%; float:right; }
+	
+	.firstgrid { width:30%; float:left; }
+	
+	.secondgrid { width:30%; float:left; }
+	
+	.thirdgrid { width:30%; float:left; }
+	
+	.spanlabel { width:100%; }
+	
+	.subtitle { float:left; width:50%}
+	
+	.logoplace { position:absolute; right:0; top:0 }
+	
+	.payslipmain { margin-top:10px; }
+
+	
+</style>
+            @if (Model.Flag == false)
+            {
+                if (Model.salaryDetails.Empcode != null && @Model.salaryDetails.Month != null && @Model.salaryDetails.CTCMonth != null)
+                {
+                <div id="test">
+      @*              <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="dfl-buttom">
+                            <input type="button" id="btnPrint" name="Download" value="Download" class="btn" style="margin-top: 5px" />
+                        </div>
+                    </div>*@
+
+
+
+                    <div class="col-lg-12 m-t-10">
+                <div class="col-lg-9 headleft" id="Heading12" >
+                
+                <div class="col-lg-9 paysliptitle headleft">Universal Surgicals</div>
+                 <div class="col-lg-9 headsub">15-15-57/3, 3/2, Prince Appartments</div>
+                  <div class="col-lg-9 headsub" >Beach Road, Visakhapatnam</div>
+
+                  <div class="col-lg-9 headsub">
+                             @if (@Model.salaryDetails.Month != null)
+                             {
+                                        
+                                   
+                                            <span><b>Payslip for the month of </b></span><span id="monthprint">@Model.salaryDetails.Month.Value.Date.ToString("MMM-yyyy")</span>
+                                        @Html.HiddenFor(s => s.salaryDetails.Month.Value.Month, new { @id = "MonthValue" })
+                             }
+                  
+                  
+                  </div>
+
+                
+                </div>
+
+                     <div class="logoplace" id="weblogo" >
+                     <img src= "@Url.Content("~/Content/Images/login-logo.png")" alt="IMAGES" />
+                     </div>
+
+
+                     </div>
+
+                              <div class="clearfix">
+                    </div>
+
+                    <div class="payslipmain">
+
+                     <div class="col-lg-12 m-t-20">
+
+                        <div class="col-lg-12 firstgrid">
+
+                        <div class="col-lg-12 spanlabel">
+                         <span class="subtitle"><b >Employee_ID  :</b></span><span class="subtitle" id="hidnEmployeeID"> @Model.salaryDetails.Empcode</span>
+                         </div>
+                       
+                    
+
+                 
+
+                        </div>
+
+                         <div class="col-lg-12 secondgrid">
+
+                             <div class="col-lg-12 spanlabel">
+                        <span class="subtitle"><b>Employee Name  </b></span> : @Model.salaryDetails.EmployeeName
+                        </div>
+                         </div>
+
+                          <div class="col-lg-12 thirdgrid">
+                                        <div class="col-lg-12">
+                                  <span class="subtitle"><b>Designation  </b></span>: @Model.salaryDetails.Designation
+                                 </div>
+                          </div>
+
+
+                        </div>
+                        </div>
+                                         <div class="clearfix">
+                    </div>
+
+                       
+
+
+
+
+
+
+
+
+
+
+
+@*
+                    <div style="float: left; display: none;" id="ExcelLogo">
+                        <img src= "@Url.Content("~/Content/Images/login-logo.png")" alt="IMAGES" />
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                    <table cellspacing="0">
+                        <tr>
+                            <td>
+                                <div id="Heading12" style="display: inline; float: left; font-weight: bold; color: #333645;
+                                    margin-left: 30px;">
+                                    <span>Universal Surgicals</span>
+                                    <div class="clearfix">
+                                    </div>
+                                    <span>15-15-57/3, 3/2, Prince Appartments</span>
+                                    <div class="clearfix">
+                                    </div>
+                                    <span>Beach Road, Visakhapatnam</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="float: left; margin-left: 30px;">
+                                    @if (@Model.salaryDetails.Month != null)
+                                    {
+                                        <div>
+                                            <span><b>Payslip for the month of </b></span><span id="monthprint">@Model.salaryDetails.Month.Value.Date.ToString("MMM-yyyy")</span></div>
+                                        @Html.HiddenFor(s => s.salaryDetails.Month.Value.Month, new { @id = "MonthValue" })
+                                    }
+                                    <div>
+                                        <span><b>Employee_ID : </b></span><span id="hidnEmployeeID">@Model.salaryDetails.Empcode</span></div>
+                                    <div>
+                                        <span><b>Employee Name : </b></span>@Model.salaryDetails.EmployeeName</div>
+                                    <div>
+                                        <span><b>Designation : </b></span>@Model.salaryDetails.Designation</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="clearfix">
+                    </div>*@
+                    <br>
+                    <table class="payslip">
+                        <thead>
+                            <tr>
+                                <th colspan="4">
+                                    Details<br>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span><b>Location</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>@Model.salaryDetails.Location</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>Days Paid </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>@Model.salaryDetails.PD</b></span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Days Working </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span>@Model.salaryDetails.WD</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>DOB </b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails.DOB != null && @Model.salaryDetails.DOB != "")
+                                {
+                                    <td>
+                                        <span><b>@Model.salaryDetails.DOB.ToString().Substring(0, @Model.salaryDetails.DOB.IndexOf(" "))</b></span>&nbsp;
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                @*<td><span><b>CLR  </b></span>&nbsp;</td>
+		<td><span>@Model.CLR</span>&nbsp;</td>*@
+                                <td>
+                                    <span><b>DOJ </b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails.DOJ != null && @Model.salaryDetails.DOJ != "")
+                                {
+                                    <td>
+                                        <span><b>@Model.salaryDetails.DOJ.ToString().Substring(0, @Model.salaryDetails.DOJ.IndexOf(" "))</b></span>&nbsp;
+                                    </td>
+                                }
+                                <td>
+                                    <span><b>PAN# </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>@Model.salaryDetails.PAN</b></span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>CL </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span>@Model.salaryDetails.CL</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>UAN# </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>@Model.salaryDetails.UANHash</b></span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>SL </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span>@Model.salaryDetails.SL</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>PF#</b></span> &nbsp;
+                                </td>
+                                <td>
+                                    <span><b>@Model.salaryDetails.PFHash</b></span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Total Leaves </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>@Model.salaryDetails.TL</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>ESI#</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>@Model.salaryDetails.ESIHash</b></span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <table class="payslip">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                    Earnings<br>
+                                </th>
+                                <th colspan="2">
+                                    Deductions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span><b>Basic + DA </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.BasicEarned</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>PF Employee </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.PFDeducted</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>HRA </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.HRAEarned</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>PF Employer </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.PFEmployerPaid</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Conveyance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.ConvEarned</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>ESI Employee </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.ESIDeducted</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Special Allow </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.SplAlEarned</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>ESI Employer </b></span>
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.ESIEmplyerPaid</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Variablepay </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.Variablepayearned</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>Professional Tax </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b><i class="fa fa-inr"></i>@Model.salaryDetails.PT</b></span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Grosspay</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b><i class="fa fa-inr"></i>@Model.salaryDetails.GrossEarned</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>IncomeTax:</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <i class="fa fa-inr"></i>@Model.salaryDetails.TDS
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>NetPay </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <i class="fa fa-inr"></i>@Model.salaryDetails.NetPaid&nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                @if (@Model.salaryDetails.CTCMonth != null)
+                                {
+                                    <td>
+                                        <span><b>CTCMonth </b></span>&nbsp;
+                                    </td>
+                                }
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails.CTCMonth</span>&nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            @*
+
+    @Html.Hidden(@Model.Employee_ID, new {@id="hidnEmployeeID" })*@
+                        </tbody>
+                    </table>
+                </div>
+                }
+                else
+                {
+                         <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+            <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+                }
+            }
+            else
+            {
+                if (Model.salaryDetails_NEW.Empcode != null && @Model.salaryDetails_NEW.Month1 != null)
+                {
+                <div id="test">
+
+
+                  <div class="col-lg-12 m-t-10">
+                <div class="col-lg-9 headleft" id="Heading12" >
+                
+                <div class="col-lg-9 paysliptitle headleft">Universal Surgicals</div>
+                 <div class="col-lg-9 headsub">15-15-57/3, 3/2, Prince Appartments</div>
+                  <div class="col-lg-9 headsub" >Beach Road, Visakhapatnam</div>
+
+                  <div class="col-lg-9 headsub">
+                             @if (@Model.salaryDetails_NEW.Month1 != null)
+                                    {
+                                        <div>
+                                            <span><b>Payslip for the month of </b></span><span id="monthprint">@Model.salaryDetails_NEW.Month1.ToString("MMM-yyyy")</span></div>
+                                        @Html.HiddenFor(s => s.salaryDetails_NEW.Month1.Month, new { @id = "MonthValue" })
+                                    }
+                  
+                  
+                  </div>
+
+                
+                </div>
+
+                     <div class="logoplace" >
+                     <img src= "@Url.Content("~/Content/Images/login-logo.png")" alt="IMAGES" />
+                     </div>
+
+
+                     </div>
+
+                       <div class="clearfix">
+                    </div>
+
+                    <div class="payslipmain">
+
+                     <div class="col-lg-12 m-t-20">
+
+                        <div class="col-lg-4 firstgrid">
+
+                        <div class="col-lg-12 spanlabel">
+                         <span class="subtitle"><b >Employee_ID  :</b></span><span class="subtitle" id="hidnEmployeeID"> @Model.salaryDetails_NEW.Empcode</span>
+                         </div>
+                       
+                        <div class="col-lg-12 spanlabel">
+                        <span class="subtitle"><b>Employee Name  </b></span> : @Model.salaryDetails_NEW.EmployeeName
+                        </div>
+
+                        </div>
+
+                        <div class="col-lg-4 secondgrid">
+
+                                 <div class="col-lg-12">
+                                  <span class="subtitle"><b>Designation  </b></span>: @Model.salaryDetails_NEW.Designation
+                                 </div>
+
+
+                                  <div class="col-lg-12">
+                                  <span class="subtitle"><b>Level  </b></span>: @Model.salaryDetails_NEW.Level
+                                  </div>
+
+                        </div>
+                        
+                        <div class="col-lg-4 thirdgrid">
+
+                                 <div class="col-lg-12">
+                                  <span class="subtitle"><b>Location  </b></span>: @Model.salaryDetails_NEW.Location
+                                 </div>
+
+
+                                  <div class="col-lg-12">
+                                  <span class="subtitle"><b>Days Paid  </b></span>: @Model.salaryDetails_NEW.PD
+                                  </div>
+
+                        </div>
+
+                     </div>
+
+
+                   <div class="col-lg-12">
+
+
+                        <div class="col-lg-4 firstgrid">
+
+                                 <div class="col-lg-12">
+                                  <span class="subtitle"><b>DOB  </b></span>
+                                  
+                                  
+                                         @if (@Model.salaryDetails_NEW.DOB != null && @Model.salaryDetails_NEW.DOB != "")
+                                {
+                                    
+                                        <span>: @Model.salaryDetails_NEW.DOB.ToString().Substring(0, @Model.salaryDetails_NEW.DOB.IndexOf(" "))</span>
+                                    
+                                }
+
+                                 </div>
+
+
+                                  <div class="col-lg-12">
+                                  <span class="subtitle"><b>Days Working  </b></span>: @Model.salaryDetails_NEW.WD
+                                  </div>
+
+                        </div>
+
+                        <div class="col-lg-4 secondgrid">
+
+                                 <div class="col-lg-12">
+                                  <span class="subtitle"><b>DOJ  </b></span>
+                                  
+                                         @if (@Model.salaryDetails_NEW.DOJ != null && @Model.salaryDetails_NEW.DOJ != "")
+                                {
+                                    
+                                        <span>: @Model.salaryDetails_NEW.DOJ.ToString().Substring(0, @Model.salaryDetails_NEW.DOJ.IndexOf(" "))</span>
+                                   
+                                }
+
+                                 </div>
+
+
+                                  <div class="col-lg-12">
+                                  <span class="subtitle"><b>Casual Leaves  </b></span>: @Model.salaryDetails_NEW.CL
+                                  </div>
+
+                        </div>
+
+                        <div class="col-lg-4 thirdgrid">
+
+                                 <div class="col-lg-12">
+                                  <span class="subtitle"><b>PAN#  </b></span>: @Model.salaryDetails_NEW.PAN
+                                 </div>
+
+
+                                  <div class="col-lg-12">
+                                  <span class="subtitle"><b>SicK Leaves  </b></span>: @Model.salaryDetails_NEW.SL
+                                  </div>
+
+                        </div>
+
+                     </div>
+
+                       <div class="col-lg-12">
+
+                       <div class="col-lg-4 firstgrid">
+
+                                 <div class="col-lg-12">
+                                  <span class="subtitle"><b>UAN#  </b></span>: @Model.salaryDetails_NEW.UANHash
+                                 </div>
+
+
+                                  <div class="col-lg-12">
+                                  <span class="subtitle"><b>Total Leaves  </b></span>: @Model.salaryDetails_NEW.TL
+                                  </div>
+
+                        </div>
+                        
+                       <div class="col-lg-4 secondgrid">
+
+                                 <div class="col-lg-12">
+                                  <span class="subtitle"><b>PF#  </b></span>: @Model.salaryDetails_NEW.PFHash
+                                 </div>
+
+
+                                  <div class="col-lg-12">
+                                  <span class="subtitle"><b>ESI#  </b></span>: @Model.salaryDetails_NEW.ESIHash
+                                  </div>
+
+                        </div>
+
+                        </div>
+
+                        </div>
+
+
+                    <div class="col-md-4 emp-exp-dt pull-right text-right">
+                        <div class="dfl-buttom">
+                           @* <input type="button" id="btnPrint" name="Download" value="Download" class="btn" style="margin-top: 5px" />*@
+                        </div>
+                    </div>
+         @*           <div style="float: left; display: none;" id="ExcelLogo">
+                        <img src= "@Url.Content("~/Content/Images/login-logo.png")" alt="IMAGES" />
+                    </div>*@
+                    <div class="clearfix">
+                    </div>
+                    
+                    <div class="clearfix">
+                    </div>
+                
+                    <table class="payslip m-t-10">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                    Earnings<br>
+                                </th>
+                                <th colspan="2">
+                                    Deductions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span><b>Basic + DA </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.BasicMonthly</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>PF Employee Share </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.PFEmployeeMonthly</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>House Rent Allowance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.HRAmonthly</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>ESI Employee Share </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.ESIEmployeeMonthly</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Conveyance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.ConvMonthly</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>Professional Tax </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.PT</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Special Allowance </b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails_NEW.SplAlwMonthly == null)
+                                {
+                                     <td>
+                                          <span><i class="fa fa-inr"></i>  0 </span>
+                                      </td>
+                                }
+                                else
+                                {
+                               
+                                    <td>
+                                       <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.SplAlwMonthly</span>&nbsp;
+                                   </td>
+                                }   
+                                <td>
+                                    <span><b>Tax Deduction at Source </b></span>
+                                </td>
+                                @if (@Model.salaryDetails_NEW.TDS == null)
+                                {
+                                      <td>
+                                          <span><i class="fa fa-inr"></i>  0 </span>
+                                      </td>
+                                }
+                                else
+                                {
+                                     <td>
+                                        <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.TDS</span>&nbsp;
+                                     </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Gross Pay </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.GrossMonthly</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>Total Deductions </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.TotalDeduct</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Net Pay</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.NetSalaryMonthly</span>&nbsp;
+                                </td>
+                                <td>
+                                   
+                                </td>
+                                <td>
+                                   
+                                </td>
+                            </tr>
+                       
+                        </tbody>
+                    </table>
+                  
+                    <table class="payslip m-t-10">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                    Compensations<br>
+                                </th>
+                                <th colspan="2">
+                                    Benefits
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span><b>Basic + DA </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.BasicProjected</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>PF Employer </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.PFEmployerP</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>House Rent Allowance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.HRAProjected</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>ESI Employer </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.ESIEmployerP</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Conveyance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.ConvProjected</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>Medical Allowance </b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails_NEW.MedicalAllowanceYearly == null)
+                                {
+                                      <td>
+                                          <span><i class="fa fa-inr"></i>  0 </span>
+                                      </td>
+                                }
+                                else
+                                {
+                                   <td>
+                                      <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.MedicalAllowanceYearly</span>&nbsp;
+                                   </td>
+                                } 
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Special Allowance </b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails_NEW.SplAlwMonthly == null)
+                                {
+                                     <td>
+                                          <span><i class="fa fa-inr"></i>  0 </span>
+                                      </td>
+                                }
+                                else
+                                {
+                               
+                                     <td>
+                                         <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.SplAlwProjected</span>&nbsp;
+                                     </td>
+                                }
+                                <td>
+                                    <span><b>Leave Travel Allowance </b></span>
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.LTAYearly</span>&nbsp;
+                                </td>
+                            </tr>
+                            @*<tr>
+                                <td>
+                                    <span><b>Variable Pay </b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails_NEW.PerformancebasedVariablepayYearly == null)
+                                {
+                                    <td>
+                                          <span><i class="fa fa-inr"></i>  0 </span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                       <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.PerformancebasedVariablepayYearly</span>&nbsp;
+                                    </td>
+                                }
+                                <td>
+                                   
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>*@
+                                                 
+                        </tbody>
+                    </table>
+                     <table class="payslip">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                   Total Compensation & Benefits Projected
+
+
+                                </th>
+                              <th colspan="2">
+                                  <span><b><i class="fa fa-inr"></i> @Model.salaryDetails_NEW.TotalProjected</b></span>&nbsp;
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                       
+                        @if (@Model.salaryDetails_NEW.PerformancebasedVariablepayYearly != null && @Model.salaryDetails_NEW.PerformancebasedVariablepayYearly !="0")
+                        {
+                                <tr> <td>
+                                    <span>*** Based on your performance you are entitled to variable pay up to ₹ @Model.salaryDetails_NEW.PerformancebasedVariablepayYearly /- payable at the end of the financial year.</span>&nbsp;&nbsp;&nbsp;
+                                </td>
+                              
+                            </tr>
+                            }
+                            </tbody>
+                    </table>
+               
+                    <table class="payslip m-t-10">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                    Compensations<br>
+                                </th>
+                                <th colspan="2">
+                                    Benefits
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span><b>Basic + DA </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.BasicPaid</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>Health Insurance</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.HealthInsurance</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>House Rent Allowance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.HRAPaid</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>Group Insurance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.GroupInsurance</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Conveyance </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.ConvPaid</span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><b>PF Employer </b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.PFEmployerPaid</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span><b>Special Allowance </b></span>&nbsp;
+                                </td>
+                                 @if (@Model.salaryDetails_NEW.SplAlwPaid == null)
+                                 {
+                                     <td>
+                                          <span><i class="fa fa-inr"></i>  0 </span>
+                                      </td>
+                                 }
+                                 else
+                                 {
+                               
+                                    <td>
+                                        <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.SplAlwPaid</span>&nbsp;
+                                    </td>
+                                 }
+                                <td>
+                                    <span><b>ESIC Employer </b></span>
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.ESIEmployerPaid</span>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <span><b>Medical Allowance </b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails_NEW.MedicalAllowancePaid == null)
+                                {
+                                    <td>
+                                        <span><i class="fa fa-inr"></i>  0 </span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                       <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.MedicalAllowancePaid</span>&nbsp;
+                                    </td>
+                                }
+                            </tr>
+                                <tr>
+                                <td>
+                                   
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <span><b>Leave Travel Allowance</b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails_NEW.LTAPaid == null)
+                                {
+                                   <td>
+                                       <span><i class="fa fa-inr"></i>  0 </span>
+                                   </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.LTAPaid</span>&nbsp;
+                                    </td>
+                                }
+                            </tr> 
+                            <tr>
+                                <td>
+                                   
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <span><b>Education/Training</b></span>&nbsp;
+                                </td>
+                                @if (@Model.salaryDetails_NEW.SoftskillsYearly == null)
+                                {
+                                    <td>
+                                       <span><i class="fa fa-inr"></i>  0 </span>
+                                   </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                      <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.SoftskillsYearly</span>&nbsp;
+                                   </td>
+                                }
+                            </tr>   
+                            
+                            <tr>
+                                <td>
+                                   
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <span><b>Travel Allowance</b></span>&nbsp;
+                                </td>
+                                <td>
+                                    <span><i class="fa fa-inr"></i>@Model.salaryDetails_NEW.TravelAllowancePaid</span>&nbsp;
+                                </td>
+                            </tr>              
+                        </tbody>
+                    </table>
+                     <table class="payslip">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                   Total Compensation & Benefits Earned  
+                                </th>
+                              <th colspan="2">
+                                   <span><b><i class="fa fa-inr"></i> @Model.salaryDetails_NEW.TotalPaid</b></span>&nbsp;
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                }
+                else
+                {
+                <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+            <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+                }
+
+            }
+        </body>
+        </html>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var EmployeeIDprint = $('#hidnEmployeeID').text();
+        var monthprint = $('#monthprint').text();
+        document.title = 'Payslip_' + EmployeeIDprint + "_" + monthprint;
+        $('#ddlMonth').val($('#MonthValue').val());
+        $('#ddlMonth').change(function (e) {
+            e.preventDefault();
+            var month = $('#ddlMonth').val();
+            var EmployeeID = $('#hidnEmployeeID').text();
+            MonthlySalaryDetails(month, EmployeeID);
+        });
+
+        function MonthlySalaryDetails(month, EmployeeID) {
+            var monthprint = $('#monthprint').text();
+            document.title = 'Payslip_' + EmployeeID + "_" + monthprint;
+            $.ajax({
+                cache: false,
+                type: 'GET',
+                url: '/Employee/GetSalaryDetails',
+                data: { Month: month, EmployeeId: EmployeeID },
+                success: function (data) {
+                    $('#divPartial').html('');
+
+                    $('#divPartial').html(data);
+                }
+            });
+
+        }
+        $("#btnPrint").click(function (e) {
+            $('#Heading').show();
+            $('#Heading1').show();
+            $('#divF').show();
+            $('#ExcelLogo').show();
+            $('#btnPrint').hide();
+            $('#btnPrint').css("display", "none");
+            $('#ExcelLogo').css("display", "block");
+            //            window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('div[id$=test]').html()));
+            //            e.preventDefault();
+            //            $('#Heading').hide();
+            //            $('#divF').hide();
+            //            $('#ExcelLogo').hide();
+            //            $('#Heading1').hide();
+
+            var contents = $("#test").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="~/Content/CSS/style.css" rel="stylesheet" type="text/css" />' +
+                                    '<link href="../../Scripts/CSS/font-awesome.css" rel="stylesheet" type="text/css" />' +
+                                    '<link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />' +
+                                    '<link href="../../Content/CSS/default.css" rel="stylesheet" type="text/css" />' +
+                                    '<link href="../../Content/CSS/component.css" rel="stylesheet" type="text/css" />' +
+                                    '<link href="../../Content/CSS/custom-icon-set.css" rel="stylesheet" type="text/css" />' +
+                                    '<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="Stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write('<style>.payslip {width:100%;border:1px solid #C0C0C0;border-collapse:collapse;padding:5px; margin-top:5px;}.payslip th {border:1px solid #C0C0C0;padding:5px;background-color:#3DBEBA!important;text-align:left;padding-left: 20px;}' + '.payslip td {border:1px solid #C0C0C0;padding:5px;padding-left: 20px; font-size:12px;}' + '.paysliptitle { padding:0px; margin:0px; text-align:right; font-size:31px; font-weight:bold; font-family:Open Sans; color:#3DBEBA;}' + '.payslipsubtitle {padding:0px; margin:0px; margin-left:335px; font-size:12px;}' + '.headleft {width:80%; text-align:right; }' + '.headright {width:20%; float:left; }' + '.firstgrid { width:35%; float:left; font-size:12px;}' + '.secondgrid { width:35%; float:left; font-size:12px; }' + '.thirdgrid { width:30%; float:left; font-size:12px; }' + '.subtitle { float:left; width:50%;}' + '.spanlabel { width:100%; }' + '.logoplace { position:absolute; right:0; top:0 }' + '.payslipmain { margin-top:10px; }' + '	.headsub { width:78%; padding-right:30px; }</style>');
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+
+            $('#Heading').hide();
+            $('#divF').hide();
+            $('#ExcelLogo').hide();
+            $('#Heading1').hide();
+            $('#btnPrint').show();
+
+
+        });
+    });
+
+</script>

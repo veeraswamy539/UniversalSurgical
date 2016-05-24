@@ -1,0 +1,581 @@
+﻿@model Universal.BusinessEntities.Employees
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>Universal Surgicals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="../../Scripts/CSS/pace-theme-flash.css" rel="stylesheet" type="text/css"
+        media="screen" />
+    <link href="../../Scripts/CSS/jquery.sidr.light.css" rel="stylesheet" type="text/css"
+        media="screen" />
+    <!-- BEGIN CORE CSS FRAMEWORK -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+        rel='stylesheet' type='text/css' />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+        rel="Stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/animate.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/CSS/datepicker.css" rel="stylesheet" type="text/css" />
+    <!-- END CORE CSS FRAMEWORK -->
+    <!-- BEGIN CSS TEMPLATE -->
+    <link href="../../Content/CSS/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/custom-icon-set.css" rel="stylesheet" type="text/css" />
+    <!-- END CSS TEMPLATE -->
+    <link href="../../Content/CSS/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/CSS/component.css" rel="stylesheet" type="text/css" />
+    <style>
+        body
+        {
+            background-color: #e5e9ec;
+        }
+        .page-content
+        {
+            position: relative !important;
+            width: auto !important;
+        }
+        
+        .src-nn
+        {
+            display: none;
+        }
+        .mrg-nn
+        {
+            margin-top: 0px !important;
+        }
+        
+        /*.datepicker-dropdown.datepicker-orient-left::before{ left:179px;}
+.datepicker-dropdown.datepicker-orient-left::after{ left:180px;}
+*/
+    </style>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="" ng-app="single-page-app">
+    <!-- BEGIN HEADER -->
+    <div ng-controller="cfgController">
+        <div class="header navbar navbar-inverse ">
+            <!-- BEGIN TOP NAVIGATION BAR -->
+            <div class="navbar-inner">
+                <div class="header-seperation">
+                    <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display: none">
+                        <li class="dropdown"><a id="main-menu-toggle" href="#main-menu" class="">
+                            <div class="iconset top-menu-toggle-white">
+                            </div>
+                        </a></li>
+                    </ul>
+                    <!-- BEGIN LOGO -->
+                    <a href="@Url.Action("EmployeeExpenditure")" class="none" data-toggle="tooltip" data-placement="right" title="Universal Surgicals">
+                        <img src="../../Content/Images/logo.png" class="logo" alt="" data-src="../../Content/Images/logo.png"
+                            data-src-retina="../../Content/Images/logo2x.png" /></a>
+                    <!-- END LOGO -->
+                </div>
+                <!-- END RESPONSIVE MENU TOGGLER -->
+                <div class="header-quick-nav">
+                    <!-- BEGIN TOP NAVIGATION MENU -->
+                    <div class="pull-left">
+                        <ul class="nav quick-section">
+                            <li class="quicklinks"><a href="#" class="" id="layout-condensed-toggle">
+                                <div class="iconset top-menu-toggle-dark">
+                                </div>
+                            </a></li>
+                        </ul>
+                    </div>
+                    <!-- END TOP NAVIGATION MENU -->
+                    <!-- BEGIN CHAT TOGGLER -->
+                    <div class="pull-right">
+                        <div class="chat-toggler">
+                            <div class="profile-pic">
+                                @if (Model.ProfilePicturePath != null && Model.ProfilePicturePath != "")
+                                {
+                                    <img src="../../Content/ProfileImg/@Model.ProfilePicturePath" height="35" width="35" alt="image"/>
+                                }
+                                else
+                                {
+                                    <img src="../../Content/Images/prf-no-img.png" height="35" width="35" alt="image" />
+                                }
+                            </div>
+                            <div class="emp-diplay-name">
+                                Hello @Model.FirstName</div>
+                        </div>
+                        <ul class="nav quick-section ">
+                            <li class="quicklinks"><a data-toggle="dropdown" class="dropdown-toggle  pull-right "
+                                href="#" id="user-options"><i class="fa fa-caret-down"></i></a>
+                                <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                    <li><a href="@Url.Action("ViewProfile", "Shared", new { id = (int?)Model.Id, profile = "yes" })" class="none">
+                                        <i class="fa fa-user"></i>&nbsp;&nbsp;Profile</a> </li>
+                                    <li class="divider"></li>
+                                    <li><a ID="changePassword" href="@Url.Action("ChangePassword", "Shared")"><i class="fa fa-key">
+                                    </i>&nbsp;&nbsp;Change Password</a> </li>
+                                    @if (Model.FK_UserGroup != 3)
+                                    {
+                                        
+                                        <li><a id="revert" href="@Url.Action("RevertRole", "Shared", new { id = (int?)Model.FK_UserGroup })" >
+                                            <i class="fa fa-user"></i>&nbsp;&nbsp;As @Model.Role</a> </li>
+                                    }
+                                    <li class="divider"></li>
+                                    <li><a href="@Url.Action("Logout", "Home")"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log
+                                        Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END CHAT TOGGLER -->
+                </div>
+                <!-- END TOP NAVIGATION MENU -->
+            </div>
+        </div>
+        <!-- END CHAT TOGGLER -->
+    </div>
+    <!-- END TOP NAVIGATION MENU -->
+    </div>
+    <!-- END TOP NAVIGATION BAR -->
+    </div>
+    <!-- END HEADER -->
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container row-fluid">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar" id="main-menu">
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul>
+                <li class="active "><a href="@Url.Action("Expenditure")" class="none" title="Expenditure">
+                    <i class="fa fa-inr"></i><span class="title">Expenditure</span> <span class="arrow selected">
+                    </span></a>
+                    <ul class="sub-menu exp">
+                        <li><a href="@Url.Action("Expenditure")" class="none" title="Create Expenditure"><i
+                            class="fa fa-plus"></i>Create Expenditure</a> </li>
+                        <li><a href="@Url.Action("Training")" class="none" title="Training Expenditure"><i
+                            class="fa fa-black-tie"></i>Training</a> </li>
+                        <li><a href="@Url.Action("SubmittedExpenditure", "Shared", new { ExpType = "SubExp" })" class="none" title="Submitted Expenditure">
+                            <i class="fa fa-share-square-o"></i>Submitted Expenditure</a> </li>
+                        <li class="app-exp-tb"><a href="@Url.Action("SubmittedExpenditure", "Shared", new { ExpType = "Approved" })" class="none" title="Approved Expenditure">
+                            <i class="fa fa-check"></i>Approved Expenditure</a></li>
+                        <li class="uph-exp-tb"><a href="@Url.Action("SubmittedExpenditure", "Shared", new { ExpType = "Upheld" })" class="none" title="Upheld Expenditure">
+                            <i class="fa fa-pause"></i>Upheld Expenditure</a></li>
+                        <li class="rej-exp-tb"><a href="@Url.Action("SubmittedExpenditure", "Shared", new { ExpType = "Rejected" })" class="none" title="Rejected Expenditure">
+                            <i class="fa fa-times"></i>Rejected Expenditure</a></li>
+                        <li class="dft-exp-tb"><a href="@Url.Action("DraftedExpenditure")" class="none" title="Drafted Expenditure">
+                            <i class="fa fa-pencil-square-o"></i>Drafted Expenditure</a> </li>
+                        <li><a href="@Url.Action("UpdateOrderConfirm")" class="none" title="Update Order Confirmation No and Service Order No">
+                            <i class="fa fa-wrench"></i>Update OC No & SO No</a> </li>
+                        <li><a href="@Url.Action("ExpenditureReport")" class="none" title="Expense Reports">
+                            <i class="fa fa-bar-chart"></i>Expense Reports</a> </li>
+                    </ul>
+                </li>
+                @*<li class="start active "> <a href=@Url.Action("npart") class="none"> <i class="fa fa-inr"></i> <span class="title">Emp Expenditure</span> <span class="selected"></span></a> </li>*@
+                @*<li class=""> <a href="@Url.Action("profile")" class="none"> <i class="fa fa-user"></i> <span class="title">Profile</span></a> </li>   *@
+                <li class=""><a href="@Url.Action("TravelDesk", "Shared")" class="none" title="Travel Desk">
+                    <i class="fa fa-plane"></i><span class="title">Travel Desk</span></a></li>
+                <li class=""><a href="@Url.Action("Leave", "Shared")" class="none" title="Leave"><i
+                    class="fa fa-calendar"></i><span class="title">Leave</span></a></li>
+                <li class=""><a href="@Url.Action("HR", "Shared")" class="none" title="HR"><i class="fa fa-user-md">
+                </i><span class="title">HR</span></a> @*<li class=""><a href="../../Content/Universal Surgicals Employee Handbook rev1.1.doc" class="" title="Employee Handbook"><span class="title">Employee Handbook</span></a>*@
+                    <ul class="sub-menu hr">
+                        <li class=""><a href="@Url.Action("HR", "Shared")" class="none" title="ORG Chart"><i
+                            class="fa fa-sitemap"></i>ORG Chart</a></li>
+                        <li class=""><a href="../../Content/Universal Surgicals Employee Handbook.pdf" target="_blank"
+                            title="Employee Handbook"><i class="fa fa-book"></i>Employee Handbook</a></li>
+                        <li class=""><a href="@Url.Action("SkillsMetrics", "Employee", new { Employeeid = Model.Employee_ID })" class="none" title="Skill Matrix">
+                            <i class="fa fa-cloud-upload"></i>Skill Set</a></li>
+                        <li class=""><a href="@Url.Action("EmployeeAssetsList", "Shared", new { id = 3 })" class="none" title="Asset Assigned">
+                            <i class="fa fa-suitcase"></i>Employee Assets</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="@Url.Action("GetSalaryDetails", "Employee", new { EmployeeId = Model.Employee_ID })" class="none" title="Pay Stub">
+                    <i class="fa fa-calendar"></i><span class="title">Pay Stub</span></a></li>
+                      <li class=""><a href="@Url.Action("NewsList", "Shared")" class="none" title="News"><i class="fa fa-newspaper-o"></i><span class="title">News </span> </a></li>
+         
+            </ul>
+            <a href="#" class="scrollup">Scroll</a>
+            <div class="clearfix">
+            </div>
+            <!-- END SIDEBAR MENU -->
+        </div>
+        <!-- END SIDEBAR -->
+        <!-- BEGIN PAGE CONTAINER-->
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div id="portlet-config" class="modal hide">
+                <div class="modal-header">
+                    <button data-dismiss="modal" class="close" type="button">
+                    </button>
+                    <h3>
+                        Widget Settings</h3>
+                </div>
+                <div class="modal-body">
+                    Widget settings form goes here
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            <div class="content">
+                <div class="clearfix">
+                </div>
+                <div id="divPartial" class=" col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding">
+                </div>
+            </div>
+            <div class="md-modal md-effect-16" id="modal-16cPassword">
+                <div class="md-content">
+                    <h3 style="padding-bottom: 40px;">
+                        <div style="float: left;">
+                            Change Password</div>
+                        <div style="float: right">
+                            <a href="#" id="Passwordpopclose">X</a></div>
+                    </h3>
+                    <div style="background-color: #fff;" id="divload">
+                        <input type="hidden" id="hdnId" value="@Model.Id" />
+                    </div>
+                </div>
+            </div>
+            <div class="md-overlay">
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- END CONTAINER -->
+    <!-- END CONTAINER -->
+    <!-- BEGIN CORE JS FRAMEWORK-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/breakpoints.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.unveil.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jqueryblockui.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
+    <!-- END CORE JS FRAMEWORK -->
+    <!-- BEGIN PAGE LEVEL JS -->
+    <script src="../../Scripts/Scripts/jquery.sidr.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/pace.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.animateNumbers.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/ios7-switch.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/jquery.dataTables.js" type="text/javascript"></script>
+    <script src="../../Scripts/Scripts/TableTools.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/Scripts/datatables.responsive.js"></script>
+    <script type="text/javascript" src="../../Scripts/Scripts/lodash.min.js"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- END PAGE LEVEL PLUGINS  -->
+    <script src="../../Scripts/Scripts/form_elements.js" type="text/javascript"></script>
+    <!-- BEGIN CORE TEMPLATE JS -->
+    <script src="../../Scripts/Scripts/core.js" type="text/javascript"></script>
+    @*<script src="../../Scripts/js/chat.js" type="text/javascript"></script> *@
+    <script src="../../Scripts/Scripts/demo.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.idle-timer.js" type="text/javascript"></script>
+    <!--[if lt IE 10]>
+    <script src="../../Scripts/jquery.placeholder.js" type="text/javascript"></script>
+     <![endif]-->
+    <script type="text/javascript">
+        $('.none,#revert,#changePassword,#layout-condensed-toggle').bind('contextmenu', function (e) {
+            alert("Mouse right click disabled");
+            return false;
+        }); 
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+            var timeout = 10;
+            timeout = (parseInt(timeout) * 60000);
+            $(document).bind("idle.idleTimer", function () {
+
+
+                $.ajax({
+                    url: '/home/Relogin',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+
+                })
+                   .success(function (result) {
+                       $('#divPartial').show();
+                       //  alert(result);
+                       $('#divPartial').html('');
+                       $('#divPartial').html(result);
+                   })
+                   .error(function (xhr, status) {
+                       // alert("2");
+                   });
+
+            });
+            $.idleTimer(timeout);
+        }); 
+
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+            $('#exp-list').slimScroll({
+                color: '#08a9c6',
+                opacity: 1,
+                size: '7px',
+                height: '600px',
+                position: 'left',
+                railVisible: true,
+                alwaysVisible: true,
+                disableFadeOut: true,
+                overflow: scroll
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(this).scrollTop(0);
+            $(".popuppositionleft").hide();
+
+            $("#revert").click(function (e) {
+                e.preventDefault();
+                var redirecturl = $(this).attr('href');
+
+                $.ajax({
+                    url: redirecturl,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'json'
+
+                })
+       .success(function (data) {
+           if (data.Text === "success") {
+               window.location.href = data.redirectTo;
+           }
+       })
+       .error(function (xhr, status) {
+
+       });
+            });
+            $("#Passwordpopclose").click(function () {
+                $('#modal-16cPassword').removeClass('md-show');
+                $(".md-overlay").fadeOut();
+                $("#txtOldPassword-error").empty();
+                $("#txtNewPassword-error").empty();
+                $("#txtConfirmPassword-error").empty();
+
+                $('#txtOldPassword,#txtNewPassword,#txtConfirmPassword').val("");
+
+
+
+            });
+            $(".md-overlay").click(function (e) {
+                $('#modal-16cPassword').removeClass('md-show');
+                $("#txtOldPassword-error").empty();
+                $("#txtNewPassword-error").empty();
+                $("#txtConfirmPassword-error").empty();
+
+                $('#txtOldPassword,#txtNewPassword,#txtConfirmPassword').val("");
+            });
+            $("#changePassword").click(function (e) {
+                e.preventDefault();
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $("#modal-16cPassword").fadeIn();
+                $(".md-overlay").fadeIn();
+                $('#modal-16cPassword').addClass('md-show');
+                $('#notvalidmessage').empty();
+                $('#result').hide();
+                $('#result').empty();
+
+                $.ajax({
+                    url: this.href,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    data: { id: $("#hdnId").val() },
+                    dataType: 'html'
+
+                })
+                   .success(function (result) {
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                       $('#divload').show();
+                       //  alert(result);
+                       $('#divload').html('');
+                       $('#divload').html(result);
+                   });
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+            var targetrouter = '@Session["url"]'
+            $("#AdminLoadingBg").fadeIn();
+            $("#AdminLoadimg").show();
+
+            if (targetrouter == "") {
+                $.ajax({
+                    url: "/employee/Expenditure",
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+                })
+                   .success(function (result) {
+                       $('#divPartial').show();
+                       //  alert(result);
+                       $('#divPartial').html(result);
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                   })
+                   .error(function (xhr, status) {
+                       // alert("2");
+                   });
+            }
+            else {
+
+                if (targetrouter == '/Employee/Expenditure') {
+                    document.title = 'Universal Surgicals | Expenditure';
+
+                }
+                else if (targetrouter == '/Employee/profile') {
+                    document.title = 'Universal Surgicals | Profile';
+
+                }
+
+                else if (targetrouter == '/Shared/Leave') {
+                    document.title = 'Universal Surgicals | Leave';
+
+                }
+                else if (targetrouter == '/Employee/Training') {
+                    document.title = 'Universal Surgicals | Training';
+
+                }
+                if (targetrouter.indexOf("/Employee/GetSalaryDetails") != -1) {
+                    document.title = 'Universal Surgicals | Payslip';
+
+                }
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+                $.ajax({
+                    url: targetrouter,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+
+                })
+                   .success(function (result) {
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                       $('#divPartial').show();
+                       //                         alert(result);
+                       $('#divPartial').html(result);
+                   })
+                   .error(function (xhr, status) {
+                       $("#AdminLoadingBg").fadeOut();
+                       $("#AdminLoadimg").hide();
+                       // alert("2");
+                   });
+            }
+            $(".none").click(function (e) {
+                e.preventDefault();
+                var redirecturl = $(this).attr('href');
+                // alert(redirecturl);
+                //  $("#pageval").val(redirecturl);
+                //alert($("#pageval").val());
+                $('li').removeClass('active');
+                var ulornot = jQuery(this).parents('li').has("ul").length;
+                if (ulornot == 0) {
+                    jQuery(this).parent().addClass('active')
+                }
+                else {
+                    jQuery(this).parents('li[class^="open"]').addClass('active');
+                }
+                if (redirecturl.indexOf('/Employee/ExpenditureReport') != -1) {
+                    $(".sub-menu").css('display', 'none');
+                }
+                else if (redirecturl.indexOf('/Employee/Expenditure') != -1) {
+                    $(".exp").css('display', 'block');
+                }
+                else if (redirecturl.indexOf('/Shared/HR') != -1) {
+                    $(".hr").css('display', 'block');
+
+                }
+                else {
+                    $(".exp").css('display', 'none');
+                    $(".hr").css('display', 'none');
+                }
+                if (redirecturl == '/Employee/Expenditure') {
+                    document.title = 'Universal Surgicals | Expenditure';
+
+                }
+                if (redirecturl.indexOf("/Employee/GetSalaryDetails") != -1) {
+                    document.title = 'Universal Surgicals | Payslip';
+
+                }
+                else if (redirecturl == '/Employee/profile') {
+                    document.title = 'Universal Surgicals | Profile';
+
+                }
+
+                else if (redirecturl == '/Shared/Leave') {
+
+                    document.title = 'Universal Surgicals | Leave';
+
+                }
+
+                else if (redirecturl == '/Employee/Training') {
+                    document.title = 'Universal Surgicals | Training';
+
+                }
+
+                $("#AdminLoadingBg").fadeIn();
+                $("#AdminLoadimg").show();
+
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '/Home/SessionOut',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if (data.Text === "session") {
+                            $.ajax({
+                                url: redirecturl,
+                                contentType: 'application/html; charset=utf-8',
+                                type: 'GET',
+                                dataType: 'html'
+
+                            })
+       .success(function (result) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           $('#divPartial').empty();
+           $('#divPartial').val("");
+           $('#divPartial').show();
+           //  alert(result);
+           $('#divPartial').html(result);
+       })
+       .error(function (xhr, status) {
+           $("#AdminLoadingBg").fadeOut();
+           $("#AdminLoadimg").hide();
+           // alert("2");
+       });
+                        }
+                        else {
+                            window.location.href = "/Home/Logout";
+                        }
+                    },
+                    failure: function () {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        alert("fail");
+                    }
+
+
+                });
+            });
+        });
+    </script>
+    @*  @if (IsSectionDefined("EmployeeScripts"))
+    {
+        @RenderSection("EmployeeScripts", required: false)
+    }*@
+    <div id="AdminLoadingBg" runat="server" style="position: fixed; height: 100%; display: none;
+        width: 100%; background-color: #F3F3F3; z-index: 8888; opacity: 0.5; top: 0;
+        left: 0;">
+    </div>
+    <div id="AdminLoadimg" runat="server" style="text-align: center; padding: 50px; display: none;
+        height: 100%; width: 100%; z-index: 10000; position: fixed; top: 100px;">
+        <img alt="loading" src="../../Content/Images/loading.gif" height="300" width="300" /></div>
+</body>
+</html>

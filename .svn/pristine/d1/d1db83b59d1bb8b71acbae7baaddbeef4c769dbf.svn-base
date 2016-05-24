@@ -1,0 +1,489 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.Employees>
+@{
+    ViewBag.Title = "EmployeeStatus";
+}
+<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 search-strip">
+    <div class="col-lg-12 col-md-12">
+        @if (Session["AccountMgr"] != null || Session["TravelManager"] != null || Session["Manager"] != null)
+        {
+            <div class="col-lg-3 col-md-3 search-fld ">
+                @Html.DropDownList("Zone", ViewBag.Zones as List<SelectListItem>, "Select All Zones", new { @class = "form-control", @id = "ddlZone", @Title = "Zone" })
+            </div>
+            
+        }
+        <div class="col-lg-3  col-md-3  m-b-10">
+            <div class="controls">
+                @Html.DropDownList("ddlstatusVAL", new List<SelectListItem>{ 
+                     new SelectListItem { Text = "Active", Value = "true"},
+                      new SelectListItem { Text = "Inactive", Value = "false" },  
+                      }, "Select Employee Status", new { @class = "form-control", @id = "ddlstatusVAL", @placeholder = "Select Employee Status", @Title = "Select Employee Status" })
+                @Html.ValidationMessage("Status")
+                @* @Html.ValidationMessageFor(model => model.LeavingReason)*@
+            </div>
+        </div>
+        <div class="col-lg-2 dt-pik">
+            <div class="input-append success date">
+                @Html.TextBox("FromDate", "", new { @placeholder = "From Date", @id = "fromdate", @required = "required", @Title = "From Date" })
+                <span class="add-on"><i class="fa fa-calendar"></i></span>
+                <label id="dateerrormessage"></label>
+            </div>
+        </div>
+        <div class="col-lg-2 dt-pik ">
+            <div class="input-append success date">
+                @Html.TextBox("ToDate", "", new { @placeholder = "To Date", @id = "todate", @required = "required", @Title = "To Date" })
+                <span class="add-on"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4  ">
+            <a href="#" id="searchBtn" class="col-lg-12 col-md-12 frm-src-fld  ">Get Records</a>
+        </div>
+    </div>
+</div>
+
+<div id="testemp">
+    <div class="content-cont col-lg-12 col-md-12 no-padding" id="testemp1">
+        <div class=" container-fluid emp-exd-frm margin-20 p-b-20">
+            @if (@ViewBag.empgroup == null)
+            {
+                <div class="grid-hd col-lg-12 col-md-12 col-sm-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 grid-headding">
+                    <div id="Heading1">
+                        <i class="fa fa-bar-chart"></i> Employees Status Report</div>
+                        </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <div class="col-lg-10 col-md-3 emp-exp-dt">
+                            @if (Model.Count != 0)
+                            {
+                              
+                                
+                                <a href="#" id="btnExport1"><img src="~/Content/Images/pdfdownload.png" alt="Download Excel" title="PDF Download" height="42" width="42"></a>
+                                  
+                            }
+                            <div class="clearfix">
+                            </div>
+      
+                        </div>
+
+                                                     <div class="col-lg-1 col-md-3 emp-exp-dt">
+                            @if (Model.Count != 0)
+                            {
+                               
+                                  <a href="#" id="btnExportExcel" onClick="javascript:fnExcelReport();"><img src="~/Content/Images/exceldownload.png" alt="Download Excel" title="Excel Download" height="42" width="42"></a>
+                            }
+                            <div class="clearfix">
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+    
+            }
+            <div class="clearfix">
+            </div>
+            <div id="Heading" style="display: none; float: left; font-weight: bold; color: #333645;">
+                <span>Universal Surgicals</span>
+                <div class="clearfix">
+                </div>
+                <span>15-15-57/3, 3/2, Prince Appartments</span>
+                <div class="clearfix">
+                </div>
+                <span>Beach Road, Visakhapantam</span>
+            </div>
+            <div style="float: left; display: none;" id="ExcelLogo">
+                <img src= "@Url.Content("~/Content/Images/login-logo.png")" alt="IMAGES" />
+           
+            </div>
+            
+            <div id="divF" style="display: none; font-weight: bold; color: #333645;">
+             <div id="divlogoEXL"></div>
+              <label id="spanzone"></label>
+            <label id="spanstatus"></label>
+            <label id="spanfromdate"></label>
+            <label id="spantodate"></label>
+          
+        </div>
+            <div class="table-responsive" id="normallist">
+                @if (Model.Count != 0)
+                {
+                    <table class="table no-more-tables col-lg-12 table-color" id="myTable">
+                        <thead>
+                            <tr class="grid-headding-strips">
+                                <th>
+                                    Employee ID
+                                </th>
+                                <th>
+                                    Employee Name
+                                </th>
+                                @*<th class="col-lg-2 col-md-2">Employee Name</th>*@
+                                <th>
+                                    Zone
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Joined Date
+                                </th>
+                                <th>
+                                    Left Date
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="v-align-middle">@item.Employee_ID
+                                    </td>
+                                    <td class="v-align-middle">@item.FullName
+                                    </td>
+                                    <td class="v-align-middle">@item.ZoneName
+                                    </td>
+                                    <td class="v-align-middle">@item.Position
+                                    </td>
+                                    @if (item.DOJ != null)
+                                    {
+                                        <td class="v-align-middle">@item.DOJ.Value.ToString("dd-MM-yyyy")
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="v-align-middle">
+                                            -
+                                        </td>
+
+                                    }
+                                    @if (item.CompanyLeftDate != null)
+                                    {
+                                        <td class="v-align-middle">@item.CompanyLeftDate.Value.ToString("dd-MM-yyyy")
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="v-align-middle">
+                                            -
+                                        </td>
+
+                                    }
+                                </tr>   
+
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    
+                            if (@ViewBag.ZonesCount != null)
+                            {
+                  <span class="totalrecords">Total Number Of Records : @ViewBag.ZonesCount</span>  
+                            }
+                }
+                else
+                {
+                    <div class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+                      <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+                        
+                        </div>
+                }
+            </div>
+            <div class="table-responsive" id="zoneswize">
+                @if (ViewBag.StatusZonesWise != null)
+                {
+                    <table class="table no-more-tables col-lg-12 table-color">
+                        <thead>
+                            <tr class="grid-headding-strips">
+                                <th>
+                                    Zone Name
+                                </th>
+                                <th>
+                                    Active Employees
+                                </th>
+                                <th>
+                                    Inactive Employees
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.StatusZonesWise)
+                            {
+                                <tr>
+                                    <td class="v-align-middle">@item.ZoneName
+                                    </td>
+                                    <td class="v-align-middle">@item.Active
+                                    </td>
+                                     <td class="v-align-middle">@item.Inactive
+                                    </td>
+                                </tr>   
+
+                            }
+                        </tbody>
+                    </table>
+        
+                    
+                }
+               
+            </div>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(this).scrollTop(0);
+            $(function () {
+                $("#fromdate").datepicker();
+                $("#todate").datepicker();
+            });
+
+        });
+        var statuvval = '@(ViewBag.StatusDDL)';
+        //        alert(statuvval);
+        var dd = document.getElementById('ddlstatusVAL');
+        for (var i = 0; i < dd.options.length; i++) {
+            if (dd.options[i].value === statuvval) {
+                dd.selectedIndex = i;
+                break;
+            }
+        }
+        var zoneval = $("#ddlZone").val();
+        $("#normallist").show();
+        $("#zoneswize").hide();
+        if(zoneval==="count") {
+            $("#normallist").hide();
+            $("#zoneswize").show();
+        }
+        else {
+            $("#normallist").show();
+            $("#zoneswize").hide();
+        }
+        $('#searchBtn').click(function (e) {
+            e.preventDefault();
+            var zone = $("#ddlZone").val();
+            var empstatusAC = $("#ddlstatusVAL").val();
+            var fromdate = $("#fromdate").val();
+            var todate = $("#todate").val();
+           
+                if (fromdate.length > 0 && todate.length > 0) {
+                    
+                if ($.datepicker.parseDate("dd/mm/yy", fromdate) <= $.datepicker.parseDate("dd/mm/yy", todate)) {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+                    $.ajax({
+                        url: "/Admin/EmployeeStatus",
+                        type: 'GET',
+                        cache: false,
+                        data: { zone: zone, empstatus: empstatusAC, fromdate: fromdate, todate: todate },
+
+                        success: function (result) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            $('#divPartial').html('');
+                            $('#divPartial').empty();
+                            $('#divPartial').html(result);
+                        }
+                    });
+                }
+                else {
+                    
+                    $("#dateerrormessage").text('');
+                    $('#dateerrormessage').text("From date should be less than to date");
+                    $('#dateerrormessage').show();
+                }
+            }
+            else {
+                if (zone != "" || empstatusAC != "" || fromdate != "" || todate != "") {
+                    $("#AdminLoadingBg").fadeIn();
+                    $("#AdminLoadimg").show();
+                }
+                else {
+                    $("#AdminLoadingBg").fadeOut();
+                    $("#AdminLoadimg").hide();
+                }
+                $.ajax({
+                    url: "/Admin/EmployeeStatus",
+                    type: 'GET',
+                    cache: false,
+                    data: { zone: zone, empstatus: empstatusAC, fromdate: fromdate, todate: todate },
+
+                    success: function (result) {
+                        $("#AdminLoadingBg").fadeOut();
+                        $("#AdminLoadimg").hide();
+                        $('#divPartial').html('');
+                        $('#divPartial').empty();
+                        $('#divPartial').html(result);
+                    }
+                });
+            }
+
+            return false;
+        });
+//        $("#btnExportExcel").click(function(e) {
+
+//    window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('#testemp').html()));
+
+//    //e.preventDefault();
+
+//});​
+        function fnExcelReport() {
+            var zone = $("#ddlZone").val();
+            var empstatusAC = $("#ddlstatusVAL").val();
+            var fromdate = $("#fromdate").val();
+            var todate = $("#todate").val();
+            $("#spanzone").hide();
+            $("#spanstatus").hide();
+            $("#spanfromdate").hide();
+            $("#spantodate").hide();
+            $("#spanzone").text('');
+            $("#spanstatus").text('');
+            $("#spanfromdate").text('');
+            $("#spantodate").text('');
+            if (zone != "") {
+                $("#spanzone").show();
+                $("#spanzone").text("Zone Name: " + $("#ddlZone option:selected").text());
+
+                $("#spanzone").append("<br/>");
+            }
+            if (empstatusAC != "") {
+                $("#spanstatus").show();
+                $("#spanstatus").text("Status: " + $("#ddlstatusVAL option:selected").text());
+                $("#spanstatus").append("<br/>");
+            }
+            if (fromdate != "") {
+                $("#spanfromdate").show();
+                $("#spanfromdate").text("From Date: " + fromdate);
+                $("#spanfromdate").append("<br/>");
+            }
+            if (todate != "") {
+                $("#spantodate").show();
+                $("#spantodate").text("To Date: " + todate);
+                $("#spantodate").append("<br/>");
+            }
+            $("#divF").show();
+            $("#divlogoEXL").append("<img src='http://universal.globaldatasolutions.com/Content/Images/login-logo.png'/><br/><br/><br/><br/><br/><br/><br/><b>Universal Surgicals</b><br/><b>15-15-57/3, 3/2, Prince Appartments<br/></b></br>");
+            var contents = $("#divF").html() + $("#normallist").html();
+           
+            var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+            tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+            tab_text = tab_text + '<x:Name>Employee Status Reports</x:Name>';
+
+            tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+            tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+//            tab_text = tab_text + "<table border='1px'>";
+            tab_text = tab_text + contents;
+            tab_text = tab_text + '</body></html>';
+
+            var data_type = 'data:application/vnd.ms-excel';
+
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
+
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+                if (window.navigator.msSaveBlob) {
+                    var blob = new Blob([tab_text], {
+                        type: "application/csv;charset=utf-8;"
+                    });
+                    navigator.msSaveBlob(blob, 'employeestatusreports.xls');
+                }
+            } else {
+                $('#btnExportExcel').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+                $('#btnExportExcel').attr('download', 'employeestatusreports.xls');
+            }
+            $('#Heading').hide();
+            $('#divlogoEXL').empty();
+            $('#divF').hide();
+            $("#spanzone").hide();
+            $("#spanstatus").hide();
+            $("#spanfromdate").hide();
+            $("#spantodate").hide();
+            $("#spanzone").text('');
+            $("#spanstatus").text('');
+            $("#spanfromdate").text('');
+            $("#spantodate").text('');
+//            $('#divF').css("text-align", "right");
+            $('#ExcelLogo').hide();
+            $('#Heading1').css("text-align", "left");
+            $('#Heading1').css("font-weight", "normal");
+            $('#btnExportExcel').show();
+            $('#btnExport1').show();
+        }
+        
+        $("#btnExport1").click(function (e) {
+            var zone = $("#ddlZone").val();
+            var empstatusAC = $("#ddlstatusVAL").val();
+            var fromdate = $("#fromdate").val();
+            var todate = $("#todate").val();
+            $("#spanzone").hide();
+            $("#spanstatus").hide();
+            $("#spanfromdate").hide();
+            $("#spantodate").hide();
+            $("#spanzone").text('');
+            $("#spanstatus").text('');
+            $("#spanfromdate").text('');
+            $("#spantodate").text('');
+            if (zone != "") {
+                $("#spanzone").show();
+                $("#spanzone").text("Zone Name: "+$("#ddlZone option:selected").text());
+            }
+            if (empstatusAC != "") {
+                $("#spanstatus").show();
+                $("#spanstatus").text("Status: " + $("#ddlstatusVAL option:selected").text());
+            }
+            if (fromdate != "") {
+                $("#spanfromdate").show();
+                $("#spanfromdate").text("From Date: "+ fromdate);
+            }
+            if (todate != "") {
+                $("#spantodate").show();
+                $("#spantodate").text("To Date: "+ todate);
+            }
+            $('#Heading').show();
+            $('#Heading1').css("text-align", "center");
+            $('#Heading1').css("font-weight", "bold");
+            $('#divF').show();
+            $('#ExcelLogo').show();
+            $('#btnExport1').hide();
+            $('#btnExportExcel').hide();
+            var contents = $("#testemp").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+            $('#Heading').hide();
+            $('#divF').hide();
+            $('#ExcelLogo').hide();
+            $('#Heading1').css("text-align", "left");
+            $('#Heading1').css("font-weight", "normal");
+            $('#btnExportExcel').show();
+            $('#btnExport1').show();
+
+        });
+
+       
+
+        
+
+    </script>

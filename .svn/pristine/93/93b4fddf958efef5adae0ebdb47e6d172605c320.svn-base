@@ -1,0 +1,1252 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Universal.BusinessEntities.UserExpenses_Header>
+@{
+    ViewBag.Title = "SubmittedExpenditure";
+}
+
+@if (ViewBag.Status != "Approved" && Session["AccountMgr"] != null)
+{
+    <style type="text/css">
+        body{ overflow:hidden !important}
+    </style>
+}
+
+@if (Session["Manager"] != null || Session["Employee"] != null)
+{
+    <style type="text/css">
+        body{ overflow:hidden !important}
+    </style>
+}
+
+<div id="empSearch">
+    <div class="col-lg-12 search-strip">
+        <div class="col-lg-12">
+        <input type="hidden" id="ExpType" value="@ViewBag.ExpType" />
+        @if (Session["AccountMgr"] != null)
+        {
+            <div class="col-lg-2">
+                @if (ViewBag.Zones != null)
+                {
+                    @Html.DropDownList("Zone", ViewBag.Zones as List<SelectListItem>, "Select Zone", new { @class = "form-control", @id = "ddlZone", @Title = "Zone" })
+                }
+            </div>
+            
+            <div class="col-lg-2">
+                @Html.DropDownList("ManagerId", new List<SelectListItem> { }, "Select Manager", new { @class = "form-control", @id = "ManagerId", @Title = "Manager" })
+            </div>
+            
+            <div class="col-lg-2">
+                @Html.DropDownList("Employees", new List<SelectListItem> { }, "Select Employee", new { @class = "form-control", @id = "Employees", @Title = "Employee" })
+            </div>
+        }
+           
+        @if (ViewBag.EmployeesByManager != null)
+        { 
+            <div class="col-lg-2">
+                @Html.DropDownList("ddlEmployee", ViewBag.EmployeesByManager as List<SelectListItem>, "Select Employee", new { @class = "form-control", @id = "ddlEmployee", @Title = "Employee" })
+            </div>
+        }
+        
+            <div class="col-lg-2" style="display:none">
+                @Html.DropDownList("Status", new List<SelectListItem> { new SelectListItem { Text = "Approved", Value = "Approved"},
+                                                                        new SelectListItem { Text = "Rejected", Value = "Rejected" },
+                                                                        new SelectListItem { Text = "Upheld", Value = "Upheld" },},
+                   "Select Status", new { @class = "form-control", @id = "ddlStatus", @Title = "Status" })
+            </div>
+   
+
+            <div class="col-lg-2 col-md-2  m-b-10 ">
+                <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                    <input type="text" id="txtFromDate" class="form-control" title="Select From Date" placeholder="Select From Date"/>
+                    <span class="add-on"> <i id="faDate" class="fa fa-calendar" title="Select Date"></i></span>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-2  m-b-10 ">
+                <div class="input-append success date col-md-10 col-lg-11 no-padding">
+                    <input type="text" id="txtToDate" class="form-control" title="Select To Date" placeholder="Select To Date" />
+                    <span class="add-on"> <i id="toDate" class="fa fa-calendar" title="Select Date"></i></span>
+                </div>
+            </div>
+            
+            @if (Session["AccountMgr"] != null)
+            {
+                <div class="col-lg-2 col-md-2  ">
+                    <a href="#" id="btnSearch" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa fa-search"></i> Search</a>
+                </div>
+            }
+            else if (Session["Manager"] != null)
+            {
+                <div class="col-lg-2 col-md-2  ">
+                    <a href="#" id="btnmgrSearch" class="col-lg-12 col-md-12 frm-src-fld  "><i class="fa fa-search"></i> Search</a>
+                </div>   
+            }
+            else if (Session["Employee"] != null)
+            {
+                <div class="col-lg-2 col-md-2">
+                    <a href="#" id="btnEmpSearch" class="col-lg-12 col-md-12 frm-src-fld"> <i class="fa fa-search"></i> Search </a>
+                </div>
+            }
+            
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Status == "Approved" && Session["AccountMgr"] != null)
+{
+    <div id="some_grid1_container">
+        <div class="content-cont container-fluid p-b-20">
+            <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12  emp-exd-frm ">
+                <div class="grid-hd col-lg-12 col-md-12 col-sm-12  grid-headding">
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 "><i class="fa fa-check"></i> Employees Approved Expenditures</div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right">
+                        <div class="col-md-4 emp-exp-dt pull-right text-right">
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clearfix"></div>
+                @if (Model.Count != 0)
+                {
+                    if (ViewBag.Search == "Search")
+                    {
+                        <div class="table-responsive">
+                            <table class="table no-more-tables col-lg-12 table-color ">
+                            <thead>
+                                <tr class="grid-headding-strips">
+                                    <th class="col-lg-2 col-md-2">Expenditure Date</th>
+                                    <th class="col-lg-2 col-md-2">Employee ID</th>
+                                    <th class="col-lg-2 col-md-2">Employee Name</th>
+                                    <th class="col-lg-2 col-md-2">SO/Explanation</th>
+                                    <th class="col-lg-2 col-md-2">Amount</th>
+                                    <th class="col-lg-2 col-md-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="col-lg-2 col-md-2">@item.FromDate.Value.ToString("MMM dd, yyyy").ToUpper()</td>
+                                    <td class="col-lg-2 col-md-2">@item.EmpUserID</td>
+                                    <td class="col-lg-2 col-md-2">@item.EmployeeName</td>
+                                    @if (@item.ServiceOrderNo == null)
+                                    {
+                                        <td class="col-lg-2 col-md-2">@item.ExplanationforSONo</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="col-lg-2 col-md-2">@item.ServiceOrderNo</td>
+                                    }
+                                    <td class="col-lg-2 col-md-2">@item.PaidPendingAmount</td>
+                                    <td class="col-lg-2 col-md-2">
+                                        <div class="pull-left upheld-btt Searchpayment">
+                                            <a href="#"> <input type="hidden" value="@item.Id" />
+                                            <input type="hidden" value="@item.PaidPendingAmount" />
+                                            <input type="hidden" value="@item.EmpUserID" />
+                                            <i class="fa fa-check"></i> Make Payment </a>
+                                        </div>
+                                    </td>
+                            </tr>
+                            }
+                            </tbody>
+                        </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                        <table class="table no-more-tables col-lg-12 table-color ">
+                            <thead>
+                                <tr class="grid-headding-strips">
+                                    <th class="col-lg-2 col-md-2">Expenditure Month</th>
+                                    <th class="col-lg-2 col-md-2">Employee ID</th>
+                                    <th class="col-lg-2 col-md-2">Employee Name</th>
+                                    <th class="col-lg-2 col-md-2">Amount</th>
+                                    <th class="col-lg-2 col-md-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="col-lg-2 col-md-2">@item.MonthName.ToUpper(), @item.YearNo
+                                        
+                                    </td>
+                                    <td class="col-lg-2 col-md-2">@item.EmpUserID</td>
+                                    <td class="col-lg-2 col-md-2">@item.EmployeeName</td>
+                                    <td class="col-lg-2 col-md-2">@item.PaidPendingAmount</td>
+                                    <td class="col-lg-2 col-md-2">
+                                        <div class="pull-left upheld-btt payment">
+                                            <a href="#"> <input type="hidden" value="@item.FK_EmployeeId" />
+                                            <input type="hidden" value="@item.PaidPendingAmount" />
+                                            <input type="hidden" value="@item.EmpUserID" />
+                                            <input type="hidden" value="@item.YearNo" />
+                                            <input type="hidden" value="@item.MonthNo" />
+                                            <i class="fa fa-check"></i> Proceed Payment </a>
+                                        </div>
+                                    </td>
+                            </tr>
+                            }
+                            </tbody>
+                        </table>
+
+
+                        <div class="col-lg-12 col-md-12">
+                            <div id="myPagerpaymentconfirm" class="pull-right">
+                                @Html.PagedListPager(Model, page => Url.Action("SubmittedExpenditure", "Shared",
+                                    new
+                                    {
+                                        humanID = ViewBag.HumanID,
+                                        page = page
+                                    }))
+                            </div>
+                        </div>
+                    </div>
+                    }
+                }
+                else
+                {
+                    <div  class="col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+                     <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="md-modal md-effect-16" id="modal-162">
+            <div class="md-content">
+                <h3>
+                    <div style="float: left"><span id="UserID"></span> - Payment Process </div>
+                    <div style="float: right">
+                        <a href="#" id="rejectClose">X</a>
+                    </div>
+                </h3>
+                <div class="col-lg-12 col-md-12" style="background-color:#fff;">
+                    <div class="col-lg-12 col-md-12"></div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-12 col-md-12">
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-b-10 m-t-10">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 pull-left">
+                                <div class="controls"><span>Select Payment Period: </span></div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pull-left">
+                                <div class="controls pull-left">
+                                <div class="controls"><span>Amount </span></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-b-10 m-t-10">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 pull-left  m-t-20">
+                               <select name="days" id="days" class="form-control"></select>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pull-left m-t-20">
+                                <div class="controls pull-left">
+                                <div class="controls"><span id="SpanAmount"> </span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="clearfix"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-b-10 m-t-10">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 pull-left">
+                                <div class="controls">
+                                    <div class="checkbox check-info">
+                                        <input id="chkPartial" type="checkbox" />
+                                        <label for="chkPartial">Do you want to pay Partial Payment </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pull-left" id="divPartialPayment" style="display:none">
+                                <div class="controls">
+                                    <input type="text" id="txtPartialAmount" placeholder="Partial Amount" class="form-control numericOnly1" title="Partial Amount" />
+                                    <div class="controls"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-4 col-md-4  m-b-20 pull-right m-t-10">
+                        <div class="controls">
+                            <button type="submit" id="btnPayment" name="btnPayment"
+                                        value="Payment">Make Payment</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+                                 <div class="popuppositionleft">
+ <div class="alert alert-warning" id="paymentwarning" runat="server">
+<strong>Warning !</strong><br /><label id="paymenterrormessage"></label>
+
+
+</div>
+
+</div>
+
+
+        </div>
+
+
+        <div class="md-modal md-effect-16" id="modal-163">
+            <div class="md-content">
+                <h3>
+                    <div style="float: left"><span id="SearchUserID"></span> - Payment Process </div>
+                    <div style="float: right">
+                        <a href="#" id="SearchrejectClose">X</a>
+                    </div>
+                </h3>
+                <input type="hidden" id="ExpenseHeaderID"/>
+                <div class="col-lg-12 col-md-12" style="background-color:#fff;">
+                    <div class="col-lg-12 col-md-12"></div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-b-10 m-t-10">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pull-left">
+                                <div class="controls"><span>Total Amount need to be paid : </span></div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pull-left">
+                                <div class="controls pull-left">
+                                   <label id="disSearchTotalAmount" style="font-weight:bold;"></label>
+                                    <div class="controls"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-b-10 m-t-10">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 pull-left">
+                                <div class="controls">
+                                    <div class="checkbox check-info">
+                                        <input id="chkSearchPartial" type="checkbox" />
+                                        <label for="chkSearchPartial">Do you want to pay Partial Payment </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pull-left" id="divSearchPartialPayment" style="display:none">
+                                <div class="controls">
+                                    <input type="text" id="txtSearchPartialAmount" placeholder="Partial Amount" class="form-control numericOnly1" title="Partial Amount" />
+                                    <div class="controls"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-4 col-md-4  m-b-20 pull-right m-t-10">
+                        <div class="controls">
+                            <button type="submit" id="btnSearchPayment" name="btnSearchPayment"
+                                        value="Payment">Submit</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="popuppositionleft">
+ <div class="alert alert-warning" id="Searchpaymentwarning" runat="server">
+<strong>Warning !</strong><br /><label id="Searchpaymenterrormessage"></label>
+
+
+</div>
+
+</div>
+
+
+        </div>
+
+
+        <div class="md-overlay"></div>
+    </div>
+}
+else
+{
+    if (Model.Count != 0)
+    {
+    <div class="content-cont col-lg-12 col-md-12 no-padding">
+        <div class=" col-lg-5 col-md-5 exp-list no-padding" id="exp-list">
+        @if (Model.Count != 0)
+        {
+            int count = 0;
+            foreach (var item in Model)
+            {
+                if (count == 0)
+                {
+                    <div class="emp-exp-cnt-lst emp-exp-cnt-lst-active">
+                    <div id="HeaderID" style="display: none">@item.Id</div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 no-padding"><h4>@item.ExpenseSheetName</h4></div>
+                        <div class="col-lg-6 text-right exp-user-id no-padding"> <i class="fa fa-user"></i> @item.EmpUserID</div>
+                    </div>
+
+                    @if ((Session["AccountMgr"] != null || Session["Employee"] != null || Session["Manager"] != null) && ((Session["Manager"] != null && item.ManagerStatus != null) || (Session["AccountMgr"] != null || Session["Employee"] != null)) && @item.ROLE == "3")
+                    {
+                        <div class="clearfix"></div>
+                        <div class="col-lg-12 no-padding">
+                            <div class="col-lg-6" style=" font-size:13px;">Manager Status: @(@item.ManagerStatus != null ? item.ManagerStatus : "Pending")</div>
+                            <div class="col-lg-6" style=" font-size:12px;">Account Manager Status: @(@item.AccountManagerStatus != null ? item.AccountManagerStatus : "Pending")</div>
+                        </div>
+
+                    } 
+                    <div class="clearfix"></div>
+                    <div class="col-lg-12"><p>@item.ExpenseDescription</p></div>
+                    <div class="col-lg-12">
+                    	<div class="col-lg-4 no-padding emp-exp-lst-amount"><i class="fa fa-inr"></i> @item.TotalAmount</div>
+                        <div class="col-lg-4">SON: @item.ServiceOrderNo</div>
+                        <div class="col-lg-4  no-padding text-right"> @item.FromDate.Value.ToString("MMM dd, yyyy")</div>
+                    </div>  
+                
+                    
+                </div>
+                }
+                else
+                {
+                    <div class="emp-exp-cnt-lst">
+                    <div id="HeaderID" style="display: none">@item.Id</div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 no-padding"><h4>@item.ExpenseSheetName</h4></div>
+                        <div class="col-lg-6 text-right exp-user-id no-padding"> <i class="fa fa-user"></i> @item.EmpUserID</div>
+                    </div>
+
+                    @if ((Session["AccountMgr"] != null || Session["Employee"] != null || Session["Manager"] != null) && ((Session["Manager"] != null && item.ManagerStatus != null) || (Session["AccountMgr"] != null || Session["Employee"] != null)) && @item.ROLE == "3")
+                    {
+                    <div class="clearfix"></div>
+                        <div class="col-lg-12 no-padding">
+                        <div class="col-lg-6" style=" font-size:13px;">Manager Status: @(@item.ManagerStatus != null ? item.ManagerStatus : "Pending")</div>
+                        
+                       <div class="col-lg-6" style=" font-size:12px;">Account Manager Status: @(@item.AccountManagerStatus != null ? item.AccountManagerStatus : "Pending")</div>
+                        </div>
+                    } 
+                    <div class="clearfix"></div>
+                    <div class="col-lg-12"><p>@item.ExpenseDescription</p></div>
+                    <div class="col-lg-12">
+                    	<div class="col-lg-4 no-padding emp-exp-lst-amount"><i class="fa fa-inr"></i> @item.TotalAmount</div>
+                        <div class="col-lg-4">SON: @item.ServiceOrderNo</div>
+                        <div class="col-lg-4  no-padding text-right"> @item.FromDate.Value.ToString("MMM dd, yyyy")</div>
+                    </div>  
+                
+                    
+                </div>
+                }
+                count++;
+            }
+        }
+        else
+        {
+            <div class="emp-exp-cnt-lst col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound">
+                <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+        }
+    </div>
+    
+        <div class=" col-lg-7 col-md-7 no-padding exp-list-details" id="DetailsValue">
+            @Html.Action("ExpenseListByID", "Shared", new { @Data = ViewBag.MaxId })
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="emp-exp-cnt-lst col-lg-12 col-md-12 m-t-20 m-l-20 norecordsfound" style="background:white; padding-top:100px;">
+                <img src="~/Content/Images/norecordfound.jpg" alt="No Records Found" title="No Records Found">
+            </div>
+    }
+}
+
+
+<!--[if lt IE 10]>
+ <script type="text/javascript">
+     $(function () {
+         // Invoke the plugin
+         $('input, textarea').placeholder({ customClass: 'my-placeholder' });
+
+     });
+		</script>
+          <![endif]-->
+<script type="text/javascript">
+              $('#myPagerpaymentconfirm').bind('contextmenu', function (e) {
+                  alert("Mouse right click disabled");
+                  return false;
+              }); 
+        </script>
+
+<script type="text/javascript">
+
+    var SZoneValue;
+    var SManagerValue;
+    var SEmployeeValue;
+    var SFromDate;
+    var SToDate;
+    var SStatus;
+
+    var year;
+    var month;
+    var FKEMPID;
+
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+        $(".popuppositionleft").hide();
+
+        $('#txtFromDate').datepicker();
+        $('#txtToDate').datepicker();
+
+        $('#myPagerpaymentconfirm').on('click', 'a', function (e) {
+            e.preventDefault();
+            if (this.href != "") {
+                $.ajax({
+                    url: this.href,
+                    type: 'GET',
+                    cache: false,
+                    data: { ExpType: 'Approved' },
+                    cache: false,
+                    success: function (result) {
+                        $('#divPartial').html('');
+                        $('#divPartial').empty();
+                        $('#divPartial').html('');
+                        $(this).scrollTop(0);
+                        $('#divPartial').html(result);
+                    }
+                });
+            }
+        });
+
+        //Allow users to enter numbers only
+        $(".numericOnly").bind('keypress', function (event) {
+            if ((event.which < 48 || event.which > 57) && event.which != 8 && event.which != 0 && event.which != 118 && event.which != 99) {
+                event.preventDefault();
+            }
+        });
+
+
+        var keyDown = false, ctrl1 = 17, vKey1 = 86, Vkey1 = 118;
+        $('.numericOnly1').keydown(function (e) {
+            if (e.keyCode == ctrl1) keyDown = true;
+        }).keyup(function (e) {
+            if (e.keyCode == ctrl1) keyDown = false;
+        });
+        $('.numericOnly1').on('keypress', function (event) {
+
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57) && event.which != 8 && event.which != 0 && event.which != 118 && event.which != 99) {
+                event.preventDefault();
+            }
+
+            if (($(this).val().indexOf('.') != -1) && event.which != 8 && ($(this).val().substring($(this).val().indexOf('.'), $(this).val().indexOf('.').length).length > 2)) {
+                event.preventDefault();
+            }
+        }).on('focusout', function (e) {
+            var $this = $(this);
+            $this.val($this.val().replace(/[^0-9.]/g, ''));
+        }).on('paste', function (e) {
+            var $this = $(this);
+            setTimeout(function () {
+                $this.val($this.val().replace(/[^0-9.]/g, ''));
+            }, 5);
+        });
+
+        $('.emp-exp-cnt-lst').click(function () {
+            $('.emp-exp-cnt-lst').removeClass('emp-exp-cnt-lst-active');
+            var HeaderID = $(this).find('div:first').text();
+            $(this).addClass('emp-exp-cnt-lst-active');
+            if (HeaderID > 0) {
+
+                ExpenditureList(HeaderID);
+            }
+
+        });
+
+        $("#rejectClose").click(function () {
+            $('#modal-162').removeClass('md-show');
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#ExpenseHeaderID").val('');
+            $("#RejectComment").val('');
+        });
+
+        $('#chkPartial').click(function (e) {
+            var chlstatus = $('#chkPartial').is(":checked");
+            if (chlstatus == true) {
+                $('#divPartialPayment').show();
+                $('#txtPartialAmount').val('');
+            }
+            else {
+                $('#divPartialPayment').hide();
+                $('#txtPartialAmount').val('');
+            }
+        });
+
+
+        $("#SearchrejectClose").click(function () {
+            $('#modal-163').removeClass('md-show');
+            $("#modal-16").fadeOut();
+            $(".md-overlay").fadeOut();
+            $("#ExpenseHeaderID").val('');
+            $("#RejectComment").val('');
+        });
+
+        $('#chkSearchPartial').click(function (e) {
+            var chlstatus = $('#chkSearchPartial').is(":checked");
+            if (chlstatus == true) {
+                $('#divSearchPartialPayment').show();
+                $('#txtSearchPartialAmount').val('');
+            }
+            else {
+                $('#divSearchPartialPayment').hide();
+                $('#txtSearchPartialAmount').val('');
+            }
+        });
+
+        $('.Searchpayment').click(function (e) {
+            e.preventDefault();
+            $("#modal-163").fadeIn();
+            $(".md-overlay").fadeIn();
+            $('#divSearchPartialPayment').hide();
+
+            var HeaderID = $(this).find('a > input[type=hidden]').val();
+            var TotalAmount = $(this).find('a > input[type = hidden]').next().val();
+            var UserID = $(this).find('a > input[type = hidden]').next().next().val();
+
+            var redirecturl = $(this).attr('href');
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                cache: false,
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $('#modal-163').show();
+                $('#chkSearchPartial').attr('checked', false);
+                $("#ExpenseHeaderID").val('');
+                $("#disSearchTotalAmount").val('');
+                $('#txtSearchPartialAmount').text('');
+                $("#disSearchTotalAmount").text(TotalAmount);
+                $("#ExpenseHeaderID").val(HeaderID);
+                $('#SearchUserID').val('');
+                $('#SearchUserID').text(UserID.toUpperCase());
+                $('#modal-163').addClass('md-modal md-effect-16 md-show');
+            })
+            .error(function (xhr, status) {
+            });
+
+        });
+
+        $('.payment').click(function (e) {
+            e.preventDefault();
+            $("#modal-162").fadeIn();
+            $(".md-overlay").fadeIn();
+            $('#divPartialPayment').hide();
+            FKEMPID = "";
+            FKEMPID = $(this).find('a > input[type=hidden]').val();
+            var TotalAmount = $(this).find('a > input[type = hidden]').next().val();
+            var UserID = $(this).find('a > input[type = hidden]').next().next().val();
+
+            year = $(this).find('a > input[type = hidden]').next().next().next().val();
+            month = $(this).find('a > input[type = hidden]').next().next().next().next().val();
+            var days = Math.round(((new Date(year, month)) - (new Date(year, month - 1))) / 86400000);
+            $('#SpanAmount').text('');
+            $('#days').empty()
+
+            var newOption = "<option value='" + "0" + "'>Select Payment Period</option>";
+            $("#days").append(newOption);
+            newOption = "<option value='" + "10" + "'>01 to 10 Days</option>";
+            $("#days").append(newOption);
+            newOption = "<option value='" + "20" + "'>11 to 20 Days</option>";
+            $("#days").append(newOption);
+            newOption = "<option value='" + days + "'>21 to " + days + " Days</option>";
+            $("#days").append(newOption);
+
+            var redirecturl = $(this).attr('href');
+            $.ajax({
+                url: redirecturl,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                cache: false,
+                dataType: 'html'
+            })
+            .success(function (result) {
+                $('#modal-162').show();
+                $('#chkPartial').attr('checked', false);
+                $("#disTotalAmount").val('');
+                $('#txtPartialAmount').text('');
+                $("#disTotalAmount").text(TotalAmount);
+                //$("#ExpenseHeaderID").val(HeaderID);
+                $('#UserID').val('');
+                $('#UserID').text(UserID.toUpperCase());
+                $('#modal-162').addClass('md-modal md-effect-16 md-show');
+                $('#uploaddiv').html('');
+                $('#uploaddiv').html(result);
+            })
+            .error(function (xhr, status) {
+            });
+
+        });
+
+        var PartialAmount = "";
+        var ExpenseID = "";
+        var chlstatus = "";
+        var lblTotalAmount = "";
+
+
+        $('#days').change(function (e) {
+            e.preventDefault();
+            var dayValue = this.value;
+
+            if (dayValue > 0) {
+
+                var SDate;
+                var EDate;
+
+                if ($('#days').val() == "10") {
+                    SDate = 1 + "/" + month + "/" + year;
+                    EDate = 10 + "/" + month + "/" + year;
+                }
+                else if ($('#days').val() == "20") {
+                    SDate = 11 + "/" + month + "/" + year;
+                    EDate = 20 + "/" + month + "/" + year;
+                }
+                else {
+                    SDate = 21 + "/" + month + "/" + year;
+                    EDate = $("#days").val() + "/" + month + "/" + year;
+                }
+
+
+                if (SDate.length > 0 && EDate.length > 0) {
+                    $.ajax({
+                        url: '/Shared/SpanAmount',
+                        type: "GET",
+                        cache: false,
+                        data: { SDate: SDate, EDate: EDate, FK_EmpID: FKEMPID },
+                        success: function (data) {
+                            $('#SpanAmount').text('');
+                            $('#SpanAmount').text(data);
+                        },
+                        error: function (event, jqxhr, settings, exception) {
+                            alert(ex);
+                        }
+                    });
+                }
+
+
+            }
+            else {
+                $('#SpanAmount').text('');
+                $('#chkPartial').attr('checked', false);
+                $('#divPartialPayment').hide();
+                $('#txtPartialAmount').val('');
+            }
+        });
+
+        var SDate1;
+        var EDate1;
+
+        $('#btnPayment').click(function (e) {
+            e.preventDefault();
+            ExpenseID = $("#ExpenseHeaderID").val();
+            chlstatus = $('#chkPartial').is(":checked");
+            lblTotalAmount = $("#SpanAmount").text();
+
+
+
+            if ($('#days').val() == "10") {
+                SDate1 = 1 + "/" + month + "/" + year;
+                EDate1 = 10 + "/" + month + "/" + year;
+            }
+            else if ($('#days').val() == "20") {
+                SDate1 = 11 + "/" + month + "/" + year;
+                EDate1 = 20 + "/" + month + "/" + year;
+            }
+            else {
+                SDate1 = 21 + "/" + month + "/" + year;
+                EDate1 = $("#days").val() + "/" + month + "/" + year;
+            }
+
+            if (lblTotalAmount > 0) {
+
+                if (chlstatus == true) {
+                    PartialAmount = $('#txtPartialAmount').val();
+                    if (PartialAmount.length > 0) {
+                        if (parseFloat(lblTotalAmount) >= parseFloat(PartialAmount)) {
+                            UpdatePaidAmount();
+                        }
+                        else {
+                            $(".popuppositionleft").fadeIn();
+                            $('#paymenterrormessage').text('Please Enter Valid Amount');
+                            $('#paymenterrormessage').show();
+                            $('.popuppositionleft').delay(3000).fadeOut('slow');
+                            $('#txtPartialAmount').focus();
+                        }
+                    }
+                    else {
+                        $(".popuppositionleft").fadeIn();
+                        $('#paymenterrormessage').text('Please Enter Partial Amount');
+                        $('#paymenterrormessage').show();
+                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+                        $('#txtPartialAmount').focus();
+                    }
+                }
+                else {
+                    PartialAmount = lblTotalAmount;
+                    UpdatePaidAmount();
+                }
+            }
+
+        });
+
+
+
+        $('#btnSearchPayment').click(function (e) {
+            e.preventDefault();
+            ExpenseID = $("#ExpenseHeaderID").val();
+            chlstatus = $('#chkSearchPartial').is(":checked");
+            lblTotalAmount = $("#disSearchTotalAmount").text();
+            if (chlstatus == true) {
+                PartialAmount = $('#txtSearchPartialAmount').val();
+                if (PartialAmount.length > 0) {
+                    if (parseFloat(lblTotalAmount) >= parseFloat(PartialAmount)) {
+                        UpdatePaidAmount();
+                    }
+                    else {
+
+                        $(".popuppositionleft").fadeIn();
+                        $('#Searchpaymenterrormessage').text('Please Enter Valid Amount');
+                        $('#Searchpaymenterrormessage').show();
+                        $('.popuppositionleft').delay(3000).fadeOut('slow');
+                        $('#txtSearchPartialAmount').focus();
+                    }
+                }
+                else {
+                    $(".popuppositionleft").fadeIn();
+                    $('#Searchpaymenterrormessage').text('Please Enter Partial Amount');
+                    $('#Searchpaymenterrormessage').show();
+                    $('.popuppositionleft').delay(3000).fadeOut('slow');
+                    $('#txtSearchPartialAmount').focus();
+                }
+            }
+            else {
+                PartialAmount = lblTotalAmount;
+                UpdatePaidAmount();
+            }
+
+        });
+
+
+
+
+        var SearchStringForMakePayment = "";
+
+
+        function UpdatePaidAmount() {
+            $.ajax({
+                url: '/Shared/Payments',
+                type: "POST",
+                cache: false,
+                data: { EmpID: FKEMPID, PaidAmount: PartialAmount, SDate: SDate1, EDate: EDate1, HeaderIDFromSearch: ExpenseID },
+                dataType: 'html',
+                success: function (data) {
+                    $('#modal-162').removeClass('md-show');
+                    $("#modal-16").fadeOut();
+                    $(".md-overlay").fadeOut();
+                    $("#ExpenseHeaderID").val('');
+                    $('#divPartialPayment').hide();
+                    $('#txtPartialAmount').val('');
+
+                    if (ExpenseID > 0){
+                        SearchStringForMakePayment = "Search"
+                    }
+
+                    UpdateView()
+
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    alert(exception);
+                }
+            });
+        }
+
+        function UpdateView() {
+            $.ajax({
+                url: '/Shared/SubmittedExpenditure',
+                type: "GET",
+                cache: false,
+                data: { ExpType: 'Approved' },
+                datatype: 'html',
+                success: function (data) {
+                    $("#divPartial").html('');
+                    $("#divPartial").html(data);
+                },
+                error: function (event, jqxhr, settings, exceptions) {
+                    alert(exceptions);
+                }
+            });
+        }
+
+
+        function ExpenditureList(HeaderID) {
+            $.ajax({
+                url: '/Shared/ExpenseListByID',
+                type: "GET",
+                cache: false,
+                data: { Data: HeaderID },
+                dataType: 'html',
+                success: function (data) {
+
+                    $("#DetailsValue").html('');
+                    $("#DetailsValue").html(data);
+
+                },
+                error: function (event, jqxhr, settings, exception) {
+                    alert(exception);
+                }
+            });
+        }
+
+        $("#ddlZone").change(function (e) {
+            e.preventDefault();
+            var zoneId = $('#ddlZone').val();
+            if (zoneId > 0) {
+                $.ajax({
+                    url: '/Shared/GetManagersList',
+                    type: "GET",
+                    cache: false,
+                    data: { ZoneId: zoneId },
+                    success: function (data) {
+                        $("#ManagerId").empty();
+                        $("#ManagerId").append($("<option />").val('').text("Select Manager"));
+                        $("#Employees").empty();
+                        $("#Employees").append($("<option />").val('').text("Select Employee"));
+                        $.each(data, function () {
+                            $("#ManagerId").append($("<option />").val(this.Id).text(this.Employee_ID + " [" + this.FirstName + "] "));
+                        });
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(ex);
+                    }
+                });
+            }
+            else {
+                $("#ManagerId").empty();
+                $("#ManagerId").append($("<option />").val('').text("Select Manager"));
+                $("#Employees").empty();
+                $("#Employees").append($("<option />").val('').text("Select Employee"));
+            }
+        });
+
+        $('#ManagerId').change(function (e) {
+            e.preventDefault();
+            var managerID = $('#ManagerId').val();
+            if (managerID > 0) {
+                $.ajax({
+                    url: '/Shared/GetEmployeesForManager',
+                    type: "GET",
+                    cache: false,
+                    data: { Id: managerID },
+                    success: function (data) {
+                        $("#Employees").empty();
+                        $("#Employees").append($("<option />").val('').text("Select Employee"));
+                        $.each(data, function () {
+                            $("#Employees").append($("<option />").val(this.Id).text(this.Employee_ID + " [" + this.FirstName + "] "));
+                        });
+                    },
+                    error: function (event, jqxhr, settings, exception) {
+                        alert(ex);
+                    }
+                });
+            }
+            else {
+                $("#Employees").empty();
+                $("#Employees").append($("<option />").val('').text("Select Employee"));
+            }
+        });
+
+
+        $('#btnSearch').click(function (e) {
+
+            e.preventDefault();
+            var zone = $('#ddlZone').val();
+            var manager = $('#ManagerId').val();
+            var emplyee = $("#Employees").val();
+            var status = $("#ExpType").val();
+            var fromdate = $("#txtFromDate").val();
+            var todate = $("#txtToDate").val();
+
+            if (zone > 0 || manager > 0 || emplyee > 0 || fromdate.length > 0 || todate.length > 0) {
+                if (fromdate.length > 0) {
+                    if (todate.length > 0) {
+                        if ($.datepicker.parseDate("dd/mm/yy", fromdate) <= $.datepicker.parseDate("dd/mm/yy", todate)) {
+                            $.ajax({
+                                url: '/Shared/SubmittedExpenditure',
+                                type: "GET",
+                                cache: false,
+                                data: { SZoneID: zone, SManagerID: manager, SEmployeeID: emplyee, SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                                success: function (data) {
+                                    $("#divPartial").html('');
+                                    $("#divPartial").html(data);
+                                    //$('#Search').show();
+                                    SZoneValue = zone;
+                                    SManagerValue = manager;
+                                    SEmployeeValue = emplyee;
+                                    SFromDate = fromdate;
+                                    SToDate = todate;
+                                    SStatus = status;
+                                },
+                                error: function (event, jqxhr, settings, exception) {
+                                    alert(ex);
+                                }
+                            });
+                        }
+                        else {
+                            alert('To Date should be less than From Date');
+                        }
+                    }
+                    else {
+                        $.ajax({
+                            url: '/Shared/SubmittedExpenditure',
+                            type: "GET",
+                            cache: false,
+                            data: { SZoneID: zone, SManagerID: manager, SEmployeeID: emplyee, SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                            success: function (data) {
+                                $("#divPartial").html('');
+                                $("#divPartial").html(data);
+                                //$('#Search').show();
+
+                                SZoneValue = zone;
+                                SManagerValue = manager;
+                                SEmployeeValue = emplyee;
+                                SFromDate = fromdate;
+                                SToDate = todate;
+                                SStatus = status;
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                alert(ex);
+                            }
+                        });
+                    }
+                }
+                else {
+                    if (todate.length > 0) {
+                        alert('Please Select From Date');
+                    }
+                    else {
+                        $.ajax({
+                            url: '/Shared/SubmittedExpenditure',
+                            type: "GET",
+                            cache: false,
+                            data: { SZoneID: zone, SManagerID: manager, SEmployeeID: emplyee, SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                            success: function (data) {
+                                $("#divPartial").html('');
+                                $("#divPartial").html(data);
+                                //$('#Search').show();
+                                SZoneValue = zone;
+                                SManagerValue = manager;
+                                SEmployeeValue = emplyee;
+                                SFromDate = fromdate;
+                                SToDate = todate;
+                                SStatus = status;
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                alert(exception);
+                            }
+                        });
+                    }
+                }
+            }
+            else {
+                alert('Please Select Appropriate Search Field and Click on Search Button');
+            }
+
+        });
+
+
+        $('#btnmgrSearch').click(function (e) {
+            e.preventDefault();
+            var employee = $('#ddlEmployee').val();
+            var fromdate = $("#txtFromDate").val();
+            var todate = $("#txtToDate").val();
+            var status = $("#ExpType").val();
+
+            if (employee > 0 || fromdate.length || 0 && todate.length || 0) {
+                if (fromdate.length > 0) {
+                    if (todate.length > 0) {
+                        if ($.datepicker.parseDate("dd/mm/yy", fromdate) <= $.datepicker.parseDate("dd/mm/yy", todate)) {
+
+                            $.ajax({
+                                url: '/Shared/SubmittedExpenditure',
+                                type: "GET",
+                                cache: false,
+                                data: { SEmployeeID: employee, SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                                success: function (data) {
+                                    $("#divPartial").html('');
+                                    $("#divPartial").html(data);
+                                    //$('#Search').show();
+                                    SEmployeeValue = employee;
+                                    SFromDate = fromdate;
+                                    SToDate = todate;
+                                    SStatus = status;
+                                },
+                                error: function (event, jqxhr, settings, exception) {
+                                    alert(exception);
+                                }
+                            });
+
+                        }
+                        else {
+                            alert('To Date should be less than From Date');
+                        }
+                    }
+                    else {
+                        $.ajax({
+                            url: '/Shared/SubmittedExpenditure',
+                            type: "GET",
+                            cache: false,
+                            data: { SEmployeeID: employee, SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                            success: function (data) {
+                                $("#divPartial").html('');
+                                $("#divPartial").html(data);
+                                //$('#Search').show();
+                                SEmployeeValue = employee;
+                                SFromDate = fromdate;
+                                SToDate = todate;
+                                SStatus = status;
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                alert(exception);
+                            }
+                        });
+                    }
+                }
+                else {
+                    if (todate.length > 0) {
+                        alert('Please Select From Date');
+                    }
+                    else {
+                        $.ajax({
+                            url: '/Shared/SubmittedExpenditure',
+                            type: "GET",
+                            cache: false,
+                            data: { SEmployeeID: employee, SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                            success: function (data) {
+                                $("#divPartial").html('');
+                                $("#divPartial").html(data);
+                                //$('#Search').show();
+                                SEmployeeValue = employee;
+                                SFromDate = fromdate;
+                                SToDate = todate;
+                                SStatus = status;
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                alert(exception);
+                            }
+                        });
+                    }
+                }
+            }
+            else {
+                alert('Please Select Appropriate Search Field and Click on Search Button');
+            }
+
+        });
+
+        $('#btnEmpSearch').click(function (e) {
+            e.preventDefault();
+
+            var fromdate = $("#txtFromDate").val();
+            var todate = $("#txtToDate").val();
+            var status = $("#ExpType").val();
+
+            if (fromdate.length > 0 || todate.length > 0) {
+
+                if (fromdate.length > 0) {
+                    if (todate.length > 0) {
+
+                        if ($.datepicker.parseDate("dd/mm/yy", fromdate) <= $.datepicker.parseDate("dd/mm/yy", todate)) {
+                            $("#AdminLoadingBg").fadeIn();
+                            $("#AdminLoadimg").show();
+                            $.ajax({
+                                url: '/Shared/SubmittedExpenditure',
+                                type: "GET",
+                                cache: false,
+                                data: { SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                                success: function (data) {
+                                    $("#AdminLoadingBg").fadeOut();
+                                    $("#AdminLoadimg").hide();
+                                    $("#divPartial").html('');
+                                    $("#divPartial").html(data);
+                                    SFromDate = fromdate;
+                                    SToDate = todate;
+                                    SStatus = status;
+                                },
+                                error: function (event, jqxhr, settings, exception) {
+                                    $("#AdminLoadingBg").fadeOut();
+                                    $("#AdminLoadimg").hide();
+                                    alert(exception);
+                                }
+                            });
+
+                        }
+                        else {
+                            alert('To Date should be less than From Date');
+                        }
+
+                    }
+                    else {
+                        $.ajax({
+                            url: '/Shared/SubmittedExpenditure',
+                            type: "GET",
+                            cache: false,
+                            data: { SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                            success: function (data) {
+                                $("#AdminLoadingBg").fadeOut();
+                                $("#AdminLoadimg").hide();
+                                $("#divPartial").html('');
+                                $("#divPartial").html(data);
+                                SFromDate = fromdate;
+                                SToDate = todate;
+                                SStatus = status;
+                            },
+                            error: function (event, jqxhr, settings, exception) {
+                                $("#AdminLoadingBg").fadeOut();
+                                $("#AdminLoadimg").hide();
+                                alert(exception);
+                            }
+                        });
+                    }
+                }
+                else {
+                    $.ajax({
+                        url: '/Shared/SubmittedExpenditure',
+                        type: "GET",
+                        cache: false,
+                        data: { SStatus: status, SFromDate: fromdate, SToDate: todate, Search: 'Search' },
+                        success: function (data) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            $("#divPartial").html('');
+                            $("#divPartial").html(data);
+                            SFromDate = fromdate;
+                            SToDate = todate;
+                            SStatus = status;
+                        },
+                        error: function (event, jqxhr, settings, exception) {
+                            $("#AdminLoadingBg").fadeOut();
+                            $("#AdminLoadimg").hide();
+                            alert(exception);
+                        }
+                    });
+                }
+
+            }
+            else {
+                alert('Please Select Dates and Click on Search');
+            }
+
+        });
+
+
+    });
+
+</script>
